@@ -9,8 +9,6 @@
     <Folder Include="Helpers\" />
     <Folder Include="DTOs\" />
     <Folder Include="Mappings\" />
-    <Folder Include="Options\" />
-    <Folder Include="Utils\" />
     <Folder Include="Specifications\" />
     <Folder Include="Services\" />
   </ItemGroup>
