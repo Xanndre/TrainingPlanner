@@ -4,9 +4,9 @@ using TrainingPlanner.Data.Entities;
 
 namespace TrainingPlanner.Data
 {
-    public class TrainingPlannerDbContext: IdentityDbContext<ApplicationUser>
+    public class TrainingPlannerDbContext : IdentityDbContext<ApplicationUser>
     {
-        public TrainingPlannerDbContext(DbContextOptions<TrainingPlannerDbContext> options): base(options)
+        public TrainingPlannerDbContext(DbContextOptions<TrainingPlannerDbContext> options) : base(options)
         {
 
         }

@@ -10,7 +10,7 @@ using TrainingPlanner.Data;
 namespace TrainingPlanner.Data.Migrations
 {
     [DbContext(typeof(TrainingPlannerDbContext))]
-    [Migration("20190902193304_Initial")]
+    [Migration("20190911192547_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

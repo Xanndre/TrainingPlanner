@@ -39,7 +39,7 @@ namespace TrainingPlanner.API.Controllers
                 await _accountService.Register(registerDTO);
                 return Ok();
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 return BadRequest(exception.Message);
             }

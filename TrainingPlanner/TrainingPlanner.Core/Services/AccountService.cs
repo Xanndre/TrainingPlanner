@@ -16,19 +16,20 @@ using TrainingPlanner.Core.Utils;
 using TrainingPlanner.Data.Entities;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
+
 namespace TrainingPlanner.Core.Services
 {
     public class AccountService : IAccountService
     {
         private readonly ConfigurationOptions _options;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly AspNetUserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
 
         public AccountService(
             IOptions<ConfigurationOptions> options,
             SignInManager<ApplicationUser> signInManager,
-            AspNetUserManager<ApplicationUser> userManager,
+            UserManager<ApplicationUser> userManager,
             IMapper mapper
             )
         {
