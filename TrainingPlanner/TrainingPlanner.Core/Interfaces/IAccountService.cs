@@ -8,6 +8,6 @@ namespace TrainingPlanner.Core.Interfaces
     {
         Task<LoginResultDTO> Login(LoginDTO dto);
         Task Register(RegisterDTO dto);
-        string GenerateJwtToken(string email, ApplicationUser user);
+        string GenerateJwtToken(ApplicationUser user);
     }
 }
