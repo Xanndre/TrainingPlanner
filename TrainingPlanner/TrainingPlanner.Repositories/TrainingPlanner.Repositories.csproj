@@ -12,8 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Repositories\" />
+    <ProjectReference Include="..\TrainingPlanner.Data\TrainingPlanner.Data.csproj" />
   </ItemGroup>
 
 </Project>

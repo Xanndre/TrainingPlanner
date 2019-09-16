@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TrainingPlanner.Core\TrainingPlanner.Core.csproj" />
+    <ProjectReference Include="..\TrainingPlanner.Repositories\TrainingPlanner.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,14 +4,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using TrainingPlanner.Core.Interfaces;
 using TrainingPlanner.Core.Mappings;
 using TrainingPlanner.Core.Services;
 using TrainingPlanner.Data;
 using TrainingPlanner.Data.Entities;
+using TrainingPlanner.Repositories.Interfaces;
+using TrainingPlanner.Repositories.Repositories;
 
 namespace TrainingPlanner.API.Extensions
 {
@@ -53,11 +53,12 @@ namespace TrainingPlanner.API.Extensions
         public static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
         {
-            
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         public static void AddDefaultCors(this IServiceCollection services)
