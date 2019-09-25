@@ -12,7 +12,9 @@ namespace TrainingPlanner.Core.Mappings
                 .ForMember(c => c.UserName, d => d.MapFrom(e => e.Email))
                 .ReverseMap();
 
-            CreateMap<ApplicationUser, UserDTO>().ReverseMap();
+            CreateMap<UserDTO, ApplicationUser>()
+                .ForMember(c => c.BirthDate, d => d.MapFrom(e => e.BirthDate.ToLocalTime().Date))
+                .ReverseMap();
         }
 
     }
