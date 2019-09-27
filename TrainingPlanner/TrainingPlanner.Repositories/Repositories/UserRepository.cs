@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TrainingPlanner.Data;
@@ -28,6 +29,13 @@ namespace TrainingPlanner.Repositories.Repositories
         {
             _trainingPlannerDbContext.Update(user);
             await _trainingPlannerDbContext.SaveChangesAsync();
+            return user;
+        }
+
+        public async Task<IdentityUserLogin<string>> GetUserLogin(string provider, string id)
+        {
+            var user = await _trainingPlannerDbContext.UserLogins
+                .SingleOrDefaultAsync(u => u.LoginProvider == provider && u.UserId == id);
             return user;
         }
     }

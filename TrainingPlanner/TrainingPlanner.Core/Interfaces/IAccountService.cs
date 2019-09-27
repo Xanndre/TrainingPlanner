@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs;
-using TrainingPlanner.Data.Entities;
 
 namespace TrainingPlanner.Core.Interfaces
 {
@@ -8,6 +7,6 @@ namespace TrainingPlanner.Core.Interfaces
     {
         Task<LoginResultDTO> Login(LoginDTO dto);
         Task Register(RegisterDTO dto);
-        string GenerateJwtToken(ApplicationUser user);
+        Task<LoginResultDTO> ExternalLogin(ExternalLoginDTO dto);
     }
 }

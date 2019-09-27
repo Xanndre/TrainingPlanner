@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TrainingPlanner.API.Extensions;
-using TrainingPlanner.Core.Options;
 using TrainingPlanner.Core.Utils;
 using TrainingPlanner.Data;
 
@@ -32,7 +31,8 @@ namespace TrainingPlanner.API
             services.AddDefaultCors();
             services.AddDefaultIdentity();
             services.AddJwtAuth(Configuration);
-            services.Configure<ConfigurationOptions>(Configuration);
+            services.ConfigureOptions(Configuration);
+            services.AddHttpClient();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

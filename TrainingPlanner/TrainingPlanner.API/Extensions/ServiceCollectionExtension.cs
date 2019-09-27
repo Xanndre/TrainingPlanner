@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TrainingPlanner.Core.Interfaces;
 using TrainingPlanner.Core.Mappings;
+using TrainingPlanner.Core.Options;
 using TrainingPlanner.Core.Services;
 using TrainingPlanner.Data;
 using TrainingPlanner.Data.Entities;
@@ -34,7 +35,7 @@ namespace TrainingPlanner.API.Extensions
                     {
                         ValidateIssuer = false,
                         ValidateAudience = false,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecret"])),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("Jwt:JwtSecret").Value)),
                     };
                 });
         }
@@ -59,6 +60,12 @@ namespace TrainingPlanner.API.Extensions
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
+        }
+
+        public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
+            services.Configure<FacebookLoginOptions>(configuration.GetSection("FacebookLogin"));
         }
 
         public static void AddDefaultCors(this IServiceCollection services)

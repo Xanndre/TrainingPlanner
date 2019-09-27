@@ -15,6 +15,9 @@ namespace TrainingPlanner.Core.Mappings
             CreateMap<UserDTO, ApplicationUser>()
                 .ForMember(c => c.BirthDate, d => d.MapFrom(e => e.BirthDate.ToLocalTime().Date))
                 .ReverseMap();
+
+            CreateMap<ExternalLoginDTO, ApplicationUser>()
+                .ForMember(c => c.UserName, d => d.MapFrom(e => e.Email));
         }
 
     }
