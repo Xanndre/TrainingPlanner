@@ -10,6 +10,7 @@ namespace TrainingPlanner.Core.Mappings
         {
             CreateMap<RegisterDTO, ApplicationUser>()
                 .ForMember(c => c.UserName, d => d.MapFrom(e => e.Email))
+                .ForMember(c => c.BirthDate, d => d.MapFrom(e => e.BirthDate.ToLocalTime().Date))
                 .ReverseMap();
 
             CreateMap<UserDTO, ApplicationUser>()
