@@ -19,6 +19,8 @@ namespace TrainingPlanner.Core.Mappings
 
             CreateMap<ExternalLoginDTO, ApplicationUser>()
                 .ForMember(c => c.UserName, d => d.MapFrom(e => e.Email));
+
+            CreateMap<SportDTO, Sport>().ReverseMap();
         }
 
     }
