@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Data;
 using TrainingPlanner.Data.Entities;
@@ -17,6 +18,12 @@ namespace TrainingPlanner.Repositories.Repositories
         public async Task<IEnumerable<Sport>> GetAllSports()
         {
             return await _trainingPlannerDbContext.Sports.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Sport>> GetSportsByNames(string sportNames)
+        {
+            var sports = sportNames.Split(", ");
+            return await _trainingPlannerDbContext.Sports.Where(s => sports.Contains(s.Name)).ToListAsync();
         }
 
         public async Task<Sport> GetSport(int id)

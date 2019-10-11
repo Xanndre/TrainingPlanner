@@ -34,6 +34,20 @@ namespace TrainingPlanner.API.Controllers
 
         }
 
+        [HttpGet("names")]
+        public async Task<ActionResult<IEnumerable<SportDTO>>> GetSportsByNames([FromQuery] string sportNames)
+        {
+            try
+            {
+                return Ok(await _sportService.GetSportsByNames(sportNames));
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<SportDTO>> GetSport(int id)
         {

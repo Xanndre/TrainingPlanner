@@ -25,6 +25,12 @@ namespace TrainingPlanner.Core.Services
             return _mapper.Map<IEnumerable<SportDTO>>(sports);
         }
 
+        public async Task<IEnumerable<SportDTO>> GetSportsByNames(string sportNames)
+        {
+            var sports = await _sportRepository.GetSportsByNames(sportNames);
+            return _mapper.Map<IEnumerable<SportDTO>>(sports);
+        }
+
         public async Task<SportDTO> GetSport(int id)
         {
             var sport = await _sportRepository.GetSport(id);

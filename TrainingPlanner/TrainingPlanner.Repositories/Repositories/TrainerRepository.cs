@@ -34,7 +34,7 @@ namespace TrainingPlanner.Repositories.Repositories
         public async Task<Trainer> CreateTrainer(Trainer trainer)
         {
             await _trainingPlannerDbContext.Trainers.AddAsync(trainer);
-            await _trainingPlannerDbContext.SaveChangesAsync();
+            //await _trainingPlannerDbContext.SaveChangesAsync();
             return trainer;
         }
 

@@ -7,6 +7,6 @@ namespace TrainingPlanner.Core.DTOs
         public int Id { get; set; }
         public UserDTO User { get; set; }
         public string Description { get; set; }
-        public ICollection<SportDTO> Sports { get; set; }
+        public ICollection<TrainerSportDTO> Sports { get; set; }
     }
 }
