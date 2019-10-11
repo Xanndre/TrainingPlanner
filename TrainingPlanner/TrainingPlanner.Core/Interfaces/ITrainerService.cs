@@ -9,7 +9,7 @@ namespace TrainingPlanner.Core.Interfaces
         Task<IEnumerable<TrainerDTO>> GetAllTrainers();
         Task<TrainerDTO> GetTrainer(int id);
         Task<TrainerDTO> UpdateTrainer(TrainerDTO trainer);
-        Task<TrainerDTO> CreateTrainer(TrainerDTO trainer);
+        Task<TrainerDTO> CreateTrainer(TrainerCreateDTO trainer);
         Task DeleteTrainer(int id);
     }
 }

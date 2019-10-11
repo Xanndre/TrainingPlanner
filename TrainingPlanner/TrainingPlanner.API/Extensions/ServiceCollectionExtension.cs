@@ -56,12 +56,14 @@ namespace TrainingPlanner.API.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISportService, SportService>();
+            services.AddScoped<ITrainerService, TrainerService>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISportRepository, SportRepository>();
+            services.AddScoped<ITrainerRepository, TrainerRepository>();
         }
 
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)

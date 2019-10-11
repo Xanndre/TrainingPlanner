@@ -2,10 +2,9 @@
 
 namespace TrainingPlanner.Core.DTOs
 {
-    public class TrainerDTO
+    public class TrainerCreateDTO
     {
-        public int Id { get; set; }
-        public UserDTO User { get; set; }
+        public string UserId { get; set; }
         public string Description { get; set; }
         public ICollection<SportDTO> Sports { get; set; }
     }

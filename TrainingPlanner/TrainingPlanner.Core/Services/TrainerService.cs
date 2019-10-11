@@ -38,7 +38,7 @@ namespace TrainingPlanner.Core.Services
             return _mapper.Map<TrainerDTO>(returnedTrainer);
         }
 
-        public async Task<TrainerDTO> CreateTrainer(TrainerDTO trainer)
+        public async Task<TrainerDTO> CreateTrainer(TrainerCreateDTO trainer)
         {
             var mappedTrainer = _mapper.Map<Trainer>(trainer);
             var returnedTrainer = await _trainerRepository.CreateTrainer(mappedTrainer);

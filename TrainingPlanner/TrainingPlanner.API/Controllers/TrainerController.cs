@@ -72,7 +72,7 @@ namespace TrainingPlanner.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TrainerDTO>> CreateTrainer([FromBody] TrainerDTO trainer)
+        public async Task<ActionResult<TrainerDTO>> CreateTrainer([FromBody] TrainerCreateDTO trainer)
         {
             try
             {
