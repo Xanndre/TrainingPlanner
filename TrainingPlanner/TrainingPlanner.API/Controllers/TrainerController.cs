@@ -104,5 +104,24 @@ namespace TrainingPlanner.API.Controllers
             }
 
         }
+
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<TrainerDTO>> GetTrainerByUser(string userId)
+        {
+            try
+            {
+                var trainer = await _trainerService.GetTrainerByUser(userId);
+                return Ok(trainer);
+            }
+            catch (ArgumentNullException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
     }
 }

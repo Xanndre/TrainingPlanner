@@ -8,6 +8,7 @@ namespace TrainingPlanner.Repositories.Interfaces
     {
         Task<IEnumerable<Trainer>> GetAllTrainers();
         Task<Trainer> GetTrainer(int id);
+        Task<Trainer> GetTrainerByUser(string userId);
         Task<Trainer> UpdateTrainer(Trainer trainer);
         Task<Trainer> CreateTrainer(Trainer trainer);
         Task DeleteTrainer(Trainer trainer);

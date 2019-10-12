@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Data;
 using TrainingPlanner.Data.Entities;
@@ -22,7 +21,15 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<Trainer> GetTrainer(int id)
         {
-            return await _trainingPlannerDbContext.Trainers.FirstAsync(u => u.Id == id);
+            return await _trainingPlannerDbContext.Trainers.FirstAsync(t => t.Id == id);
+        }
+
+        public async Task<Trainer> GetTrainerByUser(string userId)
+        {
+            return await _trainingPlannerDbContext.Trainers
+                .Include(t => t.Sports)
+                .ThenInclude(t => t.Sport)
+                .FirstOrDefaultAsync(t => t.UserId == userId);
         }
 
         public async Task<Trainer> UpdateTrainer(Trainer trainer)

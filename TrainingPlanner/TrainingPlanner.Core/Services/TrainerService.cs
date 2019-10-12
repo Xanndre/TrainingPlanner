@@ -31,6 +31,12 @@ namespace TrainingPlanner.Core.Services
             return _mapper.Map<TrainerDTO>(trainer);
         }
 
+        public async Task<TrainerDTO> GetTrainerByUser(string userId)
+        {
+            var trainer = await _trainerRepository.GetTrainerByUser(userId);
+            return _mapper.Map<TrainerDTO>(trainer);
+        }
+
         public async Task<TrainerDTO> UpdateTrainer(TrainerDTO trainer)
         {
             var mappedTrainer = _mapper.Map<Trainer>(trainer);
@@ -51,5 +57,6 @@ namespace TrainingPlanner.Core.Services
             var trainer = await _trainerRepository.GetTrainer(id);
             await _trainerRepository.DeleteTrainer(trainer);
         }
+
     }
 }
