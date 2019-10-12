@@ -38,5 +38,6 @@ namespace TrainingPlanner.Repositories.Repositories
                 .SingleOrDefaultAsync(u => u.LoginProvider == provider && u.UserId == id);
             return user;
         }
+
     }
 }

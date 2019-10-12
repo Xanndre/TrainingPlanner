@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Data;
 using TrainingPlanner.Data.Entities;
@@ -34,7 +35,7 @@ namespace TrainingPlanner.Repositories.Repositories
         public async Task<Trainer> CreateTrainer(Trainer trainer)
         {
             await _trainingPlannerDbContext.Trainers.AddAsync(trainer);
-            //await _trainingPlannerDbContext.SaveChangesAsync();
+            await _trainingPlannerDbContext.SaveChangesAsync();
             return trainer;
         }
 
@@ -43,5 +44,6 @@ namespace TrainingPlanner.Repositories.Repositories
             _trainingPlannerDbContext.Trainers.Remove(trainer);
             await _trainingPlannerDbContext.SaveChangesAsync();
         }
+
     }
 }

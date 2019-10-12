@@ -17,13 +17,17 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<IEnumerable<Sport>> GetAllSports()
         {
-            return await _trainingPlannerDbContext.Sports.ToListAsync();
+            return await _trainingPlannerDbContext.Sports
+                .OrderBy(s => s.Name)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Sport>> GetSportsByNames(string sportNames)
         {
             var sports = sportNames.Split(", ");
-            return await _trainingPlannerDbContext.Sports.Where(s => sports.Contains(s.Name)).ToListAsync();
+            return await _trainingPlannerDbContext.Sports
+                .Where(s => sports.Contains(s.Name))
+                .ToListAsync();
         }
 
         public async Task<Sport> GetSport(int id)

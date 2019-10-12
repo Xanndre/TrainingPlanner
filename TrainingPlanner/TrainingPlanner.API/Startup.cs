@@ -21,7 +21,8 @@ namespace TrainingPlanner.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<TrainingPlannerDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString(DictionaryResources.DbConnection)));
 
