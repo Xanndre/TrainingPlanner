@@ -7,5 +7,6 @@ namespace TrainingPlanner.Core.DTOs
         public string UserId { get; set; }
         public string Description { get; set; }
         public ICollection<TrainerSportBasicDTO> Sports { get; set; }
+        public ICollection<TrainerPriceBasicDTO> PriceList { get; set; }
     }
 }
