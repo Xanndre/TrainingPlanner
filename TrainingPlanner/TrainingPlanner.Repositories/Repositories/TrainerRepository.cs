@@ -27,6 +27,7 @@ namespace TrainingPlanner.Repositories.Repositories
         public async Task<Trainer> GetTrainerByUser(string userId)
         {
             return await _trainingPlannerDbContext.Trainers
+                .Include(t => t.PriceList)
                 .Include(t => t.Sports)
                 .ThenInclude(t => t.Sport)
                 .FirstOrDefaultAsync(t => t.UserId == userId);
