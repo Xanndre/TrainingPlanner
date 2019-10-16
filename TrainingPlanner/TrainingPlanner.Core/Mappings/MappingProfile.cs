@@ -29,6 +29,7 @@ namespace TrainingPlanner.Core.Mappings
             CreateMap<ClubDTO, Club>().ReverseMap();
 
             CreateMap<Trainer, TrainerCreateDTO>().ReverseMap();
+            CreateMap<Trainer, TrainerUpdateDTO>().ReverseMap();
             CreateMap<Club, ClubCreateDTO>().ReverseMap();
 
             CreateMap<TrainerSportDTO, TrainerSport>().ReverseMap();

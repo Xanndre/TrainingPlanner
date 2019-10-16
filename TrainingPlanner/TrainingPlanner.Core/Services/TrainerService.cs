@@ -37,11 +37,15 @@ namespace TrainingPlanner.Core.Services
             return _mapper.Map<TrainerDTO>(trainer);
         }
 
-        public async Task<TrainerDTO> UpdateTrainer(TrainerDTO trainer)
+        public async Task<TrainerUpdateDTO> UpdateTrainer(TrainerUpdateDTO trainer)
         {
             var mappedTrainer = _mapper.Map<Trainer>(trainer);
+
+            await RemoveTrainerSports(mappedTrainer);
+            await RemoveTrainerPrices(mappedTrainer);
+
             var returnedTrainer = await _trainerRepository.UpdateTrainer(mappedTrainer);
-            return _mapper.Map<TrainerDTO>(returnedTrainer);
+            return _mapper.Map<TrainerUpdateDTO>(returnedTrainer);
         }
 
         public async Task<TrainerCreateDTO> CreateTrainer(TrainerCreateDTO trainer)
@@ -56,6 +60,18 @@ namespace TrainingPlanner.Core.Services
 
             var trainer = await _trainerRepository.GetTrainer(id);
             await _trainerRepository.DeleteTrainer(trainer);
+        }
+
+        private async Task RemoveTrainerSports(Trainer mappedTrainer)
+        {
+            var trainerSportsToDelete = await _trainerRepository.GetTrainerSportsToDelete(mappedTrainer);
+            await _trainerRepository.RemoveTrainerSports(trainerSportsToDelete, false);
+        }
+
+        private async Task RemoveTrainerPrices(Trainer mappedTrainer)
+        {
+            var trainerPricesToDelete = await _trainerRepository.GetTrainerPricesToDelete(mappedTrainer);
+            await _trainerRepository.RemoveTrainerPrices(trainerPricesToDelete, false);
         }
 
     }

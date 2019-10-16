@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Data;
 using TrainingPlanner.Data.Entities;
@@ -51,6 +52,42 @@ namespace TrainingPlanner.Repositories.Repositories
         {
             _trainingPlannerDbContext.Trainers.Remove(trainer);
             await _trainingPlannerDbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<TrainerSport>> GetTrainerSportsToDelete(Trainer trainer)
+        {
+            return await _trainingPlannerDbContext.TrainerSports
+                .Where(t => t.TrainerId == trainer.Id)
+                .Except(trainer.Sports)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<TrainerPrice>> GetTrainerPricesToDelete(Trainer trainer)
+        {
+            return await _trainingPlannerDbContext.TrainerPrices
+                .Where(t => t.TrainerId == trainer.Id)
+                .Except(trainer.PriceList)
+                .ToListAsync();
+        }
+
+        public async Task RemoveTrainerSports(IEnumerable<TrainerSport> sports, bool isSavingChanges = true)
+        {
+            _trainingPlannerDbContext.TrainerSports.RemoveRange(sports);
+
+            if (isSavingChanges)
+            {
+                await _trainingPlannerDbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveTrainerPrices(IEnumerable<TrainerPrice> priceList, bool isSavingChanges = true)
+        {
+            _trainingPlannerDbContext.TrainerPrices.RemoveRange(priceList);
+
+            if (isSavingChanges)
+            {
+                await _trainingPlannerDbContext.SaveChangesAsync();
+            }
         }
 
     }
