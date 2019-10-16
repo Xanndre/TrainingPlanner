@@ -17,7 +17,11 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<IEnumerable<Trainer>> GetAllTrainers()
         {
-            return await _trainingPlannerDbContext.Trainers.ToListAsync();
+            return await _trainingPlannerDbContext.Trainers
+                .Include(t => t.User)
+                .Include(t => t.Sports)
+                .ThenInclude(s => s.Sport)
+                .ToListAsync();
         }
 
         public async Task<Trainer> GetTrainer(int id)
