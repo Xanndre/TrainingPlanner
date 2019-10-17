@@ -26,7 +26,12 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<Trainer> GetTrainer(int id)
         {
-            return await _trainingPlannerDbContext.Trainers.FirstAsync(t => t.Id == id);
+            return await _trainingPlannerDbContext.Trainers
+                .Include(t => t.User)
+                .Include(t => t.PriceList)
+                .Include(t => t.Sports)
+                .ThenInclude(s => s.Sport)
+                .FirstAsync(t => t.Id == id);
         }
 
         public async Task<Trainer> GetTrainerByUser(string userId)
