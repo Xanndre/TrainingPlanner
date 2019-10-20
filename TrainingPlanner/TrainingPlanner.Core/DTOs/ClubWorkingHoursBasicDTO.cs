@@ -1,16 +1,13 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace TrainingPlanner.Data.Entities
+namespace TrainingPlanner.Core.DTOs
 {
-    public class ClubWorkingHours
+    public class ClubWorkingHoursBasicDTO
     {
-        [Key]
         public int Id { get; set; }
         public string Day { get; set; }
         public DateTime OpenHour { get; set; }
         public DateTime CloseHour { get; set; }
         public int ClubId { get; set; }
-        public Club Club { get; set; }
     }
 }

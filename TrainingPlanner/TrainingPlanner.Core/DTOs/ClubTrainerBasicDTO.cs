@@ -1,15 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TrainingPlanner.Data.Entities
+﻿namespace TrainingPlanner.Core.DTOs
 {
-    public class ClubTrainer
+    public class ClubTrainerBasicDTO
     {
-        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Picture { get; set; }
         public int ClubId { get; set; }
-        public Club Club { get; set; }
     }
 }

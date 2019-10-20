@@ -14,5 +14,9 @@ namespace TrainingPlanner.Core.DTOs
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public ICollection<ClubPriceBasicDTO> PriceList { get; set; }
+        public ICollection<ClubActivityBasicDTO> Activities { get; set; }
+        public ICollection<ClubTrainerBasicDTO> Trainers { get; set; }
+        public ICollection<ClubWorkingHoursBasicDTO> WorkingHours { get; set; }
+        public ICollection<PictureDTO> Pictures { get; set; }
     }
 }
