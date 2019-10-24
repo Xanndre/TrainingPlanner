@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,20 +17,6 @@ namespace TrainingPlanner.API.Controllers
         public ClubController(IClubService clubService)
         {
             _clubService = clubService;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClubDTO>>> GetAllClubs()
-        {
-            try
-            {
-                return Ok(await _clubService.GetAllClubs());
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.Message);
-            }
-
         }
 
         [HttpGet("{id}")]
@@ -97,6 +82,58 @@ namespace TrainingPlanner.API.Controllers
             catch (ArgumentNullException exception)
             {
                 return NotFound(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PagedClubsDTO>> GetAllClubs(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 6,
+            [FromQuery] string userId = null)
+        {
+            try
+            {
+                var result = await _clubService.GetAllClubs(pageNumber, pageSize, userId);
+                return Ok(result);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
+
+        [HttpGet("favourites")]
+        public async Task<ActionResult<PagedClubsDTO>> GetFavouriteClubs(
+            [FromQuery] string userId,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 6)
+        {
+            try
+            {
+                return Ok(await _clubService.GetFavouriteClubs(pageNumber, pageSize, userId));
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
+
+        [HttpGet("user")]
+        public async Task<ActionResult<PagedClubsDTO>> GetUserClubs(
+            [FromQuery] string userId,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 6)
+        {
+            try
+            {
+                return Ok(await _clubService.GetUserClubs(pageNumber, pageSize, userId));
             }
             catch (Exception exception)
             {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Linq;
 using TrainingPlanner.Core.DTOs;
 using TrainingPlanner.Data.Entities;
 
@@ -47,6 +48,9 @@ namespace TrainingPlanner.Core.Mappings
             CreateMap<ClubWorkingHoursBasicDTO, ClubWorkingHours>().ReverseMap();
             CreateMap<PictureDTO, Picture>().ReverseMap();
 
+            CreateMap<Club, ClubBaseDTO>()
+            .ForMember(c => c.Picture, d => d.MapFrom(e => e.Pictures.FirstOrDefault(p => p.IsMiniature)))
+            .ForMember(c => c.IsFavourite, d => d.MapFrom(e => e.Favourites.Any()));
 
         }
 
