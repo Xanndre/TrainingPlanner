@@ -15,15 +15,6 @@ namespace TrainingPlanner.Repositories.Repositories
 
         }
 
-        public async Task<IEnumerable<Trainer>> GetAllTrainers()
-        {
-            return await _trainingPlannerDbContext.Trainers
-                .Include(t => t.User)
-                .Include(t => t.Sports)
-                .ThenInclude(s => s.Sport)
-                .ToListAsync();
-        }
-
         public async Task<Trainer> GetTrainer(int id)
         {
             return await _trainingPlannerDbContext.Trainers
@@ -97,6 +88,47 @@ namespace TrainingPlanner.Repositories.Repositories
             {
                 await _trainingPlannerDbContext.SaveChangesAsync();
             }
+        }
+
+        public IQueryable<Trainer> GetAllTrainers()
+        {
+            return GetTrainerQuery();
+        }
+
+
+        public async Task<IEnumerable<Trainer>> GetAllTrainers(string userId)
+        {
+            var trainers = GetTrainerWithFavouriteQuery(userId);
+            return await trainers.ToList();
+        }
+
+        public async Task<IEnumerable<Trainer>> GetFavouriteTrainers(string userId)
+        {
+            var trainers = GetTrainerWithFavouriteQuery(userId)
+                .Where(t => _trainingPlannerDbContext.FavouriteTrainers
+                    .Any(fav => t.Id == fav.TrainerId && fav.User.Id == userId));
+
+            return await trainers.ToList();
+        }
+
+        private IQueryable<Trainer> GetTrainerQuery()
+        {
+            return _trainingPlannerDbContext.Trainers
+                .Include(t => t.User)
+                .Include(t => t.Sports)
+                .ThenInclude(s => s.Sport);
+        }
+
+        private IAsyncEnumerable<Trainer> GetTrainerWithFavouriteQuery(string userId)
+        {
+            return GetTrainerQuery()
+                  .Include(x => x.Favourites)
+                  .ToAsyncEnumerable()
+                  .Select(x =>
+                  {
+                      x.Favourites = x.Favourites.Any() ? x.Favourites.Where(f => f.UserId == userId).ToList() : null;
+                      return x;
+                  });
         }
 
     }

@@ -52,6 +52,9 @@ namespace TrainingPlanner.Core.Mappings
             .ForMember(c => c.Picture, d => d.MapFrom(e => e.Pictures.FirstOrDefault(p => p.IsMiniature)))
             .ForMember(c => c.IsFavourite, d => d.MapFrom(e => e.Favourites.Any()));
 
+            CreateMap<Trainer, TrainerBaseDTO>()
+            .ForMember(c => c.IsFavourite, d => d.MapFrom(e => e.Favourites.Any()));
+
         }
 
     }

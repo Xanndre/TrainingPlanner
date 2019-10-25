@@ -20,20 +20,6 @@ namespace TrainingPlanner.API.Controllers
             _trainerService = trainerService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TrainerDTO>>> GetAllTrainers()
-        {
-            try
-            {
-                return Ok(await _trainerService.GetAllTrainers());
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.Message);
-            }
-
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<TrainerDTO>> GetTrainer(int id)
         {
@@ -116,6 +102,41 @@ namespace TrainingPlanner.API.Controllers
             catch (ArgumentNullException exception)
             {
                 return NotFound(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PagedTrainersDTO>> GetAllTrainers(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 3,
+            [FromQuery] string userId = null)
+        {
+            try
+            {
+                var result = await _trainerService.GetAllTrainers(pageNumber, pageSize, userId);
+                return Ok(result);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
+
+        [HttpGet("favourites")]
+        public async Task<ActionResult<PagedTrainersDTO>> GetFavouriteTrainers(
+            [FromQuery] string userId,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 3)
+        {
+            try
+            {
+                return Ok(await _trainerService.GetFavouriteTrainers(pageNumber, pageSize, userId));
             }
             catch (Exception exception)
             {

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs;
 using TrainingPlanner.Core.Interfaces;
@@ -10,6 +12,7 @@ namespace TrainingPlanner.Core.Services
 {
     public class TrainerService : ITrainerService
     {
+        private const int MaxPageSize = 20;
         private readonly ITrainerRepository _trainerRepository;
         private readonly IMapper _mapper;
 
@@ -17,12 +20,6 @@ namespace TrainingPlanner.Core.Services
         {
             _trainerRepository = trainerRepository;
             _mapper = mapper;
-        }
-
-        public async Task<IEnumerable<TrainerDTO>> GetAllTrainers()
-        {
-            var trainers = await _trainerRepository.GetAllTrainers();
-            return _mapper.Map<IEnumerable<TrainerDTO>>(trainers);
         }
 
         public async Task<TrainerDTO> GetTrainer(int id)
@@ -62,6 +59,36 @@ namespace TrainingPlanner.Core.Services
             await _trainerRepository.DeleteTrainer(trainer);
         }
 
+        public async Task<PagedTrainersDTO> GetFavouriteTrainers(
+            int pageNumber,
+            int pageSize,
+            string userId)
+        {
+            var trainers = await _trainerRepository.GetFavouriteTrainers(userId);
+            var result = GetTrainers(pageNumber, pageSize, trainers);
+            return result;
+        }
+
+        public async Task<PagedTrainersDTO> GetAllTrainers(
+            int pageNumber,
+            int pageSize,
+            string userId)
+        {
+            IEnumerable<Trainer> trainers;
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                trainers = await _trainerRepository.GetAllTrainers(userId);
+            }
+            else
+            {
+                trainers = _trainerRepository.GetAllTrainers();
+            }
+
+            var result = GetTrainers(pageNumber, pageSize, trainers);
+            return result;
+        }
+
         private async Task RemoveTrainerSports(Trainer mappedTrainer)
         {
             var trainerSportsToDelete = await _trainerRepository.GetTrainerSportsToDelete(mappedTrainer);
@@ -72,6 +99,30 @@ namespace TrainingPlanner.Core.Services
         {
             var trainerPricesToDelete = await _trainerRepository.GetTrainerPricesToDelete(mappedTrainer);
             await _trainerRepository.RemoveTrainerPrices(trainerPricesToDelete, false);
+        }
+
+        private PagedTrainersDTO GetTrainers(
+            int pageNumber, int pageSize, IEnumerable<Trainer> trainers)
+        {
+            var result = GetPagedTrainers(trainers, pageNumber, pageSize);
+            return result;
+        }
+
+        private PagedTrainersDTO GetPagedTrainers(IEnumerable<Trainer> trainers, int pageNumber, int pageSize)
+        {
+            var result = new PagedTrainersDTO();
+
+            var calculatedPageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
+            var pagedTrainers = trainers
+                .Skip(calculatedPageSize * (pageNumber - 1))
+                .Take(calculatedPageSize)
+                .ToList();
+
+            result.TotalCount = trainers.Count();
+            result.TotalPages = (int)Math.Ceiling(result.TotalCount / (double)calculatedPageSize);
+            result.Trainers = _mapper.Map<IEnumerable<TrainerBaseDTO>>(pagedTrainers);
+
+            return result;
         }
 
     }

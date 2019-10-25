@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Data.Entities;
 
@@ -6,7 +7,9 @@ namespace TrainingPlanner.Repositories.Interfaces
 {
     public interface ITrainerRepository
     {
-        Task<IEnumerable<Trainer>> GetAllTrainers();
+        IQueryable<Trainer> GetAllTrainers();
+        Task<IEnumerable<Trainer>> GetFavouriteTrainers(string userId);
+        Task<IEnumerable<Trainer>> GetAllTrainers(string userId);
         Task<Trainer> GetTrainer(int id);
         Task<Trainer> GetTrainerByUser(string userId);
         Task<Trainer> UpdateTrainer(Trainer trainer);
