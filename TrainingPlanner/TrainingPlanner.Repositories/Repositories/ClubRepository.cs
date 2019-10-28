@@ -90,5 +90,95 @@ namespace TrainingPlanner.Repositories.Repositories
                       return x;
                   });
         }
+
+        public async Task<IEnumerable<ClubActivity>> GetClubActivitiesToDelete(Club club)
+        {
+            return await _trainingPlannerDbContext.ClubActivities
+                .Where(c => c.ClubId == club.Id)
+                .Except(club.Activities)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ClubTrainer>> GetClubTrainersToDelete(Club club)
+        {
+            return await _trainingPlannerDbContext.ClubTrainers
+                .Where(c => c.ClubId == club.Id)
+                .Except(club.Trainers)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Picture>> GetClubPicturesToDelete(Club club)
+        {
+            return await _trainingPlannerDbContext.Pictures
+                .Where(c => c.ClubId == club.Id)
+                .Except(club.Pictures)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ClubPrice>> GetClubPricesToDelete(Club club)
+        {
+            return await _trainingPlannerDbContext.ClubPrices
+                .Where(c => c.ClubId == club.Id)
+                .Except(club.PriceList)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ClubWorkingHours>> GetClubWorkingHoursToDelete(Club club)
+        {
+            return await _trainingPlannerDbContext.ClubWorkingHours
+                .Where(c => c.ClubId == club.Id)
+                .Except(club.WorkingHours)
+                .ToListAsync();
+        }
+
+        public async Task RemoveClubActivities(IEnumerable<ClubActivity> activities, bool isSavingChanges = true)
+        {
+            _trainingPlannerDbContext.ClubActivities.RemoveRange(activities);
+
+            if (isSavingChanges)
+            {
+                await _trainingPlannerDbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveClubTrainers(IEnumerable<ClubTrainer> trainers, bool isSavingChanges = true)
+        {
+            _trainingPlannerDbContext.ClubTrainers.RemoveRange(trainers);
+
+            if (isSavingChanges)
+            {
+                await _trainingPlannerDbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveClubPictures(IEnumerable<Picture> pictures, bool isSavingChanges = true)
+        {
+            _trainingPlannerDbContext.Pictures.RemoveRange(pictures);
+
+            if (isSavingChanges)
+            {
+                await _trainingPlannerDbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveClubPrices(IEnumerable<ClubPrice> priceList, bool isSavingChanges = true)
+        {
+            _trainingPlannerDbContext.ClubPrices.RemoveRange(priceList);
+
+            if (isSavingChanges)
+            {
+                await _trainingPlannerDbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveClubWorkingHours(IEnumerable<ClubWorkingHours> workingHours, bool isSavingChanges = true)
+        {
+            _trainingPlannerDbContext.ClubWorkingHours.RemoveRange(workingHours);
+
+            if (isSavingChanges)
+            {
+                await _trainingPlannerDbContext.SaveChangesAsync();
+            }
+        }
     }
 }

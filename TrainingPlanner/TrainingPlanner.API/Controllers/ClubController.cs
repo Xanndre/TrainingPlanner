@@ -39,7 +39,7 @@ namespace TrainingPlanner.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ClubDTO>> UpdateClub([FromBody] ClubDTO club)
+        public async Task<ActionResult<ClubUpdateDTO>> UpdateClub([FromBody] ClubUpdateDTO club)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace TrainingPlanner.API.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedClubsDTO>> GetAllClubs(
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 6,
+            [FromQuery] int pageSize = 3,
             [FromQuery] string userId = null)
         {
             try
@@ -112,7 +112,7 @@ namespace TrainingPlanner.API.Controllers
         public async Task<ActionResult<PagedClubsDTO>> GetFavouriteClubs(
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 6)
+            [FromQuery] int pageSize = 3)
         {
             try
             {
@@ -129,7 +129,7 @@ namespace TrainingPlanner.API.Controllers
         public async Task<ActionResult<PagedClubsDTO>> GetUserClubs(
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 6)
+            [FromQuery] int pageSize = 3)
         {
             try
             {

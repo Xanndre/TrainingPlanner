@@ -28,11 +28,18 @@ namespace TrainingPlanner.Core.Services
             return _mapper.Map<ClubDTO>(club);
         }
 
-        public async Task<ClubDTO> UpdateClub(ClubDTO club)
+        public async Task<ClubUpdateDTO> UpdateClub(ClubUpdateDTO club)
         {
             var mappedClub = _mapper.Map<Club>(club);
+
+            await RemoveClubActivities(mappedClub);
+            await RemoveClubTrainers(mappedClub);
+            await RemoveClubPictures(mappedClub);
+            await RemoveClubWorkingHours(mappedClub);
+            await RemoveClubPrices(mappedClub);
+
             var returnedClub = await _clubRepository.UpdateClub(mappedClub);
-            return _mapper.Map<ClubDTO>(returnedClub);
+            return _mapper.Map<ClubUpdateDTO>(returnedClub);
         }
 
         public async Task<ClubCreateDTO> CreateClub(ClubCreateDTO club)
@@ -113,5 +120,34 @@ namespace TrainingPlanner.Core.Services
             return result;
         }
 
+        private async Task RemoveClubActivities(Club mappedClub)
+        {
+            var clubActivitiesToDelete = await _clubRepository.GetClubActivitiesToDelete(mappedClub);
+            await _clubRepository.RemoveClubActivities(clubActivitiesToDelete, false);
+        }
+
+        private async Task RemoveClubTrainers(Club mappedClub)
+        {
+            var clubTrainersToDelete = await _clubRepository.GetClubTrainersToDelete(mappedClub);
+            await _clubRepository.RemoveClubTrainers(clubTrainersToDelete, false);
+        }
+
+        private async Task RemoveClubPictures(Club mappedClub)
+        {
+            var clubPicturesToDelete = await _clubRepository.GetClubPicturesToDelete(mappedClub);
+            await _clubRepository.RemoveClubPictures(clubPicturesToDelete, false);
+        }
+
+        private async Task RemoveClubWorkingHours(Club mappedClub)
+        {
+            var clubWorkingHoursToDelete = await _clubRepository.GetClubWorkingHoursToDelete(mappedClub);
+            await _clubRepository.RemoveClubWorkingHours(clubWorkingHoursToDelete, false);
+        }
+
+        private async Task RemoveClubPrices(Club mappedClub)
+        {
+            var clubPricesToDelete = await _clubRepository.GetClubPricesToDelete(mappedClub);
+            await _clubRepository.RemoveClubPrices(clubPricesToDelete, false);
+        }
     }
 }
