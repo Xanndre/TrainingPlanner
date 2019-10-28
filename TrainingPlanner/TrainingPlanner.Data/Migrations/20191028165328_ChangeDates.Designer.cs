@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrainingPlanner.Data;
 
 namespace TrainingPlanner.Data.Migrations
 {
     [DbContext(typeof(TrainingPlannerDbContext))]
-    partial class TrainingPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191028165328_ChangeDates")]
+    partial class ChangeDates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -329,13 +331,9 @@ namespace TrainingPlanner.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CloseHour");
-
                     b.Property<int>("ClubId");
 
                     b.Property<string>("Day");
-
-                    b.Property<string>("OpenHour");
 
                     b.HasKey("Id");
 

@@ -45,7 +45,8 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<Club> GetClub(int id)
         {
-            return await _trainingPlannerDbContext.Clubs.FirstAsync(c => c.Id == id);
+            return await GetClubQuery()
+                .FirstAsync(c => c.Id == id);
         }
 
         public async Task<Club> UpdateClub(Club club)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TrainingPlanner.Data.Entities
 {
@@ -8,8 +7,8 @@ namespace TrainingPlanner.Data.Entities
         [Key]
         public int Id { get; set; }
         public string Day { get; set; }
-        public DateTime OpenHour { get; set; }
-        public DateTime CloseHour { get; set; }
+        public string OpenHour { get; set; }
+        public string CloseHour { get; set; }
         public int ClubId { get; set; }
         public Club Club { get; set; }
     }
