@@ -6,6 +6,7 @@ namespace TrainingPlanner.Core.Interfaces
     public interface IClubService
     {
         Task<ClubDTO> GetClub(int id);
+        Task<int> GetClubQuantity(string userId);
         Task<ClubUpdateDTO> UpdateClub(ClubUpdateDTO club);
         Task<ClubCreateDTO> CreateClub(ClubCreateDTO club);
         Task DeleteClub(int id);

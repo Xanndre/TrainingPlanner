@@ -141,6 +141,25 @@ namespace TrainingPlanner.API.Controllers
             }
 
         }
+
+        [HttpGet("user/{userId}/quantity")]
+        public async Task<ActionResult<int>> GetClubQuantity(string userId)
+        {
+            try
+            {
+                var quantity = await _clubService.GetClubQuantity(userId);
+                return Ok(quantity);
+            }
+            catch (ArgumentNullException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
     }
 
 

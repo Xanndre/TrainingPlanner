@@ -69,6 +69,13 @@ namespace TrainingPlanner.Repositories.Repositories
             await _trainingPlannerDbContext.SaveChangesAsync();
         }
 
+        public async Task<int> GetClubQuantity(string userId)
+        {
+            return await _trainingPlannerDbContext.Clubs
+                .Where(c => c.UserId == userId)
+                .CountAsync();
+        }
+
         private IQueryable<Club> GetClubQuery()
         {
             return _trainingPlannerDbContext.Clubs

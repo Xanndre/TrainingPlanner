@@ -8,6 +8,7 @@ namespace TrainingPlanner.Repositories.Interfaces
     public interface IClubRepository
     {
         Task<Club> GetClub(int id);
+        Task<int> GetClubQuantity(string userId);
         Task<Club> UpdateClub(Club club);
         Task<Club> CreateClub(Club club);
         Task DeleteClub(Club club);
