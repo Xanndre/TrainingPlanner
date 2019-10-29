@@ -9,5 +9,6 @@ namespace TrainingPlanner.Core.Interfaces
         Task<IEnumerable<UserDTO>> GetAllUsers();
         Task<UserDTO> GetUser(string id);
         Task<UserDTO> UpdateUser(UserDTO dto);
+        Task DeleteUser(string id);
     }
 }

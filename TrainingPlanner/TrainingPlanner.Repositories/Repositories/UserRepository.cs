@@ -39,5 +39,11 @@ namespace TrainingPlanner.Repositories.Repositories
             return user;
         }
 
+        public async Task DeleteUser(ApplicationUser user)
+        {
+            _trainingPlannerDbContext.Users.Remove(user);
+            await _trainingPlannerDbContext.SaveChangesAsync();
+        }
+
     }
 }

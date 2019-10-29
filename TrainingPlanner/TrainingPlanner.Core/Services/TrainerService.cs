@@ -54,7 +54,6 @@ namespace TrainingPlanner.Core.Services
 
         public async Task DeleteTrainer(int id)
         {
-
             var trainer = await _trainerRepository.GetTrainer(id);
             await _trainerRepository.DeleteTrainer(trainer);
         }

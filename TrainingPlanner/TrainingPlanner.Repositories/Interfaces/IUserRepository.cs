@@ -8,6 +8,7 @@ namespace TrainingPlanner.Repositories.Interfaces
     public interface IUserRepository
     {
         Task<IEnumerable<ApplicationUser>> GetAllUsers();
+        Task DeleteUser(ApplicationUser user);
         Task<ApplicationUser> GetUser(string id);
         Task<ApplicationUser> UpdateUser(ApplicationUser entity);
         Task<IdentityUserLogin<string>> GetUserLogin(string provider, string id);

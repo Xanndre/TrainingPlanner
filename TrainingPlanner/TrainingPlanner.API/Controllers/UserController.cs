@@ -70,5 +70,24 @@ namespace TrainingPlanner.API.Controllers
                 return BadRequest(exception.Message);
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteUser(string id)
+        {
+            try
+            {
+                await _userService.DeleteUser(id);
+                return Ok();
+            }
+            catch (ArgumentNullException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
     }
 }

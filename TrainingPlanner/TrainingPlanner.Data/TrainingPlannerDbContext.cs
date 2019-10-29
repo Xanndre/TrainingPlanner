@@ -38,7 +38,6 @@ namespace TrainingPlanner.Data
                         .HasOne(ts => ts.Trainer)
                         .WithMany(t => t.Sports)
                         .HasForeignKey(ts => ts.TrainerId);
-
         }
     }
 }
