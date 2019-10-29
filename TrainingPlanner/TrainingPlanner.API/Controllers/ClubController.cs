@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -149,6 +150,25 @@ namespace TrainingPlanner.API.Controllers
             {
                 var quantity = await _clubService.GetClubQuantity(userId);
                 return Ok(quantity);
+            }
+            catch (ArgumentNullException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
+
+        [HttpGet("user/{userId}/ids")]
+        public async Task<ActionResult<IEnumerable<int>>> GetClubIds(string userId)
+        {
+            try
+            {
+                var ids = await _clubService.GetClubIds(userId);
+                return Ok(ids);
             }
             catch (ArgumentNullException exception)
             {

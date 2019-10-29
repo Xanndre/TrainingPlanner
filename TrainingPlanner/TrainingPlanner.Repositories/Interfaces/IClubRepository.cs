@@ -9,6 +9,7 @@ namespace TrainingPlanner.Repositories.Interfaces
     {
         Task<Club> GetClub(int id);
         Task<int> GetClubQuantity(string userId);
+        Task<IEnumerable<int>> GetClubIds(string userId);
         Task<Club> UpdateClub(Club club);
         Task<Club> CreateClub(Club club);
         Task DeleteClub(Club club);

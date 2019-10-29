@@ -33,6 +33,11 @@ namespace TrainingPlanner.Core.Services
             return await _clubRepository.GetClubQuantity(userId);
         }
 
+        public async Task<IEnumerable<int>> GetClubIds(string userId)
+        {
+            return await _clubRepository.GetClubIds(userId);
+        }
+
         public async Task<ClubUpdateDTO> UpdateClub(ClubUpdateDTO club)
         {
             var mappedClub = _mapper.Map<Club>(club);

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs;
 
 namespace TrainingPlanner.Core.Interfaces
@@ -7,6 +8,7 @@ namespace TrainingPlanner.Core.Interfaces
     {
         Task<ClubDTO> GetClub(int id);
         Task<int> GetClubQuantity(string userId);
+        Task<IEnumerable<int>> GetClubIds(string userId);
         Task<ClubUpdateDTO> UpdateClub(ClubUpdateDTO club);
         Task<ClubCreateDTO> CreateClub(ClubCreateDTO club);
         Task DeleteClub(int id);
