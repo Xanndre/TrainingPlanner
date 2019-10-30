@@ -1,6 +1,13 @@
 ﻿using AutoMapper;
 using System.Linq;
 using TrainingPlanner.Core.DTOs;
+using TrainingPlanner.Core.DTOs.Account;
+using TrainingPlanner.Core.DTOs.Club;
+using TrainingPlanner.Core.DTOs.ClubStuff;
+using TrainingPlanner.Core.DTOs.Stuff;
+using TrainingPlanner.Core.DTOs.Trainer;
+using TrainingPlanner.Core.DTOs.TrainerStuff;
+using TrainingPlanner.Core.DTOs.User;
 using TrainingPlanner.Data.Entities;
 
 namespace TrainingPlanner.Core.Mappings

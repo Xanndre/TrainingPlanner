@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrainingPlanner.Core.DTOs;
+using TrainingPlanner.Core.DTOs.User;
 using TrainingPlanner.Core.Interfaces;
 
 namespace TrainingPlanner.API.Controllers
