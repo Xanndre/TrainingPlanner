@@ -20,6 +20,7 @@ namespace TrainingPlanner.API.Controllers
             _trainerService = trainerService;
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<TrainerDTO>> GetTrainer(int id)
         {
@@ -110,6 +111,7 @@ namespace TrainingPlanner.API.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<PagedTrainersDTO>> GetAllTrainers(
             [FromQuery] int pageNumber = 1,

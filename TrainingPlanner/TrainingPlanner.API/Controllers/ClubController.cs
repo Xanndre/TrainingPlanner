@@ -21,6 +21,7 @@ namespace TrainingPlanner.API.Controllers
             _clubService = clubService;
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ClubDTO>> GetClub(int id)
         {
@@ -92,6 +93,7 @@ namespace TrainingPlanner.API.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<PagedClubsDTO>> GetAllClubs(
             [FromQuery] int pageNumber = 1,
