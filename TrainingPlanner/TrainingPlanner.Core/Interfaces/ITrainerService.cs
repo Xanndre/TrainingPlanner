@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
-using TrainingPlanner.Core.DTOs;
+using TrainingPlanner.Core.DTOs.Paged;
+using TrainingPlanner.Core.DTOs.Trainer;
 
 namespace TrainingPlanner.Core.Interfaces
 {

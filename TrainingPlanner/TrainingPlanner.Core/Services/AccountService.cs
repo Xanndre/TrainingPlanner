@@ -13,7 +13,7 @@ using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using TrainingPlanner.Core.DTOs;
+using TrainingPlanner.Core.DTOs.Account;
 using TrainingPlanner.Core.Interfaces;
 using TrainingPlanner.Core.Options;
 using TrainingPlanner.Core.Utils;

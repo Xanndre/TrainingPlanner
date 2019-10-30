@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TrainingPlanner.Core.DTOs;
+using TrainingPlanner.Core.DTOs.User;
 using TrainingPlanner.Core.Interfaces;
 using TrainingPlanner.Repositories.Interfaces;
 

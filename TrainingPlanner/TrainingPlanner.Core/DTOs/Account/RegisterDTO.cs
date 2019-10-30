@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TrainingPlanner.Core.DTOs.Account
 {
-    class RegisterDTO : LoginDTO
+    public class RegisterDTO : LoginDTO
     {
         [Required]
         public string FirstName { get; set; }

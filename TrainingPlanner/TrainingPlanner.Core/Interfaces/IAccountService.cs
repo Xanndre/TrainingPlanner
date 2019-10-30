@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using TrainingPlanner.Core.DTOs;
+using TrainingPlanner.Core.DTOs.Account;
 
 namespace TrainingPlanner.Core.Interfaces
 {

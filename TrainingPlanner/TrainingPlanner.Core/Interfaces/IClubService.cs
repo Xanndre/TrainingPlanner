@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TrainingPlanner.Core.DTOs;
+using TrainingPlanner.Core.DTOs.Club;
+using TrainingPlanner.Core.DTOs.Paged;
 
 namespace TrainingPlanner.Core.Interfaces
 {

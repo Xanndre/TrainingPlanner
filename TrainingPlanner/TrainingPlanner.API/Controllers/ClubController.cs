@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TrainingPlanner.Core.DTOs;
+using TrainingPlanner.Core.DTOs.Club;
+using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.Interfaces;
 
 namespace TrainingPlanner.API.Controllers
