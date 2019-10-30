@@ -1,6 +1,6 @@
 ﻿namespace TrainingPlanner.Core.DTOs.Favourite
 {
-    public class FavouriteClubDTO : FavouriteBasicDTO
+    public class FavouriteClubDTO : FavouriteDTO
     {
         public int ClubId { get; set; }
     }

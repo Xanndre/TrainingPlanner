@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using System.Linq;
-using TrainingPlanner.Core.DTOs;
 using TrainingPlanner.Core.DTOs.Account;
 using TrainingPlanner.Core.DTOs.Club;
 using TrainingPlanner.Core.DTOs.ClubStuff;
@@ -30,8 +29,8 @@ namespace TrainingPlanner.Core.Mappings
 
             CreateMap<SportDTO, Sport>().ReverseMap();
 
-            CreateMap<TrainerPriceBasicDTO, TrainerPrice>().ReverseMap();
-            CreateMap<ClubPriceBasicDTO, ClubPrice>().ReverseMap();
+            CreateMap<TrainerPriceDTO, TrainerPrice>().ReverseMap();
+            CreateMap<ClubPriceDTO, ClubPrice>().ReverseMap();
 
             CreateMap<TrainerDTO, Trainer>().ReverseMap();
             CreateMap<ClubDTO, Club>().ReverseMap();
@@ -42,16 +41,15 @@ namespace TrainingPlanner.Core.Mappings
             CreateMap<Club, ClubCreateDTO>().ReverseMap();
 
             CreateMap<TrainerSportDTO, TrainerSport>().ReverseMap();
-            CreateMap<TrainerSport, TrainerSportBasicDTO>();
-            CreateMap<TrainerSportBasicDTO, TrainerSport>();
+            CreateMap<TrainerSport, TrainerSportBaseDTO>().ReverseMap();
 
-            CreateMap<ClubActivity, ClubActivityBasicDTO>()
+            CreateMap<ClubActivity, ClubActivityDTO>()
                 .ForMember(c => c.Picture, d => d.MapFrom(e => e.Picture))
                 .ReverseMap();
 
-            CreateMap<ClubTrainerBasicDTO, ClubTrainer>().ReverseMap();
+            CreateMap<ClubTrainerDTO, ClubTrainer>().ReverseMap();
 
-            CreateMap<ClubWorkingHoursBasicDTO, ClubWorkingHours>().ReverseMap(); 
+            CreateMap<ClubWorkingHoursDTO, ClubWorkingHours>().ReverseMap(); 
                 
             CreateMap<PictureDTO, Picture>().ReverseMap();
 

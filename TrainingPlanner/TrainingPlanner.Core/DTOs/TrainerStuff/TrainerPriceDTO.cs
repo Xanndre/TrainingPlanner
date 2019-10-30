@@ -2,7 +2,7 @@
 
 namespace TrainingPlanner.Core.DTOs.TrainerStuff
 {
-    public class TrainerPriceBasicDTO : PriceBasicDTO
+    public class TrainerPriceDTO : PriceDTO
     {
         public int TrainerId { get; set; }
     }

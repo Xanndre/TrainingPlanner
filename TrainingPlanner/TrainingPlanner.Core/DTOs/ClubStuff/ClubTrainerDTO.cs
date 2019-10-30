@@ -1,6 +1,6 @@
 ﻿namespace TrainingPlanner.Core.DTOs.ClubStuff
 {
-    public class ClubTrainerBasicDTO
+    public class ClubTrainerDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }

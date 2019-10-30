@@ -3,7 +3,7 @@ using System.Security.Authentication;
 using System.Threading.Tasks;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Mvc;
-using TrainingPlanner.Core.DTOs;
+using TrainingPlanner.Core.DTOs.Account;
 using TrainingPlanner.Core.Interfaces;
 
 namespace TrainingPlanner.API.Controllers

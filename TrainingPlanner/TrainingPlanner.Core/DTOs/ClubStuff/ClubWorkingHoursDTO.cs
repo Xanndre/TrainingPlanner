@@ -1,6 +1,6 @@
 ﻿namespace TrainingPlanner.Core.DTOs.ClubStuff
 {
-    public class ClubWorkingHoursBasicDTO
+    public class ClubWorkingHoursDTO
     {
         public int Id { get; set; }
         public string Day { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace TrainingPlanner.Core.DTOs.Stuff
 {
-    public class PriceBasicDTO
+    public class PriceDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
