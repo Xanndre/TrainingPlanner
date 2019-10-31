@@ -23,10 +23,15 @@ namespace TrainingPlanner.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<TrainerDTO> GetTrainer(int id)
+        public async Task<TrainerDTO> GetTrainer(int id, bool isIncrementingViewCounter)
         {
             var trainer = await _trainerRepository.GetTrainer(id);
-            return _mapper.Map<TrainerDTO>(trainer);
+            if (isIncrementingViewCounter)
+            {
+                trainer.ViewCounter++;
+            }
+            var updatedTrainer = await _trainerRepository.UpdateTrainer(trainer);
+            return _mapper.Map<TrainerDTO>(updatedTrainer);
         }
 
         public async Task<TrainerDTO> GetTrainerByUser(string userId)

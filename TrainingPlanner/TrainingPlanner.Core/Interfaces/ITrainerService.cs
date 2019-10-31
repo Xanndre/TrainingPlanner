@@ -6,7 +6,7 @@ namespace TrainingPlanner.Core.Interfaces
 {
     public interface ITrainerService
     {
-        Task<TrainerDTO> GetTrainer(int id);
+        Task<TrainerDTO> GetTrainer(int id, bool isIncrementingViewCounter);
         Task<TrainerDTO> GetTrainerByUser(string userId);
         Task<TrainerUpdateDTO> UpdateTrainer(TrainerUpdateDTO trainer);
         Task<TrainerCreateDTO> CreateTrainer(TrainerCreateDTO trainer);

@@ -12,5 +12,6 @@ namespace TrainingPlanner.Core.DTOs.Trainer
         public string PhoneNumber { get; set; }
         public ICollection<TrainerSportDTO> Sports { get; set; }
         public ICollection<TrainerPriceDTO> PriceList { get; set; }
+        public int ViewCounter { get; set; }
     }
 }

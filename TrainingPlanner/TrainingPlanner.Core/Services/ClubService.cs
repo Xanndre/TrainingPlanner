@@ -23,10 +23,15 @@ namespace TrainingPlanner.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<ClubDTO> GetClub(int id)
+        public async Task<ClubDTO> GetClub(int id, bool isIncrementingViewCounter)
         {
             var club = await _clubRepository.GetClub(id);
-            return _mapper.Map<ClubDTO>(club);
+            if (isIncrementingViewCounter)
+            {
+                club.ViewCounter++;
+            }
+            var updatedClub = await _clubRepository.UpdateClub(club);
+            return _mapper.Map<ClubDTO>(updatedClub);
         }
 
         public async Task<int> GetClubQuantity(string userId)

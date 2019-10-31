@@ -22,11 +22,11 @@ namespace TrainingPlanner.API.Controllers
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ActionResult<TrainerDTO>> GetTrainer(int id)
+        public async Task<ActionResult<TrainerDTO>> GetTrainer(int id, [FromQuery] bool isIncrementingViewCounter = false)
         {
             try
             {
-                var trainer = await _trainerService.GetTrainer(id);
+                var trainer = await _trainerService.GetTrainer(id, isIncrementingViewCounter);
                 return Ok(trainer);
             }
             catch (ArgumentNullException exception)

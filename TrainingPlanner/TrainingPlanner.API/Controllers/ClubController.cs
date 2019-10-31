@@ -23,11 +23,11 @@ namespace TrainingPlanner.API.Controllers
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClubDTO>> GetClub(int id)
+        public async Task<ActionResult<ClubDTO>> GetClub(int id, [FromQuery] bool isIncrementingViewCounter = false)
         {
             try
             {
-                var club = await _clubService.GetClub(id);
+                var club = await _clubService.GetClub(id, isIncrementingViewCounter);
                 return Ok(club);
             }
             catch (ArgumentNullException exception)
