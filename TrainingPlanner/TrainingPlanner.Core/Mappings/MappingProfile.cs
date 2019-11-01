@@ -3,6 +3,7 @@ using System.Linq;
 using TrainingPlanner.Core.DTOs.Account;
 using TrainingPlanner.Core.DTOs.Club;
 using TrainingPlanner.Core.DTOs.ClubStuff;
+using TrainingPlanner.Core.DTOs.Favourite;
 using TrainingPlanner.Core.DTOs.Stuff;
 using TrainingPlanner.Core.DTOs.Trainer;
 using TrainingPlanner.Core.DTOs.TrainerStuff;
@@ -59,6 +60,9 @@ namespace TrainingPlanner.Core.Mappings
 
             CreateMap<Trainer, TrainerBaseDTO>()
             .ForMember(c => c.IsFavourite, d => d.MapFrom(e => e.Favourites.Any()));
+
+            CreateMap<FavouriteClub, FavouriteClubDTO>().ReverseMap();
+            CreateMap<FavouriteTrainer, FavouriteTrainerDTO>().ReverseMap();
 
         }
 
