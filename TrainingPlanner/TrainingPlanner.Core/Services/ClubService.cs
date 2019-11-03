@@ -173,7 +173,7 @@ namespace TrainingPlanner.Core.Services
         private async Task<double> CalculateAverageClubRate(int clubId)
         {
             var rates = await _rateRepository.GetClubRateValues(clubId);
-            return rates.Average();
+            return rates.Count() != 0 ? rates.Average() : 0;
         }
     }
 }

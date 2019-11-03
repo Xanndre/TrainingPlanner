@@ -137,7 +137,7 @@ namespace TrainingPlanner.Core.Services
         private async Task<double> CalculateAverageTrainerRate(int trainerId)
         {
             var rates = await _rateRepository.GetTrainerRateValues(trainerId);
-            return rates.Average();
+            return rates.Count() != 0 ? rates.Average() : 0;
         }
 
     }
