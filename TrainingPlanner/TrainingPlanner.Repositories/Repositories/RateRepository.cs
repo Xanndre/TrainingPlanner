@@ -44,6 +44,7 @@ namespace TrainingPlanner.Repositories.Repositories
         public async Task<IEnumerable<TrainerRate>> GetTrainerRates(int trainerId)
         {
             return await _trainingPlannerDbContext.TrainerRatings
+                .Include(t => t.User)
                 .Where(t => t.TrainerId == trainerId)
                 .ToListAsync();
         }
@@ -52,6 +53,15 @@ namespace TrainingPlanner.Repositories.Repositories
         {
             return await _trainingPlannerDbContext.TrainerRatings
                 .FirstOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task<IEnumerable<int>> GetTrainerRateValues(int trainerId)
+        {
+            return await _trainingPlannerDbContext.TrainerRatings
+                .Include(t => t.User)
+                .Where(t => t.TrainerId == trainerId)
+                .Select(t => t.Rate)
+                .ToListAsync();
         }
 
         public async Task<ClubRate> UpdateClubRate(ClubRate rate)
@@ -83,6 +93,7 @@ namespace TrainingPlanner.Repositories.Repositories
         public async Task<IEnumerable<ClubRate>> GetClubRates(int clubId)
         {
             return await _trainingPlannerDbContext.ClubRatings
+                .Include(t => t.User)
                 .Where(t => t.ClubId == clubId)
                 .ToListAsync();
         }
@@ -91,6 +102,15 @@ namespace TrainingPlanner.Repositories.Repositories
         {
             return await _trainingPlannerDbContext.ClubRatings
                 .FirstOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task<IEnumerable<int>> GetClubRateValues(int clubId)
+        {
+            return await _trainingPlannerDbContext.ClubRatings
+                .Include(t => t.User)
+                .Where(t => t.ClubId == clubId)
+                .Select(t => t.Rate)
+                .ToListAsync();
         }
     }
 }

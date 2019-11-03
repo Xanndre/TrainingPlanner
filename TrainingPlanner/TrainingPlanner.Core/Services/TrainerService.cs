@@ -15,12 +15,14 @@ namespace TrainingPlanner.Core.Services
     {
         private const int MaxPageSize = 20;
         private readonly ITrainerRepository _trainerRepository;
+        private readonly IRateRepository _rateRepository;
         private readonly IMapper _mapper;
 
-        public TrainerService(ITrainerRepository trainerRepository, IMapper mapper)
+        public TrainerService(ITrainerRepository trainerRepository, IMapper mapper, IRateRepository rateRepository)
         {
             _trainerRepository = trainerRepository;
             _mapper = mapper;
+            _rateRepository = rateRepository;
         }
 
         public async Task<TrainerDTO> GetTrainer(int id, bool isIncrementingViewCounter)
@@ -31,7 +33,9 @@ namespace TrainingPlanner.Core.Services
                 trainer.ViewCounter++;
             }
             var updatedTrainer = await _trainerRepository.UpdateTrainer(trainer);
-            return _mapper.Map<TrainerDTO>(updatedTrainer);
+            var mappedTrainer = _mapper.Map<TrainerDTO>(updatedTrainer);
+            mappedTrainer.Average = await CalculateAverageTrainerRate(mappedTrainer.Id);
+            return mappedTrainer;
         }
 
         public async Task<TrainerDTO> GetTrainerByUser(string userId)
@@ -128,6 +132,12 @@ namespace TrainingPlanner.Core.Services
             result.Trainers = _mapper.Map<IEnumerable<TrainerBaseDTO>>(pagedTrainers);
 
             return result;
+        }
+
+        private async Task<double> CalculateAverageTrainerRate(int trainerId)
+        {
+            var rates = await _rateRepository.GetTrainerRateValues(trainerId);
+            return rates.Average();
         }
 
     }

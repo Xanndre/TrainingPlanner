@@ -15,11 +15,13 @@ namespace TrainingPlanner.Core.Services
     {
         private const int MaxPageSize = 20;
         private readonly IClubRepository _clubRepository;
+        private readonly IRateRepository _rateRepository;
         private readonly IMapper _mapper;
 
-        public ClubService(IClubRepository clubRepository, IMapper mapper)
+        public ClubService(IClubRepository clubRepository, IMapper mapper, IRateRepository rateRepository)
         {
             _clubRepository = clubRepository;
+            _rateRepository = rateRepository;
             _mapper = mapper;
         }
 
@@ -31,7 +33,9 @@ namespace TrainingPlanner.Core.Services
                 club.ViewCounter++;
             }
             var updatedClub = await _clubRepository.UpdateClub(club);
-            return _mapper.Map<ClubDTO>(updatedClub);
+            var mappedClub = _mapper.Map<ClubDTO>(updatedClub);
+            mappedClub.Average = await CalculateAverageClubRate(mappedClub.Id);
+            return mappedClub;
         }
 
         public async Task<int> GetClubQuantity(string userId)
@@ -164,6 +168,12 @@ namespace TrainingPlanner.Core.Services
         {
             var clubPricesToDelete = await _clubRepository.GetClubPricesToDelete(mappedClub);
             await _clubRepository.RemoveClubPrices(clubPricesToDelete, false);
+        }
+
+        private async Task<double> CalculateAverageClubRate(int clubId)
+        {
+            var rates = await _rateRepository.GetClubRateValues(clubId);
+            return rates.Average();
         }
     }
 }

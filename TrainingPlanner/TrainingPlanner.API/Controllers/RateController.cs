@@ -92,6 +92,7 @@ namespace TrainingPlanner.API.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpGet("club/all")]
         public async Task<ActionResult<PagedClubRatesDTO>> GetClubRates(
             [FromQuery] int clubId,
@@ -180,6 +181,7 @@ namespace TrainingPlanner.API.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpGet("trainer/all")]
         public async Task<ActionResult<PagedTrainerRatesDTO>> GetTrainerRates(
             [FromQuery] int trainerId,

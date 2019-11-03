@@ -3,10 +3,12 @@ using System.Linq;
 using TrainingPlanner.Core.DTOs.Account;
 using TrainingPlanner.Core.DTOs.Club;
 using TrainingPlanner.Core.DTOs.ClubStuff;
+using TrainingPlanner.Core.DTOs.ClubStuff.ClubRate;
 using TrainingPlanner.Core.DTOs.Favourite;
 using TrainingPlanner.Core.DTOs.Stuff;
 using TrainingPlanner.Core.DTOs.Trainer;
 using TrainingPlanner.Core.DTOs.TrainerStuff;
+using TrainingPlanner.Core.DTOs.TrainerStuff.TrainerRate;
 using TrainingPlanner.Core.DTOs.User;
 using TrainingPlanner.Data.Entities;
 
@@ -64,6 +66,12 @@ namespace TrainingPlanner.Core.Mappings
             CreateMap<FavouriteClub, FavouriteClubDTO>().ReverseMap();
             CreateMap<FavouriteTrainer, FavouriteTrainerDTO>().ReverseMap();
 
+            CreateMap<ClubRate, ClubRateBaseDTO>();
+            CreateMap<TrainerRate, TrainerRateBaseDTO>();
+            CreateMap<ClubRate, ClubRateDTO>().ReverseMap();
+            CreateMap<TrainerRate, TrainerRateDTO>().ReverseMap();
+            CreateMap<ClubRate, ClubRateCreateDTO>().ReverseMap();
+            CreateMap<TrainerRate, TrainerRateCreateDTO>().ReverseMap();
         }
 
     }

@@ -13,5 +13,6 @@ namespace TrainingPlanner.Core.DTOs.Trainer
         public ICollection<TrainerSportDTO> Sports { get; set; }
         public ICollection<TrainerPriceDTO> PriceList { get; set; }
         public int ViewCounter { get; set; }
+        public double Average { get; set; }
     }
 }

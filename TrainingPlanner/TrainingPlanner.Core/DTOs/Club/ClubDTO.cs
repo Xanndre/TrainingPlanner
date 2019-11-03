@@ -23,5 +23,6 @@ namespace TrainingPlanner.Core.DTOs.Club
         public ICollection<ClubWorkingHoursDTO> WorkingHours { get; set; }
         public ICollection<PictureDTO> Pictures { get; set; }
         public int ViewCounter { get; set; }
+        public double Average { get; set; }
     }
 }
