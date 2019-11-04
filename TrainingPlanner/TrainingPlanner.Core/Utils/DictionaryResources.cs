@@ -11,7 +11,10 @@
         public const string InvalidRegistrationAttempt = "Invalid registration attempt";
         public const string InvalidLoginAttempt = "Invalid login attempt";
         public const string InvalidToken = "User token is invalid";
+        public const string InvalidSendAttempt = "Invalid send attempt";
 
         public const string Facebook = "FACEBOOK";
+
+        public const string EmailConfirmation = "Join Training Planner";
     }
 }

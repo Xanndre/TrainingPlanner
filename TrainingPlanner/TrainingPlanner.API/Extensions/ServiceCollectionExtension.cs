@@ -60,6 +60,7 @@ namespace TrainingPlanner.API.Extensions
             services.AddScoped<IClubService, ClubService>();
             services.AddScoped<IFavouriteService, FavouriteService>();
             services.AddScoped<IRateService, RateService>();
+            services.AddScoped<IEmailService, EmailService>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
@@ -76,6 +77,7 @@ namespace TrainingPlanner.API.Extensions
         {
             services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
             services.Configure<FacebookLoginOptions>(configuration.GetSection("FacebookLogin"));
+            services.Configure<EmailOptions>(configuration.GetSection("Email"));
         }
 
         public static void AddDefaultCors(this IServiceCollection services)

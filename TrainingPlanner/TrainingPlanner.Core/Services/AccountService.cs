@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Security.Authentication;
 using System.Security.Claims;
@@ -28,29 +29,35 @@ namespace TrainingPlanner.Core.Services
     {
         private readonly JwtOptions _jwtOptions;
         private readonly FacebookLoginOptions _fbLoginOptions;
+        private readonly EmailOptions _emailOptions;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserRepository _userRepository;
         private readonly IHttpClientFactory _clientFactory;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
 
         public AccountService(
             IOptions<JwtOptions> jwtOptions,
             IOptions<FacebookLoginOptions> fbLoginOptions,
+            IOptions<EmailOptions> emailOptions,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             IUserRepository userRepository,
             IHttpClientFactory clientFactory,
-            IMapper mapper
+            IMapper mapper,
+            IEmailService emailService
             )
         {
             _jwtOptions = jwtOptions.Value;
             _fbLoginOptions = fbLoginOptions.Value;
+            _emailOptions = emailOptions.Value;
             _signInManager = signInManager;
             _userManager = userManager;
             _userRepository = userRepository;
             _clientFactory = clientFactory;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
         public async Task<LoginResultDTO> Login(LoginDTO loginDTO)
@@ -82,6 +89,15 @@ namespace TrainingPlanner.Core.Services
             if (!result.Succeeded)
             {
                 throw new ApplicationException(DictionaryResources.InvalidRegistrationAttempt);
+            }
+
+            var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var message = $"{_emailOptions.Url}?id={user.Id}&token={WebUtility.UrlEncode(emailToken)}";
+            var emailResult = await _emailService.SendEmail(registerDTO.Email, DictionaryResources.EmailConfirmation, message);
+
+            if (emailResult == null)
+            {
+                throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
             }
         }
 
