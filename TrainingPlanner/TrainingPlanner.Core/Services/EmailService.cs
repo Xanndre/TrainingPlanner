@@ -61,7 +61,7 @@ namespace TrainingPlanner.Core.Services
                 return mimeMessage;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }

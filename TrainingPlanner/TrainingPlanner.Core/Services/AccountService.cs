@@ -101,6 +101,22 @@ namespace TrainingPlanner.Core.Services
             }
         }
 
+        public async Task<string> ConfirmEmail(string userId, string emailToken)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                return _emailOptions.ErrorFrontUrl;
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, emailToken);
+            if (!result.Succeeded)
+            {
+                return _emailOptions.ErrorFrontUrl;
+            }
+            return _emailOptions.FrontUrl;
+        }
+
         public async Task<LoginResultDTO> ExternalLogin(ExternalLoginDTO loginDTO)
         {
             if (loginDTO.LoginProvider == DictionaryResources.Facebook)

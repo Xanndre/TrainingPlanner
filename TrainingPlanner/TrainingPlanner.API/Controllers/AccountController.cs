@@ -70,5 +70,19 @@ namespace TrainingPlanner.API.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult> ConfirmEmail([FromQuery] string id, [FromQuery] string token)
+        {
+            try
+            {
+                var result = await _accountService.ConfirmEmail(id, token);
+                return Redirect(result);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
     }
 }
