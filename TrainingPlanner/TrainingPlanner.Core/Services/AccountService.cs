@@ -62,13 +62,18 @@ namespace TrainingPlanner.Core.Services
 
         public async Task<LoginResultDTO> Login(LoginDTO loginDTO)
         {
+            var user = _userManager.Users.SingleOrDefault(u => u.Email == loginDTO.Email);
+
+            if (! await _userManager.IsEmailConfirmedAsync(user))
+            {
+                throw new ApplicationException(DictionaryResources.InvalidLoginAttempt);
+            }
+
             var result = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, false, false);
             if (!result.Succeeded)
             {
                 throw new ApplicationException(DictionaryResources.InvalidLoginAttempt);
             }
-
-            var user = _userManager.Users.SingleOrDefault(u => u.Email == loginDTO.Email);
 
             var loginResult = new LoginResultDTO
             {
