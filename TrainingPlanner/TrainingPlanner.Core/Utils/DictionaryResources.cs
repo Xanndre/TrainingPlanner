@@ -12,6 +12,7 @@
         public const string InvalidLoginAttempt = "Invalid login attempt";
         public const string InvalidToken = "User token is invalid";
         public const string InvalidSendAttempt = "Invalid send attempt";
+        public const string EmailNotConfirmed = "Email not confirmed";
 
         public const string Facebook = "FACEBOOK";
 

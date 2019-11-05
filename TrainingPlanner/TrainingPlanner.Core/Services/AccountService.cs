@@ -66,7 +66,7 @@ namespace TrainingPlanner.Core.Services
 
             if (! await _userManager.IsEmailConfirmedAsync(user))
             {
-                throw new ApplicationException(DictionaryResources.InvalidLoginAttempt);
+                throw new ApplicationException(DictionaryResources.EmailNotConfirmed);
             }
 
             var result = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, false, false);
