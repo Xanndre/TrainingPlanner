@@ -97,8 +97,32 @@ namespace TrainingPlanner.Core.Services
             }
 
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var message = $"{_emailOptions.Url}?id={user.Id}&token={WebUtility.UrlEncode(emailToken)}";
+
+            var link = $"{_emailOptions.Url}?id={user.Id}&token={WebUtility.UrlEncode(emailToken)}";
+            var message = "Hello " + user.FirstName + DictionaryResources.Message + link + DictionaryResources.Thanks;
+            
             var emailResult = await _emailService.SendEmail(registerDTO.Email, DictionaryResources.EmailConfirmation, message);
+
+            if (emailResult == null)
+            {
+                throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
+            }
+        }
+
+        public async Task SendEmailAgain(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
+            }
+
+            var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            var link = $"{_emailOptions.Url}?id={user.Id}&token={WebUtility.UrlEncode(emailToken)}";
+            var message = "Hello " + user.FirstName + DictionaryResources.Message + link + DictionaryResources.Thanks;
+
+            var emailResult = await _emailService.SendEmail(user.Email, DictionaryResources.EmailConfirmation, message);
 
             if (emailResult == null)
             {
@@ -109,17 +133,20 @@ namespace TrainingPlanner.Core.Services
         public async Task<string> ConfirmEmail(string userId, string emailToken)
         {
             var user = await _userManager.FindByIdAsync(userId);
+            var errorUrl = _emailOptions.ErrorFrontUrl + user.Id;
+            var successUrl = _emailOptions.FrontUrl + user.Id;
+
             if(user == null)
             {
-                return _emailOptions.ErrorFrontUrl;
+                return errorUrl;
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, emailToken);
             if (!result.Succeeded)
             {
-                return _emailOptions.ErrorFrontUrl;
+                return errorUrl;
             }
-            return _emailOptions.FrontUrl;
+            return successUrl;
         }
 
         public async Task<LoginResultDTO> ExternalLogin(ExternalLoginDTO loginDTO)
@@ -154,8 +181,6 @@ namespace TrainingPlanner.Core.Services
             {
                 throw new ApplicationException(DictionaryResources.InvalidLoginAttempt);
             }
-
-
 
             var loginResult = new LoginResultDTO
             {

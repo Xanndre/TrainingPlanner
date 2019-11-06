@@ -17,5 +17,7 @@
         public const string Facebook = "FACEBOOK";
 
         public const string EmailConfirmation = "Join Training Planner";
+        public const string Message = "!<br/>You're only one step from being able to log in on our website! Simply click on the link below to confirm your account:<br/>";
+        public const string Thanks = "<br/>Thanks,<br/>Training Planner Team";
     }
 }

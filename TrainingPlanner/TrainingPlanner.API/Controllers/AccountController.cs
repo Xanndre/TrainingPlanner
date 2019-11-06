@@ -84,5 +84,18 @@ namespace TrainingPlanner.API.Controllers
             }
         }
 
+        [HttpGet("send/{id}")]
+        public async Task<ActionResult> SendEmailAgain(string id)
+        {
+            try
+            {
+                await _accountService.SendEmailAgain(id);
+                return Ok();
+            }
+            catch(Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace TrainingPlanner.Core.Interfaces
         Task Register(RegisterDTO dto);
         Task<LoginResultDTO> ExternalLogin(ExternalLoginDTO dto);
         Task<string> ConfirmEmail(string userId, string emailToken);
+        Task SendEmailAgain(string userId);
     }
 }
