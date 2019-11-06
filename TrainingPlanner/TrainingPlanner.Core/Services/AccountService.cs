@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.Account;
+using TrainingPlanner.Core.DTOs.User;
 using TrainingPlanner.Core.Interfaces;
 using TrainingPlanner.Core.Options;
 using TrainingPlanner.Core.Utils;
@@ -147,6 +148,25 @@ namespace TrainingPlanner.Core.Services
                 return errorUrl;
             }
             return successUrl;
+        }
+
+        public async Task ChangePassword(ChangePasswordDTO dto)
+        {
+            var user = await _userManager.FindByIdAsync(dto.UserId);
+            if(user == null)
+            {
+                throw new ApplicationException(DictionaryResources.NoUser);
+            }
+            if(user.Email != dto.Email)
+            {
+                throw new ApplicationException(DictionaryResources.WrongEmail);
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+            if (!result.Succeeded)
+            {
+                throw new ApplicationException(DictionaryResources.InvalidChangePasswordAttempt);
+            }
         }
 
         public async Task<LoginResultDTO> ExternalLogin(ExternalLoginDTO loginDTO)

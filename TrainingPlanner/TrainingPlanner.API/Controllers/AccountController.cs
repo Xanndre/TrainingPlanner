@@ -2,8 +2,10 @@
 using System.Security.Authentication;
 using System.Threading.Tasks;
 using Google.Apis.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrainingPlanner.Core.DTOs.Account;
+using TrainingPlanner.Core.DTOs.User;
 using TrainingPlanner.Core.Interfaces;
 
 namespace TrainingPlanner.API.Controllers
@@ -90,6 +92,21 @@ namespace TrainingPlanner.API.Controllers
             try
             {
                 await _accountService.SendEmailAgain(id);
+                return Ok();
+            }
+            catch(Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("change_password")]
+        public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordDTO dto)
+        {
+            try
+            {
+                await _accountService.ChangePassword(dto);
                 return Ok();
             }
             catch(Exception exception)

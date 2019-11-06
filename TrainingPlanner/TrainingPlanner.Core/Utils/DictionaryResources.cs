@@ -10,9 +10,12 @@
         public const string AccountExists = "Account with this email already exists";
         public const string InvalidRegistrationAttempt = "Invalid registration attempt";
         public const string InvalidLoginAttempt = "Invalid login attempt";
+        public const string NoUser = "There's no user with such email";
         public const string InvalidToken = "User token is invalid";
         public const string InvalidSendAttempt = "Invalid send attempt";
         public const string EmailNotConfirmed = "Email not confirmed";
+        public const string WrongEmail = "Provided email address doesn't match yours";
+        public const string InvalidChangePasswordAttempt = "Invalid change password attempt";
 
         public const string Facebook = "FACEBOOK";
 
