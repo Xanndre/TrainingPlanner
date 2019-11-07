@@ -12,5 +12,6 @@ namespace TrainingPlanner.Core.Interfaces
         Task<string> ConfirmEmail(string userId, string emailToken);
         Task SendEmailAgain(string userId);
         Task ChangePassword(ChangePasswordDTO dto);
+        Task SendResetToken(string email);
     }
 }

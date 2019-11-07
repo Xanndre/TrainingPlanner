@@ -170,6 +170,28 @@ namespace TrainingPlanner.Core.Services
             }
         }
 
+        public async Task SendResetToken(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user == null)
+            {
+                throw new ApplicationException(DictionaryResources.NoUser);
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var link = $"{_emailOptions.ResetUrl}?id={user.Id}&token={WebUtility.UrlEncode(token)}";
+            var message = "Hello " + user.FirstName + DictionaryResources.PasswordResetMessage + link + DictionaryResources.PasswordResetThanks;
+
+            var emailResult = await _emailService.SendEmail(user.Email, DictionaryResources.PasswordReset, message);
+
+            if (emailResult == null)
+            {
+                throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
+            }
+        }
+
+
         public async Task<LoginResultDTO> ExternalLogin(ExternalLoginDTO loginDTO)
         {
             if (loginDTO.LoginProvider == DictionaryResources.Facebook)

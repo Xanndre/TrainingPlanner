@@ -8,6 +8,7 @@
         public string Sender { get; set; }
         public string Password { get; set; }
         public string Url { get; set; }
+        public string ResetUrl { get; set; }
         public string FrontUrl { get; set; }
         public string ErrorFrontUrl { get; set; }
         public string UserErrorUrl { get; set; }

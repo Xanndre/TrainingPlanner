@@ -114,5 +114,19 @@ namespace TrainingPlanner.API.Controllers
                 return BadRequest(exception.Message);
             }
         }
+
+        [HttpGet("generate_reset_token")]
+        public async Task<ActionResult> SendResetToken([FromQuery] string email)
+        {
+            try
+            {
+                await _accountService.SendResetToken(email);
+                return Ok();
+            }
+            catch(Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
     }
 }

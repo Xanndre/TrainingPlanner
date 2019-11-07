@@ -20,7 +20,11 @@
         public const string Facebook = "FACEBOOK";
 
         public const string EmailConfirmation = "Join Training Planner";
+        public const string PasswordReset = "Reset Password - Training Planner";
         public const string Message = "!<br/>You're only one step from being able to log in on our website! Simply click on the link below to confirm your account:<br/>";
         public const string Thanks = "<br/>Thanks,<br/>Training Planner Team";
+        public const string PasswordResetMessage = "!<br/>You've receiving this email because we received a password reset request for your account. Click the link below to reset your password.<br/>";
+        public const string PasswordResetThanks = "<br/>If you didn't request a password reset, please ignore this email or reply to let us know.<br/>Thanks,<br/>Training Planner Team";
+
     }
 }
