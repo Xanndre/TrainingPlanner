@@ -99,7 +99,7 @@ namespace TrainingPlanner.Core.Services
 
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            var link = $"{_emailOptions.Url}?id={user.Id}&token={WebUtility.UrlEncode(emailToken)}";
+            var link = $"{_emailOptions.ConfirmUrl}?id={user.Id}&token={WebUtility.UrlEncode(emailToken)}";
             var message = "Hello " + user.FirstName + DictionaryResources.Message + link + DictionaryResources.Thanks;
             
             var emailResult = await _emailService.SendEmail(registerDTO.Email, DictionaryResources.EmailConfirmation, message);
@@ -120,7 +120,7 @@ namespace TrainingPlanner.Core.Services
 
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            var link = $"{_emailOptions.Url}?id={user.Id}&token={WebUtility.UrlEncode(emailToken)}";
+            var link = $"{_emailOptions.ConfirmUrl}?id={user.Id}&token={WebUtility.UrlEncode(emailToken)}";
             var message = "Hello " + user.FirstName + DictionaryResources.Message + link + DictionaryResources.Thanks;
 
             var emailResult = await _emailService.SendEmail(user.Email, DictionaryResources.EmailConfirmation, message);
@@ -140,8 +140,8 @@ namespace TrainingPlanner.Core.Services
                 return _emailOptions.UserErrorUrl;
             }
 
-            var errorUrl = _emailOptions.ErrorFrontUrl + user.Id;
-            var successUrl = _emailOptions.FrontUrl + user.Id;
+            var errorUrl = _emailOptions.ConfirmErrorUrl + user.Id;
+            var successUrl = _emailOptions.ConfirmSuccessUrl + user.Id;
 
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (!result.Succeeded)
