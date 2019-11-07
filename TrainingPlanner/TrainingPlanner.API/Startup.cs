@@ -31,6 +31,7 @@ namespace TrainingPlanner.API
             services.AddMapper();
             services.AddDefaultCors();
             services.AddDefaultIdentity();
+            services.ConfigureIdentityTokens();
             services.AddJwtAuth(Configuration);
             services.ConfigureOptions(Configuration);
             services.AddHttpClient();

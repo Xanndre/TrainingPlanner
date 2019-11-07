@@ -15,7 +15,8 @@
         public const string InvalidSendAttempt = "Invalid send attempt";
         public const string EmailNotConfirmed = "Email not confirmed";
         public const string WrongEmail = "Provided email address doesn't match yours";
-        public const string InvalidChangePasswordAttempt = "Invalid change password attempt";
+        public const string InvalidChangePasswordAttempt = "Invalid password change attempt";
+        public const string InvalidResetPasswordAttempt = "Invalid password reset attempt";
 
         public const string Facebook = "FACEBOOK";
 

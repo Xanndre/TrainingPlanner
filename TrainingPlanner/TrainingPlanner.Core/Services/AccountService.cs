@@ -110,9 +110,9 @@ namespace TrainingPlanner.Core.Services
             }
         }
 
-        public async Task SendEmailAgain(string userId)
+        public async Task SendEmailAgain(string id)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
@@ -131,9 +131,9 @@ namespace TrainingPlanner.Core.Services
             }
         }
 
-        public async Task<string> ConfirmEmail(string userId, string emailToken)
+        public async Task<string> ConfirmEmail(string id, string token)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(id);
             
             if(user == null)
             {
@@ -143,7 +143,7 @@ namespace TrainingPlanner.Core.Services
             var errorUrl = _emailOptions.ErrorFrontUrl + user.Id;
             var successUrl = _emailOptions.FrontUrl + user.Id;
 
-            var result = await _userManager.ConfirmEmailAsync(user, emailToken);
+            var result = await _userManager.ConfirmEmailAsync(user, token);
             if (!result.Succeeded)
             {
                 return errorUrl;
@@ -173,22 +173,30 @@ namespace TrainingPlanner.Core.Services
         public async Task SendResetToken(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if(user == null)
+            await SendToken(user);
+        }
+
+        public async Task SendResetTokenAgain(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            await SendToken(user);
+        }
+
+        public async Task ResetPassword(ResetPasswordDTO dto)
+        {
+            var user = await _userManager.FindByIdAsync(dto.UserId);
+
+            if (user == null)
             {
                 throw new ApplicationException(DictionaryResources.NoUser);
             }
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            var link = $"{_emailOptions.ResetUrl}?id={user.Id}&token={WebUtility.UrlEncode(token)}";
-            var message = "Hello " + user.FirstName + DictionaryResources.PasswordResetMessage + link + DictionaryResources.PasswordResetThanks;
-
-            var emailResult = await _emailService.SendEmail(user.Email, DictionaryResources.PasswordReset, message);
-
-            if (emailResult == null)
+            var result = await _userManager.ResetPasswordAsync(user, dto.Token, dto.Password);
+            if (!result.Succeeded)
             {
-                throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
+                throw new ApplicationException(DictionaryResources.InvalidResetPasswordAttempt);
             }
+
         }
 
 
@@ -231,6 +239,26 @@ namespace TrainingPlanner.Core.Services
                 Id = user.Id
             };
             return loginResult;
+        }
+
+        private async Task SendToken(ApplicationUser user)
+        {
+            if (user == null)
+            {
+                throw new ApplicationException(DictionaryResources.NoUser);
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var link = $"{_emailOptions.ResetUrl}?id={user.Id}&token={WebUtility.UrlEncode(token)}";
+            var message = "Hello " + user.FirstName + DictionaryResources.PasswordResetMessage + link + DictionaryResources.PasswordResetThanks;
+
+            var emailResult = await _emailService.SendEmail(user.Email, DictionaryResources.PasswordReset, message);
+
+            if (emailResult == null)
+            {
+                throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
+            }
         }
 
         private async Task<ApplicationUser> ExternalRegister(ExternalLoginDTO loginDTO)

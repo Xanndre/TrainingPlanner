@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
 using TrainingPlanner.Core.Interfaces;
 using TrainingPlanner.Core.Mappings;
@@ -23,6 +24,12 @@ namespace TrainingPlanner.API.Extensions
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<TrainingPlannerDbContext>()
                 .AddDefaultUI();
+        }
+
+        public static void ConfigureIdentityTokens(this IServiceCollection services)
+        {
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+                options.TokenLifespan = TimeSpan.FromMinutes(10));
         }
 
         public static void AddJwtAuth(this IServiceCollection services, IConfiguration configuration)

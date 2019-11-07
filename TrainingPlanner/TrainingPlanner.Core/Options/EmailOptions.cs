@@ -12,5 +12,6 @@
         public string FrontUrl { get; set; }
         public string ErrorFrontUrl { get; set; }
         public string UserErrorUrl { get; set; }
+        public string SuccessResetUrl { get; set; }
     }
 }

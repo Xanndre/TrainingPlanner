@@ -128,5 +128,33 @@ namespace TrainingPlanner.API.Controllers
                 return BadRequest(exception.Message);
             }
         }
+
+        [HttpGet("generate_reset_token_again")]
+        public async Task<ActionResult> SendResetTokenAgain([FromQuery] string id)
+        {
+            try
+            {
+                await _accountService.SendResetTokenAgain(id);
+                return Ok();
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpPost("reset_password")]
+        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordDTO dto)
+        {
+            try
+            {
+                await _accountService.ResetPassword(dto);
+                return Ok();
+            }
+            catch(Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
     }
 }
