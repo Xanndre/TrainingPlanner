@@ -134,13 +134,14 @@ namespace TrainingPlanner.Core.Services
         public async Task<string> ConfirmEmail(string userId, string emailToken)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            var errorUrl = _emailOptions.ErrorFrontUrl + user.Id;
-            var successUrl = _emailOptions.FrontUrl + user.Id;
-
+            
             if(user == null)
             {
-                return errorUrl;
+                return _emailOptions.UserErrorUrl;
             }
+
+            var errorUrl = _emailOptions.ErrorFrontUrl + user.Id;
+            var successUrl = _emailOptions.FrontUrl + user.Id;
 
             var result = await _userManager.ConfirmEmailAsync(user, emailToken);
             if (!result.Succeeded)
