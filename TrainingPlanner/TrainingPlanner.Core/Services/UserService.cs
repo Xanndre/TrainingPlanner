@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.User;
 using TrainingPlanner.Core.Interfaces;
@@ -48,12 +49,21 @@ namespace TrainingPlanner.Core.Services
             var user = await _userRepository.GetUser(id);
             var trainer = await _trainerRepository.GetTrainerByUser(id);
             var clubs = await _clubRepository.GetUserClubs(id);
-            foreach (var club in clubs)
+            if(clubs.Count() != 0)
             {
-                await _clubRepository.DeleteClub(club);
+                foreach (var club in clubs)
+                {
+                    await _clubRepository.DeleteClub(club);
+                }
             }
-            await _trainerRepository.DeleteTrainer(trainer);
+            
+            if(trainer != null)
+            {
+                await _trainerRepository.DeleteTrainer(trainer);
+            }
+           
             await _userRepository.DeleteUser(user);
+      
         }
     }
 }
