@@ -1,4 +1,5 @@
 ﻿using System;
+using TrainingPlanner.Core.DTOs.User;
 
 namespace TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard
 {
@@ -8,5 +9,6 @@ namespace TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard
         public string TrainerName { get; set; }
         public string Name { get; set; }
         public DateTime ExpirationDate { get; set; }
+        public UserDTO User { get; set; }
     }
 }
