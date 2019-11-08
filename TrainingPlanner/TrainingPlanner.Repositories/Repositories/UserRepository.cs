@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Data;
 using TrainingPlanner.Data.Entities;
@@ -15,9 +16,9 @@ namespace TrainingPlanner.Repositories.Repositories
 
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetAllUsers()
+        public IQueryable<ApplicationUser> GetAllUsers()
         {
-            return await _trainingPlannerDbContext.Users.ToListAsync();
+            return GetUserQuery();
         }
 
         public async Task<ApplicationUser> GetUser(string id)
@@ -43,6 +44,11 @@ namespace TrainingPlanner.Repositories.Repositories
         {
             _trainingPlannerDbContext.Users.Remove(user);
             await _trainingPlannerDbContext.SaveChangesAsync();
+        }
+
+        private IQueryable<ApplicationUser> GetUserQuery()
+        {
+            return _trainingPlannerDbContext.Users.AsNoTracking();
         }
 
     }

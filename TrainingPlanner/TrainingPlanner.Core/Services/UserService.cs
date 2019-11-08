@@ -28,11 +28,11 @@ namespace TrainingPlanner.Core.Services
             _clubRepository = clubRepository;
         }
 
-        public async Task<PagedUsersDTO> GetAllUsers(
+        public PagedUsersDTO GetAllUsers(
             int pageNumber,
             int pageSize)
         {
-            var users = await _userRepository.GetAllUsers();
+            var users = _userRepository.GetAllUsers();
             var result = GetUsers(pageNumber, pageSize, users);
             return result;
         }
