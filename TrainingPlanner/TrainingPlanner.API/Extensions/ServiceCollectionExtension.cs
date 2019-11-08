@@ -68,6 +68,7 @@ namespace TrainingPlanner.API.Extensions
             services.AddScoped<IFavouriteService, FavouriteService>();
             services.AddScoped<IRateService, RateService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ICardService, CardService>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
@@ -78,6 +79,7 @@ namespace TrainingPlanner.API.Extensions
             services.AddScoped<IClubRepository, ClubRepository>();
             services.AddScoped<IFavouriteRepository, FavouriteRepository>();
             services.AddScoped<IRateRepository, RateRepository>();
+            services.AddScoped<ICardRepository, CardRepository>();
         }
 
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
