@@ -34,8 +34,15 @@ namespace TrainingPlanner.Core.Mappings
 
             CreateMap<SportDTO, Sport>().ReverseMap();
 
-            CreateMap<TrainerPriceDTO, TrainerPrice>().ReverseMap();
-            CreateMap<ClubPriceDTO, ClubPrice>().ReverseMap();
+            CreateMap<TrainerPrice, TrainerPriceDTO>()
+                .ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))
+                .ForMember(c => c.UnlimitedValidityPeriod, d => d.MapFrom(e => e.ValidityPeriod != 0 ? false : true))
+                .ReverseMap();
+
+            CreateMap<ClubPrice, ClubPriceDTO>()
+                .ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))
+                .ForMember(c => c.UnlimitedValidityPeriod, d => d.MapFrom(e => e.ValidityPeriod != 0 ? false : true))
+                .ReverseMap();
 
             CreateMap<TrainerDTO, Trainer>().ReverseMap();
             CreateMap<ClubDTO, Club>().ReverseMap();
