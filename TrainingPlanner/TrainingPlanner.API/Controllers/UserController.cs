@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.DTOs.User;
 using TrainingPlanner.Core.Interfaces;
 
@@ -21,11 +22,14 @@ namespace TrainingPlanner.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
+        public async Task<ActionResult<PagedUsersDTO>> GetAllUsers(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 3)
         {
             try
             {
-                return Ok(await _userService.GetAllUsers());
+                var result = await _userService.GetAllUsers(pageNumber, pageSize);
+                return Ok(result);
             }
             catch (Exception exception)
             {

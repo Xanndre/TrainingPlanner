@@ -1,15 +1,19 @@
 ﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.DTOs.User;
 using TrainingPlanner.Core.Interfaces;
+using TrainingPlanner.Data.Entities;
 using TrainingPlanner.Repositories.Interfaces;
 
 namespace TrainingPlanner.Core.Services
 {
     public class UserService : IUserService
     {
+        private const int MaxPageSize = 20;
         private readonly IUserRepository _userRepository;
         private readonly ITrainerRepository _trainerRepository;
         private readonly IClubRepository _clubRepository;
@@ -24,10 +28,13 @@ namespace TrainingPlanner.Core.Services
             _clubRepository = clubRepository;
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAllUsers()
+        public async Task<PagedUsersDTO> GetAllUsers(
+            int pageNumber,
+            int pageSize)
         {
             var users = await _userRepository.GetAllUsers();
-            return _mapper.Map<IEnumerable<UserDTO>>(users);
+            var result = GetUsers(pageNumber, pageSize, users);
+            return result;
         }
 
         public async Task<UserDTO> GetUser(string id)
@@ -64,6 +71,30 @@ namespace TrainingPlanner.Core.Services
            
             await _userRepository.DeleteUser(user);
       
+        }
+
+        private PagedUsersDTO GetUsers(
+            int pageNumber, int pageSize, IEnumerable<ApplicationUser> users)
+        {
+            var result = GetPagedUsers(users, pageNumber, pageSize);
+            return result;
+        }
+
+        private PagedUsersDTO GetPagedUsers(IEnumerable<ApplicationUser> users, int pageNumber, int pageSize)
+        {
+            var result = new PagedUsersDTO();
+
+            var calculatedPageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
+            var pagedUsers = users
+                .Skip(calculatedPageSize * (pageNumber - 1))
+                .Take(calculatedPageSize)
+                .ToList();
+
+            result.TotalCount = users.Count();
+            result.TotalPages = (int)Math.Ceiling(result.TotalCount / (double)calculatedPageSize);
+            result.Users = _mapper.Map<IEnumerable<UserDTO>>(pagedUsers);
+
+            return result;
         }
     }
 }
