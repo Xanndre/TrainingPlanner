@@ -10,6 +10,7 @@
         public double Price { get; set; }
         public int EntriesLeft { get; set; }
         public string TrainerName { get; set; }
+        public string UserName { get; set; }
         public bool UnlimitedValidityPeriod { get; set; }
         public bool UnlimitedEntries { get; set; }
     }

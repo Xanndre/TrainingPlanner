@@ -27,7 +27,8 @@ namespace TrainingPlanner.Core.Services
         public async Task<TrainerCardUpdateDTO> UpdateTrainerCard(TrainerCardUpdateDTO card)
         {
             var mappedCard = _mapper.Map<TrainerCard>(card);
-
+            var days = !card.UnlimitedValidityPeriod ? card.ValidityPeriod : 0;
+            mappedCard.ExpirationDate = mappedCard.PurchaseDate.AddDays(days);
             var returnedCard = await _cardRepository.UpdateTrainerCard(mappedCard);
             return _mapper.Map<TrainerCardUpdateDTO>(returnedCard);
         }
@@ -37,7 +38,10 @@ namespace TrainingPlanner.Core.Services
             var mappedCard = _mapper.Map<TrainerCard>(card);
             var days = !card.UnlimitedValidityPeriod ? card.ValidityPeriod : 0;
             mappedCard.PurchaseDate = DateTime.Now;
-            mappedCard.ExpirationDate = DateTime.Now.AddDays(days);
+            if (!card.UnlimitedValidityPeriod)
+            {
+                mappedCard.ExpirationDate = DateTime.Now.AddDays(days);
+            }
             var returnedCard = await _cardRepository.CreateTrainerCard(mappedCard);
             return _mapper.Map<TrainerCardCreateDTO>(returnedCard);
         }

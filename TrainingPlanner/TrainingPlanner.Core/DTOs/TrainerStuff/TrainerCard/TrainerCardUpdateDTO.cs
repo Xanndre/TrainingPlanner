@@ -6,6 +6,6 @@ namespace TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard
     {
         public int Id { get; set; }
         public DateTime PurchaseDate { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
     }
 }
