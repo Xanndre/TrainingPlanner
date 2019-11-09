@@ -82,14 +82,39 @@ namespace TrainingPlanner.Core.Mappings
             CreateMap<ClubRate, ClubRateCreateDTO>().ReverseMap();
             CreateMap<TrainerRate, TrainerRateCreateDTO>().ReverseMap();
 
-            CreateMap<ClubCard, ClubCardBaseDTO>();
-            CreateMap<TrainerCard, TrainerCardBaseDTO>();
-            CreateMap<ClubCard, ClubCardDTO>().ReverseMap();
-            CreateMap<TrainerCard, TrainerCardDTO>().ReverseMap();
-            CreateMap<ClubCard, ClubCardCreateDTO>().ReverseMap();
-            CreateMap<TrainerCard, TrainerCardCreateDTO>().ReverseMap();
-            CreateMap<ClubCard, ClubCardUpdateDTO>().ReverseMap();
-            CreateMap<TrainerCard, TrainerCardUpdateDTO>().ReverseMap();
+            CreateMap<ClubCard, ClubCardBaseDTO>()
+                .ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))
+                .ForMember(c => c.UnlimitedValidityPeriod, d => d.MapFrom(e => e.ValidityPeriod != 0 ? false : true));
+
+            CreateMap<TrainerCard, TrainerCardBaseDTO>()
+                .ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))
+                .ForMember(c => c.UnlimitedValidityPeriod, d => d.MapFrom(e => e.ValidityPeriod != 0 ? false : true));
+
+            CreateMap<ClubCard, ClubCardDTO>()
+                .ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))
+                .ForMember(c => c.UnlimitedValidityPeriod, d => d.MapFrom(e => e.ValidityPeriod != 0 ? false : true))
+                .ReverseMap();
+
+            CreateMap<TrainerCard, TrainerCardDTO>()
+                .ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))
+                .ForMember(c => c.UnlimitedValidityPeriod, d => d.MapFrom(e => e.ValidityPeriod != 0 ? false : true))
+                .ReverseMap();
+
+            CreateMap<ClubCard, ClubCardCreateDTO>().ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))
+                .ForMember(c => c.UnlimitedValidityPeriod, d => d.MapFrom(e => e.ValidityPeriod != 0 ? false : true))
+                .ReverseMap();
+
+            CreateMap<TrainerCard, TrainerCardCreateDTO>().ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))
+                .ForMember(c => c.UnlimitedValidityPeriod, d => d.MapFrom(e => e.ValidityPeriod != 0 ? false : true))
+                .ReverseMap();
+
+            CreateMap<ClubCard, ClubCardUpdateDTO>().ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))
+                .ForMember(c => c.UnlimitedValidityPeriod, d => d.MapFrom(e => e.ValidityPeriod != 0 ? false : true))
+                .ReverseMap();
+
+            CreateMap<TrainerCard, TrainerCardUpdateDTO>().ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))
+                .ForMember(c => c.UnlimitedValidityPeriod, d => d.MapFrom(e => e.ValidityPeriod != 0 ? false : true))
+                .ReverseMap();
         }
 
     }
