@@ -96,7 +96,7 @@ namespace TrainingPlanner.API.Controllers
         public async Task<ActionResult<PagedClubCardsDTO>> GetUserClubCards(
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 3)
+            [FromQuery] int pageSize = 5)
         {
             try
             {
@@ -113,7 +113,7 @@ namespace TrainingPlanner.API.Controllers
         public async Task<ActionResult<PagedClubCardsDTO>> GetClubClubCards(
             [FromQuery] int clubId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 3)
+            [FromQuery] int pageSize = 5)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace TrainingPlanner.API.Controllers
             [FromQuery] int clubId,
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 3)
+            [FromQuery] int pageSize = 5)
         {
             try
             {
@@ -219,7 +219,7 @@ namespace TrainingPlanner.API.Controllers
         public async Task<ActionResult<PagedTrainerCardsDTO>> GetUserTrainerCards(
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 3)
+            [FromQuery] int pageSize = 5)
         {
             try
             {
@@ -236,7 +236,7 @@ namespace TrainingPlanner.API.Controllers
         public async Task<ActionResult<PagedTrainerCardsDTO>> GetTrainerTrainerCards(
             [FromQuery] int trainerId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 3)
+            [FromQuery] int pageSize = 5)
         {
             try
             {
@@ -254,7 +254,7 @@ namespace TrainingPlanner.API.Controllers
             [FromQuery] int trainerId,
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 3)
+            [FromQuery] int pageSize = 5)
         {
             try
             {

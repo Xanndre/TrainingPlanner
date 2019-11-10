@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +23,7 @@ namespace TrainingPlanner.API.Controllers
         [HttpGet]
         public ActionResult<PagedUsersDTO> GetAllUsers(
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 3)
+            [FromQuery] int pageSize = 5)
         {
             try
             {
