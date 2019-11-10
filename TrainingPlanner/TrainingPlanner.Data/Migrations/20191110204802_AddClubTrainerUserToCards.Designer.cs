@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrainingPlanner.Data;
 
 namespace TrainingPlanner.Data.Migrations
 {
     [DbContext(typeof(TrainingPlannerDbContext))]
-    partial class TrainingPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191110204802_AddClubTrainerUserToCards")]
+    partial class AddClubTrainerUserToCards
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -638,13 +640,11 @@ namespace TrainingPlanner.Data.Migrations
                 {
                     b.HasOne("TrainingPlanner.Data.Entities.Club", "Club")
                         .WithMany()
-                        .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("ClubId");
 
                     b.HasOne("TrainingPlanner.Data.Entities.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("TrainingPlanner.Data.Entities.ClubPrice", b =>
@@ -724,13 +724,11 @@ namespace TrainingPlanner.Data.Migrations
                 {
                     b.HasOne("TrainingPlanner.Data.Entities.Trainer", "Trainer")
                         .WithMany()
-                        .HasForeignKey("TrainerId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("TrainerId");
 
                     b.HasOne("TrainingPlanner.Data.Entities.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("TrainingPlanner.Data.Entities.TrainerPrice", b =>

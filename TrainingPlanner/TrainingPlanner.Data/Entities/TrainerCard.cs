@@ -7,8 +7,10 @@ namespace TrainingPlanner.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        public int TrainerId { get; set; }
+        public int? TrainerId { get; set; }
+        public Trainer Trainer { get; set; }
         public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
         public string Name { get; set; }
         public int ValidityPeriod { get; set; }
         public int Entries { get; set; }

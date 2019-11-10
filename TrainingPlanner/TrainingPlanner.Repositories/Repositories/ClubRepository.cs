@@ -84,28 +84,6 @@ namespace TrainingPlanner.Repositories.Repositories
                 .ToListAsync();
         }
 
-        private IQueryable<Club> GetClubQuery()
-        {
-            return _trainingPlannerDbContext.Clubs
-                .Include(c => c.Activities)
-                .Include(c => c.Pictures)
-                .Include(c => c.PriceList)
-                .Include(c => c.Trainers)
-                .Include(c => c.WorkingHours);
-        }
-
-        private IAsyncEnumerable<Club> GetClubWithFavouriteQuery(string userId)
-        {
-            return GetClubQuery()
-                  .Include(x => x.Favourites)
-                  .ToAsyncEnumerable()
-                  .Select(x =>
-                  {
-                      x.Favourites = x.Favourites.Any() ? x.Favourites.Where(f => f.UserId == userId).ToList() : null;
-                      return x;
-                  });
-        }
-
         public async Task<IEnumerable<ClubActivity>> GetClubActivitiesToDelete(Club club)
         {
             return await _trainingPlannerDbContext.ClubActivities
@@ -194,6 +172,28 @@ namespace TrainingPlanner.Repositories.Repositories
             {
                 await _trainingPlannerDbContext.SaveChangesAsync();
             }
+        }
+
+        private IQueryable<Club> GetClubQuery()
+        {
+            return _trainingPlannerDbContext.Clubs
+                .Include(c => c.Activities)
+                .Include(c => c.Pictures)
+                .Include(c => c.PriceList)
+                .Include(c => c.Trainers)
+                .Include(c => c.WorkingHours);
+        }
+
+        private IAsyncEnumerable<Club> GetClubWithFavouriteQuery(string userId)
+        {
+            return GetClubQuery()
+                  .Include(x => x.Favourites)
+                  .ToAsyncEnumerable()
+                  .Select(x =>
+                  {
+                      x.Favourites = x.Favourites.Any() ? x.Favourites.Where(f => f.UserId == userId).ToList() : null;
+                      return x;
+                  });
         }
     }
 }

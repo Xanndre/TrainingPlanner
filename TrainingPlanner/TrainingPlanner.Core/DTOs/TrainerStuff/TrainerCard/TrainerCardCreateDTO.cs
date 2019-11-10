@@ -2,7 +2,7 @@
 {
     public class TrainerCardCreateDTO
     {
-        public int TrainerId { get; set; }
+        public int? TrainerId { get; set; }
         public string UserId { get; set; }
         public string Name { get; set; }
         public int ValidityPeriod { get; set; }

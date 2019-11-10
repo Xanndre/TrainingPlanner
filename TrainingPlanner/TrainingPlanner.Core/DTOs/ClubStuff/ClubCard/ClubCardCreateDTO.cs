@@ -2,7 +2,7 @@
 {
     public class ClubCardCreateDTO
     {
-        public int ClubId { get; set; }
+        public int? ClubId { get; set; }
         public string UserId { get; set; }
         public string Name { get; set; }
         public int ValidityPeriod { get; set; }

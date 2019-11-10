@@ -40,6 +40,26 @@ namespace TrainingPlanner.Data
                         .HasOne(ts => ts.Trainer)
                         .WithMany(t => t.Sports)
                         .HasForeignKey(ts => ts.TrainerId);
+
+            modelBuilder.Entity<TrainerCard>()
+                        .HasOne(t => t.Trainer)
+                        .WithMany()
+                        .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<ClubCard>()
+                        .HasOne(t => t.Club)
+                        .WithMany()
+                        .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<TrainerCard>()
+                        .HasOne(t => t.User)
+                        .WithMany()
+                        .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<ClubCard>()
+                        .HasOne(t => t.User)
+                        .WithMany()
+                        .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
