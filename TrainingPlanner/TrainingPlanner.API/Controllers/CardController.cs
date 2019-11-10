@@ -164,11 +164,11 @@ namespace TrainingPlanner.API.Controllers
         }
 
         [HttpPut("trainer")]
-        public async Task<ActionResult<TrainerCardUpdateDTO>> UpdateTrainerCard([FromBody] TrainerCardUpdateDTO card)
+        public async Task<ActionResult<TrainerCardUpdateDTO>> UpdateTrainerCard([FromBody] TrainerCardUpdateDTO card, [FromQuery] bool isDeactivating = false)
         {
             try
             {
-                var returnedCard = await _cardService.UpdateTrainerCard(card);
+                var returnedCard = await _cardService.UpdateTrainerCard(card, isDeactivating);
                 return Ok(returnedCard);
             }
             catch (ArgumentNullException exception)

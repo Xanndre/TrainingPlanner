@@ -7,7 +7,7 @@ namespace TrainingPlanner.Core.Interfaces
 {
     public interface ICardService
     {
-        Task<TrainerCardUpdateDTO> UpdateTrainerCard(TrainerCardUpdateDTO card);
+        Task<TrainerCardUpdateDTO> UpdateTrainerCard(TrainerCardUpdateDTO card, bool isDeactivating);
         Task<TrainerCardCreateDTO> CreateTrainerCard(TrainerCardCreateDTO card);
         Task DeleteTrainerCard(int id);
         Task<TrainerCardDTO> GetTrainerCard(int id);

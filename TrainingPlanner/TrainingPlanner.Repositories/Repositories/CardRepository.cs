@@ -18,8 +18,6 @@ namespace TrainingPlanner.Repositories.Repositories
         public async Task<TrainerCard> GetTrainerCard(int id)
         {
             return await _trainingPlannerDbContext.TrainerCards
-                .Include(t => t.User)
-                .Include(t => t.Trainer)
                 .FirstAsync(t => t.Id == id);
         }
 
@@ -67,8 +65,6 @@ namespace TrainingPlanner.Repositories.Repositories
         public async Task<ClubCard> GetClubCard(int id)
         {
             return await _trainingPlannerDbContext.ClubCards
-                .Include(t => t.User)
-                .Include(t => t.Club)
                 .FirstAsync(t => t.Id == id);
         }
 
@@ -115,16 +111,12 @@ namespace TrainingPlanner.Repositories.Repositories
 
         private IQueryable<ClubCard> GetClubCardQuery()
         {
-            return _trainingPlannerDbContext.ClubCards
-                .Include(t => t.User)
-                .Include(t => t.Club);
+            return _trainingPlannerDbContext.ClubCards;
         }
 
         private IQueryable<TrainerCard> GetTrainerCardQuery()
         {
-            return _trainingPlannerDbContext.TrainerCards
-                .Include(t => t.User)
-                .Include(t => t.Trainer);
+            return _trainingPlannerDbContext.TrainerCards;
         }
     }
 }

@@ -24,11 +24,21 @@ namespace TrainingPlanner.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<TrainerCardUpdateDTO> UpdateTrainerCard(TrainerCardUpdateDTO card)
+        public async Task<TrainerCardUpdateDTO> UpdateTrainerCard(TrainerCardUpdateDTO card, bool isDeactivating)
         {
             var mappedCard = _mapper.Map<TrainerCard>(card);
-            var days = !card.UnlimitedValidityPeriod ? card.ValidityPeriod : 0;
-            mappedCard.ExpirationDate = mappedCard.PurchaseDate.AddDays(days);
+            if (!isDeactivating)
+            {
+                var days = !card.UnlimitedValidityPeriod ? card.ValidityPeriod : 0;
+                mappedCard.ExpirationDate = mappedCard.PurchaseDate.AddDays(days);
+            }
+            else
+            {
+                if (!card.UnlimitedValidityPeriod)
+                {
+                    mappedCard.ExpirationDate = DateTime.Now;
+                }
+            }
             var returnedCard = await _cardRepository.UpdateTrainerCard(mappedCard);
             return _mapper.Map<TrainerCardUpdateDTO>(returnedCard);
         }
