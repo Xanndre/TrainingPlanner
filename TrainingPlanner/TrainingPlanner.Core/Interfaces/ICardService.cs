@@ -14,7 +14,7 @@ namespace TrainingPlanner.Core.Interfaces
         Task<PagedTrainerCardsDTO> GetUserTrainerCards(int pageNumber, int pageSize, string userId);
         Task<PagedTrainerCardsDTO> GetTrainerTrainerCards(int pageNumber, int pageSize, int trainerId);
         Task<PagedTrainerCardsDTO> GetTrainerCards(int pageNumber, int pageSize, string userId, int trainerId);
-        Task<ClubCardUpdateDTO> UpdateClubCard(ClubCardUpdateDTO card);
+        Task<ClubCardUpdateDTO> UpdateClubCard(ClubCardUpdateDTO card, bool isDeactivating);
         Task<ClubCardCreateDTO> CreateClubCard(ClubCardCreateDTO card);
         Task DeleteClubCard(int id);
         Task<ClubCardDTO> GetClubCard(int id);

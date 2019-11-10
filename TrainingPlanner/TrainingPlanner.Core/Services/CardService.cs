@@ -99,10 +99,21 @@ namespace TrainingPlanner.Core.Services
             return result;
         }
 
-        public async Task<ClubCardUpdateDTO> UpdateClubCard(ClubCardUpdateDTO card)
+        public async Task<ClubCardUpdateDTO> UpdateClubCard(ClubCardUpdateDTO card, bool isDeactivating)
         {
             var mappedCard = _mapper.Map<ClubCard>(card);
-
+            if (!isDeactivating)
+            {
+                var days = !card.UnlimitedValidityPeriod ? card.ValidityPeriod : 0;
+                mappedCard.ExpirationDate = mappedCard.PurchaseDate.AddDays(days);
+            }
+            else
+            {
+                if (!card.UnlimitedValidityPeriod)
+                {
+                    mappedCard.ExpirationDate = DateTime.Now;
+                }
+            }
             var returnedCard = await _cardRepository.UpdateClubCard(mappedCard);
             return _mapper.Map<ClubCardUpdateDTO>(returnedCard);
         }
