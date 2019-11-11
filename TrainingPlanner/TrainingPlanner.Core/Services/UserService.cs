@@ -18,14 +18,19 @@ namespace TrainingPlanner.Core.Services
         private readonly ITrainerRepository _trainerRepository;
         private readonly IClubRepository _clubRepository;
         private readonly IMapper _mapper;
+        private readonly IFavouriteRepository _favouriteRepository;
+        private readonly IRateRepository _rateRepository;
 
         public UserService(IUserRepository repository, IMapper mapper, ITrainerRepository trainerRepository,
-                            IClubRepository clubRepository)
+                            IClubRepository clubRepository, IFavouriteRepository favouriteRepository,
+                            IRateRepository rateRepository)
         {
             _userRepository = repository;
             _mapper = mapper;
             _trainerRepository = trainerRepository;
             _clubRepository = clubRepository;
+            _rateRepository = rateRepository;
+            _favouriteRepository = favouriteRepository;
         }
 
         public PagedUsersDTO GetAllUsers(
@@ -56,6 +61,11 @@ namespace TrainingPlanner.Core.Services
             var user = await _userRepository.GetUser(id);
             var trainer = await _trainerRepository.GetTrainerByUser(id);
             var clubs = await _clubRepository.GetUserClubs(id);
+            var favTrainers = await _favouriteRepository.GetUserFavouriteTrainers(id);
+            var favClubs = await _favouriteRepository.GetUserFavouriteClubs(id);
+            var clubRates = await _rateRepository.GetUserClubRates(id);
+            var trainerRates = await _rateRepository.GetUserTrainerRates(id);
+
             if(clubs.Count() != 0)
             {
                 foreach (var club in clubs)
@@ -68,7 +78,39 @@ namespace TrainingPlanner.Core.Services
             {
                 await _trainerRepository.DeleteTrainer(trainer);
             }
-           
+
+            if(favClubs.Count() != 0)
+            {
+                foreach (var club in favClubs)
+                {
+                    await _favouriteRepository.DeleteFavouriteClub(club);
+                }
+            }
+
+            if(favTrainers.Count() != 0)
+            {
+                foreach (var favTrainer in favTrainers)
+                {
+                    await _favouriteRepository.DeleteFavouriteTrainer(favTrainer);
+                }
+            }
+
+            if(clubRates.Count() != 0)
+            {
+                foreach (var rate in clubRates)
+                {
+                    await _rateRepository.DeleteClubRate(rate);
+                }
+            }
+
+            if (trainerRates.Count() != 0)
+            {
+                foreach (var rate in trainerRates)
+                {
+                    await _rateRepository.DeleteTrainerRate(rate);
+                }
+            }
+
             await _userRepository.DeleteUser(user);
       
         }

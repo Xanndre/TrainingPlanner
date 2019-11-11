@@ -16,12 +16,15 @@ namespace TrainingPlanner.Core.Services
         private const int MaxPageSize = 20;
         private readonly IClubRepository _clubRepository;
         private readonly IRateRepository _rateRepository;
+        private readonly IFavouriteRepository _favouriteRepository;
         private readonly IMapper _mapper;
 
-        public ClubService(IClubRepository clubRepository, IMapper mapper, IRateRepository rateRepository)
+        public ClubService(IClubRepository clubRepository, IMapper mapper, IRateRepository rateRepository,
+                            IFavouriteRepository favouriteRepository)
         {
             _clubRepository = clubRepository;
             _rateRepository = rateRepository;
+            _favouriteRepository = favouriteRepository;
             _mapper = mapper;
         }
 
@@ -71,6 +74,24 @@ namespace TrainingPlanner.Core.Services
 
         public async Task DeleteClub(int id)
         {
+            var rates = await _rateRepository.GetClubRates(id);
+            var favs = await _favouriteRepository.GetFavouriteClubs(id);
+
+            if (favs.Count() != 0)
+            {
+                foreach (var fav in favs)
+                {
+                    await _favouriteRepository.DeleteFavouriteClub(fav);
+                }
+            }
+
+            if (rates.Count() != 0)
+            {
+                foreach (var rate in rates)
+                {
+                    await _rateRepository.DeleteClubRate(rate);
+                }
+            }
 
             var club = await _clubRepository.GetClub(id);
             await _clubRepository.DeleteClub(club);

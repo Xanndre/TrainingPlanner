@@ -20,5 +20,7 @@ namespace TrainingPlanner.Repositories.Interfaces
         Task<IEnumerable<ClubRate>> GetClubRates(int clubId);
         Task<ClubRate> GetClubRateById(int id);
         Task<IEnumerable<int>> GetClubRateValues(int clubId);
+        Task<IEnumerable<ClubRate>> GetUserClubRates(string userId);
+        Task<IEnumerable<TrainerRate>> GetUserTrainerRates(string userId);
     }
 }

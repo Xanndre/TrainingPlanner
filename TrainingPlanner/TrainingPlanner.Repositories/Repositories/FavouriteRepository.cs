@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Data;
 using TrainingPlanner.Data.Entities;
@@ -49,6 +51,44 @@ namespace TrainingPlanner.Repositories.Repositories
         {
             return await _trainingPlannerDbContext.FavouriteTrainers
                 .FirstAsync(fav => fav.TrainerId == trainerId && fav.UserId == userId);
+        }
+
+        public async Task<IEnumerable<FavouriteClub>> GetUserFavouriteClubs(string userId)
+        {
+            return await GetFavouriteClubs()
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<FavouriteTrainer>> GetUserFavouriteTrainers(string userId)
+        {
+            return await GetFavouriteTrainers()
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<FavouriteClub>> GetFavouriteClubs(int clubId)
+        {
+            return await GetFavouriteClubs()
+                .Where(c => c.ClubId == clubId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<FavouriteTrainer>> GetFavouriteTrainers(int trainerId)
+        {
+            return await GetFavouriteTrainers()
+                .Where(c => c.TrainerId == trainerId)
+                .ToListAsync();
+        }
+
+        private IQueryable<FavouriteClub> GetFavouriteClubs()
+        {
+            return _trainingPlannerDbContext.FavouriteClubs;
+        }
+
+        private IQueryable<FavouriteTrainer> GetFavouriteTrainers()
+        {
+            return _trainingPlannerDbContext.FavouriteTrainers;
         }
     }
 }

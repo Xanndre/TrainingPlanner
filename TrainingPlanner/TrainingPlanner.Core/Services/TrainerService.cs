@@ -16,13 +16,16 @@ namespace TrainingPlanner.Core.Services
         private const int MaxPageSize = 20;
         private readonly ITrainerRepository _trainerRepository;
         private readonly IRateRepository _rateRepository;
+        private readonly IFavouriteRepository _favouriteRepository;
         private readonly IMapper _mapper;
 
-        public TrainerService(ITrainerRepository trainerRepository, IMapper mapper, IRateRepository rateRepository)
+        public TrainerService(ITrainerRepository trainerRepository, IMapper mapper, IRateRepository rateRepository,
+                                IFavouriteRepository favouriteRepository)
         {
             _trainerRepository = trainerRepository;
             _mapper = mapper;
             _rateRepository = rateRepository;
+            _favouriteRepository = favouriteRepository;
         }
 
         public async Task<TrainerDTO> GetTrainer(int id, bool isIncrementingViewCounter)
@@ -64,6 +67,25 @@ namespace TrainingPlanner.Core.Services
 
         public async Task DeleteTrainer(int id)
         {
+            var rates = await _rateRepository.GetTrainerRates(id);
+            var favs = await _favouriteRepository.GetFavouriteTrainers(id);
+
+            if (favs.Count() != 0)
+            {
+                foreach (var fav in favs)
+                {
+                    await _favouriteRepository.DeleteFavouriteTrainer(fav);
+                }
+            }
+
+            if (rates.Count() != 0)
+            {
+                foreach (var rate in rates)
+                {
+                    await _rateRepository.DeleteTrainerRate(rate);
+                }
+            }
+
             var trainer = await _trainerRepository.GetTrainer(id);
             await _trainerRepository.DeleteTrainer(trainer);
         }

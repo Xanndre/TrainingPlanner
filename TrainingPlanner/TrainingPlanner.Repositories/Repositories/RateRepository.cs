@@ -112,5 +112,29 @@ namespace TrainingPlanner.Repositories.Repositories
                 .Select(t => t.Rate)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<ClubRate>> GetUserClubRates(string userId)
+        {
+            return await GetClubRateQuery()
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<TrainerRate>> GetUserTrainerRates(string userId)
+        {
+            return await GetTrainerRateQuery()
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
+        }
+
+        private IQueryable<ClubRate> GetClubRateQuery()
+        {
+            return _trainingPlannerDbContext.ClubRatings;
+        }
+
+        private IQueryable<TrainerRate> GetTrainerRateQuery()
+        {
+            return _trainingPlannerDbContext.TrainerRatings;
+        }
     }
 }

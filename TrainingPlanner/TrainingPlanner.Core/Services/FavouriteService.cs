@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.Favourite;
 using TrainingPlanner.Core.Interfaces;
@@ -43,5 +44,6 @@ namespace TrainingPlanner.Core.Services
             var favourite = await _favouriteRepository.GetFavouriteTrainer(trainerId, userId);
             await _favouriteRepository.DeleteFavouriteTrainer(favourite);
         }
+
     }
 }
