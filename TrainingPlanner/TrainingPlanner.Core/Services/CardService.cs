@@ -29,15 +29,14 @@ namespace TrainingPlanner.Core.Services
             var mappedCard = _mapper.Map<TrainerCard>(card);
             if (!isDeactivating)
             {
-                var days = !card.UnlimitedValidityPeriod ? card.ValidityPeriod : 0;
-                mappedCard.ExpirationDate = mappedCard.PurchaseDate.AddDays(days);
+                if (!card.UnlimitedValidityPeriod)
+                {
+                    mappedCard.ExpirationDate = mappedCard.PurchaseDate.AddDays(card.ValidityPeriod);
+                }
             }
             else
             {
-                if (!card.UnlimitedValidityPeriod)
-                {
-                    mappedCard.ExpirationDate = DateTime.Now;
-                }
+                mappedCard.ExpirationDate = DateTime.Now;
             }
             var returnedCard = await _cardRepository.UpdateTrainerCard(mappedCard);
             return _mapper.Map<TrainerCardUpdateDTO>(returnedCard);
@@ -104,15 +103,14 @@ namespace TrainingPlanner.Core.Services
             var mappedCard = _mapper.Map<ClubCard>(card);
             if (!isDeactivating)
             {
-                var days = !card.UnlimitedValidityPeriod ? card.ValidityPeriod : 0;
-                mappedCard.ExpirationDate = mappedCard.PurchaseDate.AddDays(days);
+                if (!card.UnlimitedValidityPeriod)
+                {
+                    mappedCard.ExpirationDate = mappedCard.PurchaseDate.AddDays(card.ValidityPeriod);
+                } 
             }
             else
             {
-                if (!card.UnlimitedValidityPeriod)
-                {
-                    mappedCard.ExpirationDate = DateTime.Now;
-                }
+                mappedCard.ExpirationDate = DateTime.Now;
             }
             var returnedCard = await _cardRepository.UpdateClubCard(mappedCard);
             return _mapper.Map<ClubCardUpdateDTO>(returnedCard);
@@ -123,7 +121,10 @@ namespace TrainingPlanner.Core.Services
             var mappedCard = _mapper.Map<ClubCard>(card);
             var days = !card.UnlimitedValidityPeriod ? card.ValidityPeriod : 0; 
             mappedCard.PurchaseDate = DateTime.Now;
-            mappedCard.ExpirationDate = DateTime.Now.AddDays(days);
+            if (!card.UnlimitedValidityPeriod)
+            {
+                mappedCard.ExpirationDate = DateTime.Now.AddDays(days);
+            }
             var returnedCard = await _cardRepository.CreateClubCard(mappedCard);
             return _mapper.Map<ClubCardCreateDTO>(returnedCard);
         }
