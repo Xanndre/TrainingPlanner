@@ -23,7 +23,8 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<ApplicationUser> GetUser(string id)
         {
-            return await _trainingPlannerDbContext.Users.FirstAsync(u => u.Id == id);
+            return await GetUserQuery()
+                .FirstAsync(u => u.Id == id);
         }
 
         public async Task<ApplicationUser> UpdateUser(ApplicationUser user)
@@ -94,7 +95,10 @@ namespace TrainingPlanner.Repositories.Repositories
 
         private IQueryable<ApplicationUser> GetUserQuery()
         {
-            return _trainingPlannerDbContext.Users.AsNoTracking();
+            return _trainingPlannerDbContext.Users
+                .Include(t => t.Sports)
+                .Include(t => t.Locations)
+                .AsNoTracking();
         }
 
     }
