@@ -46,6 +46,16 @@ namespace TrainingPlanner.Repositories.Repositories
             await _trainingPlannerDbContext.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<string>> GetLocations()
+        {
+            var locations = await _trainingPlannerDbContext.Users
+                .Where(u => u.City != null)
+                .Select(u => u.City)
+                .Distinct()
+                .ToListAsync();
+            return locations;
+        }
+
         private IQueryable<ApplicationUser> GetUserQuery()
         {
             return _trainingPlannerDbContext.Users.AsNoTracking();

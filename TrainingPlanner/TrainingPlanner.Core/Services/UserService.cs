@@ -115,6 +115,11 @@ namespace TrainingPlanner.Core.Services
       
         }
 
+        public async Task<IEnumerable<string>> GetLocations()
+        {
+            return await _userRepository.GetLocations();
+        }
+
         private PagedUsersDTO GetUsers(
             int pageNumber, int pageSize, IEnumerable<ApplicationUser> users)
         {
