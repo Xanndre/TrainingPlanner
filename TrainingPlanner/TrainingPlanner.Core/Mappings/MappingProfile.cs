@@ -12,6 +12,7 @@ using TrainingPlanner.Core.DTOs.TrainerStuff;
 using TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard;
 using TrainingPlanner.Core.DTOs.TrainerStuff.TrainerRate;
 using TrainingPlanner.Core.DTOs.User;
+using TrainingPlanner.Core.DTOs.UserStuff;
 using TrainingPlanner.Data.Entities;
 
 namespace TrainingPlanner.Core.Mappings
@@ -54,6 +55,9 @@ namespace TrainingPlanner.Core.Mappings
 
             CreateMap<TrainerSportDTO, TrainerSport>().ReverseMap();
             CreateMap<TrainerSport, TrainerSportBaseDTO>().ReverseMap();
+
+            CreateMap<UserSport, UserSportDTO>().ReverseMap();
+            CreateMap<UserLocation, UserLocationDTO>().ReverseMap();
 
             CreateMap<ClubActivity, ClubActivityDTO>()
                 .ForMember(c => c.Picture, d => d.MapFrom(e => e.Picture))

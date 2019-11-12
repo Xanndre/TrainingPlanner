@@ -56,6 +56,42 @@ namespace TrainingPlanner.Repositories.Repositories
             return locations;
         }
 
+        public async Task<IEnumerable<UserSport>> GetUserSportsToDelete(ApplicationUser user)
+        {
+            return await _trainingPlannerDbContext.UserSports
+                .Where(u => u.UserId == user.Id)
+                .Except(user.Sports)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<UserLocation>> GetUserLocationsToDelete(ApplicationUser user)
+        {
+            return await _trainingPlannerDbContext.UserLocations
+                .Where(u => u.UserId == user.Id)
+                .Except(user.Locations)
+                .ToListAsync();
+        }
+
+        public async Task RemoveUserSports(IEnumerable<UserSport> sports, bool isSavingChanges = true)
+        {
+            _trainingPlannerDbContext.UserSports.RemoveRange(sports);
+
+            if (isSavingChanges)
+            {
+                await _trainingPlannerDbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveUserLocations(IEnumerable<UserLocation> locations, bool isSavingChanges = true)
+        {
+            _trainingPlannerDbContext.UserLocations.RemoveRange(locations);
+
+            if (isSavingChanges)
+            {
+                await _trainingPlannerDbContext.SaveChangesAsync();
+            }
+        }
+
         private IQueryable<ApplicationUser> GetUserQuery()
         {
             return _trainingPlannerDbContext.Users.AsNoTracking();

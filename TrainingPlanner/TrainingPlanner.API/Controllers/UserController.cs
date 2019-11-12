@@ -57,11 +57,11 @@ namespace TrainingPlanner.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<UserDTO>> UpdateUser([FromBody] UserDTO user)
+        public async Task<ActionResult<UserDTO>> UpdateUser([FromBody] UserDTO user, [FromQuery] bool isPartner = false)
         {
             try
             {
-                var appUser = await _userService.UpdateUser(user);
+                var appUser = await _userService.UpdateUser(user, isPartner);
                 return Ok(appUser);
             }
             catch (ArgumentNullException exception)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace TrainingPlanner.Data.Entities
 {
@@ -11,5 +12,7 @@ namespace TrainingPlanner.Data.Entities
         public DateTime BirthDate { get; set; }
         public string City { get; set; }
         public string ProfilePicture { get; set; }
+        public ICollection<UserSport> Sports { get; set; }
+        public ICollection<UserLocation> Locations { get; set; }
     }
 }

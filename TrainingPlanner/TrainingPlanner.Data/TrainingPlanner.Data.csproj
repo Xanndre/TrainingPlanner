@@ -7,6 +7,12 @@
   <ItemGroup>
     <Compile Remove="Migrations\20191110203837_ChangeClubIdToOptional.cs" />
     <Compile Remove="Migrations\20191110203837_ChangeClubIdToOptional.Designer.cs" />
+    <Compile Remove="Migrations\20191112154400_TrainingPartner3.cs" />
+    <Compile Remove="Migrations\20191112154400_TrainingPartner3.Designer.cs" />
+    <Compile Remove="Migrations\20191112154631_TrainingPartner.cs" />
+    <Compile Remove="Migrations\20191112154631_TrainingPartner.Designer.cs" />
+    <Compile Remove="Migrations\20191112154718_TrainingPartner.cs" />
+    <Compile Remove="Migrations\20191112154718_TrainingPartner.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

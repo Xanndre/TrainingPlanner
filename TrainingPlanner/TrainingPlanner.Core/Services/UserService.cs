@@ -48,10 +48,15 @@ namespace TrainingPlanner.Core.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-        public async Task<UserDTO> UpdateUser(UserDTO user)
+        public async Task<UserDTO> UpdateUser(UserDTO user, bool isPartner)
         {
             var identityUser = await _userRepository.GetUser(user.Id);
             identityUser = _mapper.Map(user, identityUser);
+            if (isPartner)
+            {
+                await RemoveUserSports(identityUser);
+                await RemoveUserLocations(identityUser);
+            }
             var appUser = await _userRepository.UpdateUser(identityUser);
             return _mapper.Map<UserDTO>(appUser);
         }
@@ -142,6 +147,18 @@ namespace TrainingPlanner.Core.Services
             result.Users = _mapper.Map<IEnumerable<UserDTO>>(pagedUsers);
 
             return result;
+        }
+
+        private async Task RemoveUserSports(ApplicationUser mappedUser)
+        {
+            var userSportsToDelete = await _userRepository.GetUserSportsToDelete(mappedUser);
+            await _userRepository.RemoveUserSports(userSportsToDelete, false);
+        }
+
+        private async Task RemoveUserLocations(ApplicationUser mappedUser)
+        {
+            var userLocationsToDelete = await _userRepository.GetUserLocationsToDelete(mappedUser);
+            await _userRepository.RemoveUserLocations(userLocationsToDelete, false);
         }
     }
 }

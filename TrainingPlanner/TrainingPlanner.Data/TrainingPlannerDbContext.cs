@@ -22,6 +22,8 @@ namespace TrainingPlanner.Data
         public DbSet<ClubTrainer> ClubTrainers { get; set; }
         public DbSet<ClubCard> ClubCards { get; set; }
         public DbSet<TrainerCard> TrainerCards { get; set; }
+        public DbSet<UserLocation> UserLocations { get; set; }
+        public DbSet<UserSport> UserSports { get; set; }
         public TrainingPlannerDbContext(DbContextOptions<TrainingPlannerDbContext> options) : base(options)
         {
 
