@@ -9,8 +9,10 @@ namespace TrainingPlanner.Core.Interfaces
     {
         PagedUsersDTO GetAllUsers(int pageNumber, int pageSize);
         Task<UserDTO> GetUser(string id);
+        Task<PartnerDTO> GetPartner(string id);
         Task<UserDTO> UpdateUser(UserDTO user, bool isPartner);
         Task DeleteUser(string id);
         Task<IEnumerable<string>> GetLocations();
+        Task<PagedPartnersDTO> GetAllPartners(int pageNumber, int pageSize, string userId);
     }
 }

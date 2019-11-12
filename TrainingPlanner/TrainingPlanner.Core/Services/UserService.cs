@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.DTOs.User;
+using TrainingPlanner.Core.DTOs.UserStuff;
 using TrainingPlanner.Core.Interfaces;
 using TrainingPlanner.Data.Entities;
 using TrainingPlanner.Repositories.Interfaces;
@@ -46,6 +47,12 @@ namespace TrainingPlanner.Core.Services
         {
             var user = await _userRepository.GetUser(id);
             return _mapper.Map<UserDTO>(user);
+        }
+
+        public async Task<PartnerDTO> GetPartner(string id)
+        {
+            var user = await _userRepository.GetUser(id);
+            return _mapper.Map<PartnerDTO>(user);
         }
 
         public async Task<UserDTO> UpdateUser(UserDTO user, bool isPartner)
@@ -125,6 +132,48 @@ namespace TrainingPlanner.Core.Services
             return await _userRepository.GetLocations();
         }
 
+        public async Task<PagedPartnersDTO> GetAllPartners(
+            int pageNumber,
+            int pageSize,
+            string userId)
+        {
+            var users = _userRepository.GetAllUsers();
+            var result = await GetPartners(pageNumber, pageSize, userId, users);
+            return result;
+        }
+
+        private async Task<PagedPartnersDTO> GetPartners(
+            int pageNumber, int pageSize, string userId, IEnumerable<ApplicationUser> users)
+        {
+            var authenticatedUser = await _userRepository.GetUser(userId);
+
+            var partners = users.Where(u => GetSimilarity(authenticatedUser, u) > 0);
+
+            var result = await GetPagedPartners(partners, pageNumber, pageSize, userId);
+            return result;
+        }
+
+        private async Task<PagedPartnersDTO> GetPagedPartners(IEnumerable<ApplicationUser> users, int pageNumber, int pageSize, string userId)
+        {
+            var result = new PagedPartnersDTO();
+            var user = await GetPartner(userId);
+
+            var calculatedPageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
+            var pagedUsers = users
+                .Skip(calculatedPageSize * (pageNumber - 1))
+                .Take(calculatedPageSize)
+                .ToList();
+
+            result.TotalCount = users.Count();
+            result.TotalPages = (int)Math.Ceiling(result.TotalCount / (double)calculatedPageSize);
+            result.Partners = _mapper.Map<IEnumerable<PartnerDTO>>(pagedUsers);
+            foreach (var partner in result.Partners)
+            {
+                partner.Similarity = Math.Round(GetSimilarity(user, partner), 2);
+            }
+            return result;
+        }
+
         private PagedUsersDTO GetUsers(
             int pageNumber, int pageSize, IEnumerable<ApplicationUser> users)
         {
@@ -159,6 +208,48 @@ namespace TrainingPlanner.Core.Services
         {
             var userLocationsToDelete = await _userRepository.GetUserLocationsToDelete(mappedUser);
             await _userRepository.RemoveUserLocations(userLocationsToDelete, false);
+        }
+
+        private double GetSimilarity(ApplicationUser user, ApplicationUser partner)
+        {
+            if (user.Locations.Any(c => c.Location == partner.City) && user.Sports.Count() != 0)
+            {
+                var commonSports = new List<UserSport>();
+                foreach (var sport in partner.Sports)
+                {
+                    if (user.Sports.Any(c => c.Sport == sport.Sport))
+                    {
+                        commonSports.Add(sport);
+                    }
+                }
+
+                return commonSports.Count() / user.Sports.Count() * 100;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        private double GetSimilarity(PartnerDTO user, PartnerDTO partner)
+        {
+            if (user.Locations.Any(c => c.Location == partner.City) && user.Sports.Count() != 0)
+            {
+                var commonSports = new List<UserSportDTO>();
+                foreach (var sport in partner.Sports)
+                {
+                    if (user.Sports.Any(c => c.Sport == sport.Sport))
+                    {
+                        commonSports.Add(sport);
+                    }
+                }
+
+                return commonSports.Count() / user.Sports.Count() * 100;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

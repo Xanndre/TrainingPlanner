@@ -111,5 +111,22 @@ namespace TrainingPlanner.API.Controllers
             }
 
         }
+
+        [HttpGet("partners/{id}")]
+        public ActionResult<PagedPartnersDTO> GetAllPartners(string id,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 5)
+        {
+            try
+            {
+                var result = _userService.GetAllPartners(pageNumber, pageSize, id);
+                return Ok(result);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
     }
 }
