@@ -78,20 +78,20 @@ namespace TrainingPlanner.Core.Services
             var clubRates = await _rateRepository.GetUserClubRates(id);
             var trainerRates = await _rateRepository.GetUserTrainerRates(id);
 
-            if(clubs.Count() != 0)
+            if (clubs.Count() != 0)
             {
                 foreach (var club in clubs)
                 {
                     await _clubRepository.DeleteClub(club);
                 }
             }
-            
-            if(trainer != null)
+
+            if (trainer != null)
             {
                 await _trainerRepository.DeleteTrainer(trainer);
             }
 
-            if(favClubs.Count() != 0)
+            if (favClubs.Count() != 0)
             {
                 foreach (var club in favClubs)
                 {
@@ -99,7 +99,7 @@ namespace TrainingPlanner.Core.Services
                 }
             }
 
-            if(favTrainers.Count() != 0)
+            if (favTrainers.Count() != 0)
             {
                 foreach (var favTrainer in favTrainers)
                 {
@@ -107,7 +107,7 @@ namespace TrainingPlanner.Core.Services
                 }
             }
 
-            if(clubRates.Count() != 0)
+            if (clubRates.Count() != 0)
             {
                 foreach (var rate in clubRates)
                 {
@@ -124,7 +124,7 @@ namespace TrainingPlanner.Core.Services
             }
 
             await _userRepository.DeleteUser(user);
-      
+
         }
 
         public async Task<IEnumerable<string>> GetLocations()
@@ -145,32 +145,34 @@ namespace TrainingPlanner.Core.Services
         private async Task<PagedPartnersDTO> GetPartners(
             int pageNumber, int pageSize, string userId, IEnumerable<ApplicationUser> users)
         {
-            var authenticatedUser = await _userRepository.GetUser(userId);
+            var user = await GetPartner(userId);
 
-            var partners = users.Where(u => GetSimilarity(authenticatedUser, u) > 0);
+            var partners = _mapper.Map<IEnumerable<PartnerDTO>>(users);
+            foreach (var partner in partners)
+            {
+                partner.Similarity = Math.Round(GetSimilarity(user, partner), 2);
+            }
+            partners = partners.Where(u => u.Similarity > 0);
 
-            var result = await GetPagedPartners(partners, pageNumber, pageSize, userId);
+            var result = GetPagedPartners(partners, pageNumber, pageSize, userId);
             return result;
         }
 
-        private async Task<PagedPartnersDTO> GetPagedPartners(IEnumerable<ApplicationUser> users, int pageNumber, int pageSize, string userId)
+        private PagedPartnersDTO GetPagedPartners(IEnumerable<PartnerDTO> partners, int pageNumber, int pageSize, string userId)
         {
             var result = new PagedPartnersDTO();
-            var user = await GetPartner(userId);
 
             var calculatedPageSize = pageSize > MaxPageSize ? MaxPageSize : pageSize;
-            var pagedUsers = users
+
+            var pagedUsers = partners
                 .Skip(calculatedPageSize * (pageNumber - 1))
                 .Take(calculatedPageSize)
                 .ToList();
 
-            result.TotalCount = users.Count();
+            result.TotalCount = partners.Count();
             result.TotalPages = (int)Math.Ceiling(result.TotalCount / (double)calculatedPageSize);
-            result.Partners = _mapper.Map<IEnumerable<PartnerDTO>>(pagedUsers);
-            foreach (var partner in result.Partners)
-            {
-                partner.Similarity = Math.Round(GetSimilarity(user, partner), 2);
-            }
+            result.Partners = pagedUsers;
+
             return result;
         }
 
@@ -208,27 +210,6 @@ namespace TrainingPlanner.Core.Services
         {
             var userLocationsToDelete = await _userRepository.GetUserLocationsToDelete(mappedUser);
             await _userRepository.RemoveUserLocations(userLocationsToDelete, false);
-        }
-
-        private double GetSimilarity(ApplicationUser user, ApplicationUser partner)
-        {
-            if (user.Locations.Any(c => c.Location == partner.City) && user.Sports.Count() != 0)
-            {
-                var commonSports = new List<UserSport>();
-                foreach (var sport in partner.Sports)
-                {
-                    if (user.Sports.Any(c => c.Sport == sport.Sport))
-                    {
-                        commonSports.Add(sport);
-                    }
-                }
-
-                return commonSports.Count() / user.Sports.Count() * 100;
-            }
-            else
-            {
-                return 0;
-            }
         }
 
         private double GetSimilarity(PartnerDTO user, PartnerDTO partner)
