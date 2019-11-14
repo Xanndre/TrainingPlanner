@@ -115,7 +115,7 @@ namespace TrainingPlanner.API.Controllers
         [HttpGet("partners/{id}")]
         public async Task<ActionResult<PagedPartnersDTO>> GetAllPartners(string id,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 5)
+            [FromQuery] int pageSize = 3)
         {
             try
             {

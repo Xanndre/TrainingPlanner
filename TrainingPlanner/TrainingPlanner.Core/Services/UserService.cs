@@ -152,7 +152,7 @@ namespace TrainingPlanner.Core.Services
             {
                 partner.Similarity = Math.Round(GetSimilarity(user, partner), 2);
             }
-            partners = partners.Where(u => u.Similarity > 0);
+            partners = partners.Where(u => u.Similarity > 0 && u.Id != userId).OrderByDescending(u => u.Similarity);
 
             var result = GetPagedPartners(partners, pageNumber, pageSize, userId);
             return result;
@@ -224,8 +224,8 @@ namespace TrainingPlanner.Core.Services
                         commonSports.Add(sport);
                     }
                 }
-
-                return commonSports.Count() / user.Sports.Count() * 100;
+                var sim = (double)commonSports.Count() / user.Sports.Count() * 100;
+                return sim;
             }
             else
             {
