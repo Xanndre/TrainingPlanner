@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrainingPlanner.Data;
 
 namespace TrainingPlanner.Data.Migrations
 {
     [DbContext(typeof(TrainingPlannerDbContext))]
-    partial class TrainingPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191115114305_BodyMeasurements")]
+    partial class BodyMeasurements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,23 +196,6 @@ namespace TrainingPlanner.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("TrainingPlanner.Data.Entities.BodyInjury", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BodyMeasurementId");
-
-                    b.Property<string>("Injury");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BodyMeasurementId");
-
-                    b.ToTable("BodyInjuries");
                 });
 
             modelBuilder.Entity("TrainingPlanner.Data.Entities.BodyMeasurement", b =>
@@ -718,14 +703,6 @@ namespace TrainingPlanner.Data.Migrations
                     b.HasOne("TrainingPlanner.Data.Entities.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("TrainingPlanner.Data.Entities.BodyInjury", b =>
-                {
-                    b.HasOne("TrainingPlanner.Data.Entities.BodyMeasurement", "BodyMeasurement")
-                        .WithMany("Injuries")
-                        .HasForeignKey("BodyMeasurementId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

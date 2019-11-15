@@ -17,7 +17,7 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<TrainerCard> GetTrainerCard(int id)
         {
-            return await _trainingPlannerDbContext.TrainerCards
+            return await GetTrainerCardQuery()
                 .FirstAsync(t => t.Id == id);
         }
 
@@ -64,7 +64,7 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<ClubCard> GetClubCard(int id)
         {
-            return await _trainingPlannerDbContext.ClubCards
+            return await GetClubCardQuery()
                 .FirstAsync(t => t.Id == id);
         }
 

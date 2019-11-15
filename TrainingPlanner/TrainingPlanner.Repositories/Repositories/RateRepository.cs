@@ -37,13 +37,13 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<TrainerRate> GetTrainerRate(string userId, int trainerId)
         {
-            return await _trainingPlannerDbContext.TrainerRatings
+            return await GetTrainerRateQuery()
                 .FirstOrDefaultAsync(t => t.UserId == userId && t.TrainerId == trainerId);
         }
 
         public async Task<IEnumerable<TrainerRate>> GetTrainerRates(int trainerId)
         {
-            return await _trainingPlannerDbContext.TrainerRatings
+            return await GetTrainerRateQuery()
                 .Include(t => t.User)
                 .Where(t => t.TrainerId == trainerId)
                 .ToListAsync();
@@ -51,13 +51,13 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<TrainerRate> GetTrainerRateById(int id)
         {
-            return await _trainingPlannerDbContext.TrainerRatings
+            return await GetTrainerRateQuery()
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<IEnumerable<int>> GetTrainerRateValues(int trainerId)
         {
-            return await _trainingPlannerDbContext.TrainerRatings
+            return await GetTrainerRateQuery()
                 .Include(t => t.User)
                 .Where(t => t.TrainerId == trainerId)
                 .Select(t => t.Rate)
@@ -86,13 +86,13 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<ClubRate> GetClubRate(string userId, int clubId)
         {
-            return await _trainingPlannerDbContext.ClubRatings
+            return await GetClubRateQuery()
                 .FirstOrDefaultAsync(t => t.UserId == userId && t.ClubId == clubId);
         }
 
         public async Task<IEnumerable<ClubRate>> GetClubRates(int clubId)
         {
-            return await _trainingPlannerDbContext.ClubRatings
+            return await GetClubRateQuery()
                 .Include(t => t.User)
                 .Where(t => t.ClubId == clubId)
                 .ToListAsync();
@@ -100,13 +100,13 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<ClubRate> GetClubRateById(int id)
         {
-            return await _trainingPlannerDbContext.ClubRatings
+            return await GetClubRateQuery()
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<IEnumerable<int>> GetClubRateValues(int clubId)
         {
-            return await _trainingPlannerDbContext.ClubRatings
+            return await GetClubRateQuery()
                 .Include(t => t.User)
                 .Where(t => t.ClubId == clubId)
                 .Select(t => t.Rate)

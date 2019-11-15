@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System.Linq;
 using TrainingPlanner.Core.DTOs.Account;
+using TrainingPlanner.Core.DTOs.BodyMeasurement;
 using TrainingPlanner.Core.DTOs.Club;
 using TrainingPlanner.Core.DTOs.ClubStuff;
 using TrainingPlanner.Core.DTOs.ClubStuff.ClubCard;
@@ -58,6 +59,7 @@ namespace TrainingPlanner.Core.Mappings
 
             CreateMap<UserSport, UserSportDTO>().ReverseMap();
             CreateMap<UserLocation, UserLocationDTO>().ReverseMap();
+            CreateMap<BodyInjury, BodyInjuryDTO>().ReverseMap();
 
             CreateMap<ClubActivity, ClubActivityDTO>()
                 .ForMember(c => c.Picture, d => d.MapFrom(e => e.Picture))
@@ -81,10 +83,13 @@ namespace TrainingPlanner.Core.Mappings
 
             CreateMap<ClubRate, ClubRateBaseDTO>();
             CreateMap<TrainerRate, TrainerRateBaseDTO>();
+            CreateMap<BodyMeasurement, BodyMeasurementBaseDTO>();
             CreateMap<ClubRate, ClubRateDTO>().ReverseMap();
             CreateMap<TrainerRate, TrainerRateDTO>().ReverseMap();
+            CreateMap<BodyMeasurement, BodyMeasurementDTO>().ReverseMap();
             CreateMap<ClubRate, ClubRateCreateDTO>().ReverseMap();
             CreateMap<TrainerRate, TrainerRateCreateDTO>().ReverseMap();
+            CreateMap<BodyMeasurement, BodyMeasurementCreateDTO>().ReverseMap();
 
             CreateMap<ClubCard, ClubCardBaseDTO>()
                 .ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))

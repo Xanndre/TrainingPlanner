@@ -30,7 +30,7 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<FavouriteClub> GetFavouriteClub(int clubId, string userId)
         {
-            return await _trainingPlannerDbContext.FavouriteClubs
+            return await GetFavouriteClubs()
                 .FirstAsync(fav => fav.ClubId == clubId && fav.UserId == userId);
         }
 
@@ -49,7 +49,7 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<FavouriteTrainer> GetFavouriteTrainer(int trainerId, string userId)
         {
-            return await _trainingPlannerDbContext.FavouriteTrainers
+            return await GetFavouriteTrainers()
                 .FirstAsync(fav => fav.TrainerId == trainerId && fav.UserId == userId);
         }
 

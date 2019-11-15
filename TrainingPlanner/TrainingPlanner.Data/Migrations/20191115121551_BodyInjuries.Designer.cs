@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrainingPlanner.Data;
 
 namespace TrainingPlanner.Data.Migrations
 {
     [DbContext(typeof(TrainingPlannerDbContext))]
-    partial class TrainingPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191115121551_BodyInjuries")]
+    partial class BodyInjuries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
