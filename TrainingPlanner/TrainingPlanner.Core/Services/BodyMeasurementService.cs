@@ -33,6 +33,7 @@ namespace TrainingPlanner.Core.Services
         public async Task<BodyMeasurementCreateDTO> CreateBodyMeasurement(BodyMeasurementCreateDTO measurement)
         {
             var mappedMeasurement = _mapper.Map<BodyMeasurement>(measurement);
+            mappedMeasurement.Date = DateTime.Now;
             var returnedMeasurement = await _bodyMeasurementRepository.CreateBodyMeasurement(mappedMeasurement);
             return _mapper.Map<BodyMeasurementCreateDTO>(returnedMeasurement);
         }

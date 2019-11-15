@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TrainingPlanner.Core.DTOs.BodyMeasurement;
 using TrainingPlanner.Core.DTOs.UserStuff;
 
 namespace TrainingPlanner.Core.DTOs.User
@@ -16,5 +17,6 @@ namespace TrainingPlanner.Core.DTOs.User
         public string ProfilePicture { get; set; }
         public ICollection<UserSportDTO> Sports { get; set; }
         public ICollection<UserLocationDTO> Locations { get; set; }
+        public ICollection<BodyMeasurementDTO> BodyMeasurements { get; set; }
     }
 }

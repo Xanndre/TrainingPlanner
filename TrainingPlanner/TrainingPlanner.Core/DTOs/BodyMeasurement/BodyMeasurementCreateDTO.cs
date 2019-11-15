@@ -6,7 +6,6 @@ namespace TrainingPlanner.Core.DTOs.BodyMeasurement
     public class BodyMeasurementCreateDTO
     {
         public string UserId { get; set; }
-        public DateTime Date { get; set; }
         public int Age { get; set; }
         public int MuscleMass { get; set; }
         public int Weight { get; set; }

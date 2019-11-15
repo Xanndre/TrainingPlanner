@@ -50,7 +50,8 @@ namespace TrainingPlanner.Repositories.Repositories
 
         private IQueryable<BodyMeasurement> GetBodyMeasurementQuery()
         {
-            return _trainingPlannerDbContext.BodyMeasurements;
+            return _trainingPlannerDbContext.BodyMeasurements
+                .Include(t => t.Injuries);
         }
     }
 }
