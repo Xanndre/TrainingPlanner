@@ -21,10 +21,11 @@ namespace TrainingPlanner.Core.Services
         private readonly IMapper _mapper;
         private readonly IFavouriteRepository _favouriteRepository;
         private readonly IRateRepository _rateRepository;
+        private readonly IBodyMeasurementRepository _bodyMeasurementRepository;
 
         public UserService(IUserRepository repository, IMapper mapper, ITrainerRepository trainerRepository,
                             IClubRepository clubRepository, IFavouriteRepository favouriteRepository,
-                            IRateRepository rateRepository)
+                            IRateRepository rateRepository, IBodyMeasurementRepository bodyMeasurementRepository)
         {
             _userRepository = repository;
             _mapper = mapper;
@@ -32,6 +33,7 @@ namespace TrainingPlanner.Core.Services
             _clubRepository = clubRepository;
             _rateRepository = rateRepository;
             _favouriteRepository = favouriteRepository;
+            _bodyMeasurementRepository = bodyMeasurementRepository;
         }
 
         public PagedUsersDTO GetAllUsers(
@@ -77,6 +79,7 @@ namespace TrainingPlanner.Core.Services
             var favClubs = await _favouriteRepository.GetUserFavouriteClubs(id);
             var clubRates = await _rateRepository.GetUserClubRates(id);
             var trainerRates = await _rateRepository.GetUserTrainerRates(id);
+            var bodyMeasurements = await _bodyMeasurementRepository.GetBodyMeasurements(id);
 
             if (clubs.Count() != 0)
             {
@@ -120,6 +123,14 @@ namespace TrainingPlanner.Core.Services
                 foreach (var rate in trainerRates)
                 {
                     await _rateRepository.DeleteTrainerRate(rate);
+                }
+            }
+
+            if(bodyMeasurements.Count() != 0)
+            {
+                foreach(var measurement in bodyMeasurements)
+                {
+                    await _bodyMeasurementRepository.DeleteBodyMeasurement(measurement);
                 }
             }
 

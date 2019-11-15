@@ -64,6 +64,16 @@ namespace TrainingPlanner.Data
                         .HasOne(t => t.User)
                         .WithMany()
                         .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<UserLocation>()
+                        .HasOne(t => t.User)
+                        .WithMany(t => t.Locations)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserSport>()
+                        .HasOne(t => t.User)
+                        .WithMany(t => t.Sports)
+                        .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
