@@ -11,5 +11,7 @@ namespace TrainingPlanner.Repositories.Interfaces
         Task DeleteBodyMeasurement(BodyMeasurement measurement);
         Task<IEnumerable<BodyMeasurement>> GetBodyMeasurements(string userId);
         Task<BodyMeasurement> GetBodyMeasurement(int id);
+        Task<IEnumerable<BodyInjury>> GetBodyInjuriesToDelete(BodyMeasurement measurement);
+        Task RemoveBodyInjuries(IEnumerable<BodyInjury> injuries, bool isSavingChanges = true);
     }
 }

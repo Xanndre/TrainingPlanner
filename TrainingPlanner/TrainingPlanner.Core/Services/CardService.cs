@@ -175,7 +175,8 @@ namespace TrainingPlanner.Core.Services
         private PagedTrainerCardsDTO GetTrainerCards(
             int pageNumber, int pageSize, IEnumerable<TrainerCard> cards)
         {
-            var result = GetPagedTrainerCards(cards, pageNumber, pageSize);
+            var trainerCards = cards.OrderByDescending(u => u.PurchaseDate);
+            var result = GetPagedTrainerCards(trainerCards, pageNumber, pageSize);
             return result;
         }
 
@@ -199,7 +200,8 @@ namespace TrainingPlanner.Core.Services
         private PagedClubCardsDTO GetClubCards(
             int pageNumber, int pageSize, IEnumerable<ClubCard> cards)
         {
-            var result = GetPagedClubCards(cards, pageNumber, pageSize);
+            var clubCards = cards.OrderByDescending(u => u.PurchaseDate);
+            var result = GetPagedClubCards(clubCards, pageNumber, pageSize);
             return result;
         }
 

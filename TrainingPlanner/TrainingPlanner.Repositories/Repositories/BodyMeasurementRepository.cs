@@ -48,6 +48,24 @@ namespace TrainingPlanner.Repositories.Repositories
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
+        public async Task<IEnumerable<BodyInjury>> GetBodyInjuriesToDelete(BodyMeasurement measurement)
+        {
+            return await _trainingPlannerDbContext.BodyInjuries
+                .Where(c => c.BodyMeasurementId == measurement.Id)
+                .Except(measurement.Injuries)
+                .ToListAsync();
+        }
+
+        public async Task RemoveBodyInjuries(IEnumerable<BodyInjury> injuries, bool isSavingChanges = true)
+        {
+            _trainingPlannerDbContext.BodyInjuries.RemoveRange(injuries);
+
+            if (isSavingChanges)
+            {
+                await _trainingPlannerDbContext.SaveChangesAsync();
+            }
+        }
+
         private IQueryable<BodyMeasurement> GetBodyMeasurementQuery()
         {
             return _trainingPlannerDbContext.BodyMeasurements

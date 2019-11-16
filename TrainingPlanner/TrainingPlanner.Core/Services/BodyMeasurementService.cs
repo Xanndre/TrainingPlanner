@@ -26,6 +26,7 @@ namespace TrainingPlanner.Core.Services
         public async Task<BodyMeasurementDTO> UpdateBodyMeasurement(BodyMeasurementDTO measurement)
         {
             var mappedMeasurement = _mapper.Map<BodyMeasurement>(measurement);
+            await RemoveBodyInjuries(mappedMeasurement);
             var returnedMeasurement = await _bodyMeasurementRepository.UpdateBodyMeasurement(mappedMeasurement);
             return _mapper.Map<BodyMeasurementDTO>(returnedMeasurement);
         }
@@ -48,7 +49,9 @@ namespace TrainingPlanner.Core.Services
         public async Task<BodyMeasurementDTO> GetBodyMeasurement(int id)
         {
             var measurement = await _bodyMeasurementRepository.GetBodyMeasurement(id);
-            return _mapper.Map<BodyMeasurementDTO>(measurement);
+            var mappedMeasurement = _mapper.Map<BodyMeasurementDTO>(measurement);
+            mappedMeasurement.Bmi = Math.Round(measurement.Weight / Math.Pow((double)measurement.Height / 100, 2), 2);
+            return mappedMeasurement;
         }
 
         public async Task<PagedBodyMeasurementsDTO> GetAllBodyMeasurements(
@@ -64,11 +67,17 @@ namespace TrainingPlanner.Core.Services
         private PagedBodyMeasurementsDTO GetBodyMeasurements(
             int pageNumber, int pageSize, IEnumerable<BodyMeasurement> measurements)
         {
-            var result = GetPagedBodyMeasurements(measurements, pageNumber, pageSize);
+            var bodyMeasurements = _mapper.Map<IEnumerable<BodyMeasurementDTO>>(measurements).OrderByDescending(u => u.Date);
+            foreach (var measurement in bodyMeasurements)
+            {
+                measurement.Bmi = Math.Round(measurement.Weight / Math.Pow((double)measurement.Height/100, 2), 2);
+            }
+
+            var result = GetPagedBodyMeasurements(bodyMeasurements, pageNumber, pageSize);
             return result;
         }
 
-        private PagedBodyMeasurementsDTO GetPagedBodyMeasurements(IEnumerable<BodyMeasurement> measurements, int pageNumber, int pageSize)
+        private PagedBodyMeasurementsDTO GetPagedBodyMeasurements(IEnumerable<BodyMeasurementDTO> measurements, int pageNumber, int pageSize)
         {
             var result = new PagedBodyMeasurementsDTO();
 
@@ -83,6 +92,12 @@ namespace TrainingPlanner.Core.Services
             result.BodyMeasurements = _mapper.Map<IEnumerable<BodyMeasurementBaseDTO>>(pagedMeasurements);
 
             return result;
+        }
+
+        private async Task RemoveBodyInjuries(BodyMeasurement mappedMeasurement)
+        {
+            var bodyInjuriesToDelete = await _bodyMeasurementRepository.GetBodyInjuriesToDelete(mappedMeasurement);
+            await _bodyMeasurementRepository.RemoveBodyInjuries(bodyInjuriesToDelete, false);
         }
     }
 }
