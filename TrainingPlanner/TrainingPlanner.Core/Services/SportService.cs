@@ -53,7 +53,6 @@ namespace TrainingPlanner.Core.Services
 
         public async Task DeleteSport(int id)
         {
-
             var sport = await _sportRepository.GetSport(id);
             await _sportRepository.DeleteSport(sport);
         }

@@ -24,6 +24,7 @@ namespace TrainingPlanner.Data.Entities
         public ICollection<ClubActivity> Activities { get; set; }
         public ICollection<ClubTrainer> Trainers { get; set; }
         public ICollection<FavouriteClub> Favourites { get; set; }
+        public ICollection<Training> Trainings { get; set; }
         public int ViewCounter { get; set; }
     }
 }

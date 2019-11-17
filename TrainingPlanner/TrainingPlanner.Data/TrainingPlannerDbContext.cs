@@ -26,6 +26,7 @@ namespace TrainingPlanner.Data
         public DbSet<UserSport> UserSports { get; set; }
         public DbSet<BodyMeasurement> BodyMeasurements { get; set; }
         public DbSet<BodyInjury> BodyInjuries { get; set; }
+        public DbSet<Training> Trainings { get; set; }
         public TrainingPlannerDbContext(DbContextOptions<TrainingPlannerDbContext> options) : base(options)
         {
 
