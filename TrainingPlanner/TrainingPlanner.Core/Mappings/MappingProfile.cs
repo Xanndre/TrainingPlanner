@@ -82,7 +82,10 @@ namespace TrainingPlanner.Core.Mappings
             CreateMap<FavouriteClub, FavouriteClubDTO>().ReverseMap();
             CreateMap<FavouriteTrainer, FavouriteTrainerDTO>().ReverseMap();
 
-            CreateMap<Training, TrainingCreateDTO>().ReverseMap();
+            CreateMap<TrainingCreateDTO, Training>()
+                .ForMember(c => c.StartDate, d => d.MapFrom(e => e.StartDate.ToLocalTime()))
+                .ForMember(c => c.EndDate, d => d.MapFrom(e => e.EndDate.ToLocalTime()))
+                .ReverseMap();
             CreateMap<Training, TrainingDTO>().ReverseMap();
 
             CreateMap<ClubRate, ClubRateBaseDTO>();
