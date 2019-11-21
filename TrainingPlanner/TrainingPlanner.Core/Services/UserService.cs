@@ -83,12 +83,25 @@ namespace TrainingPlanner.Core.Services
             var clubRates = await _rateRepository.GetUserClubRates(id);
             var trainerRates = await _rateRepository.GetUserTrainerRates(id);
             var bodyMeasurements = await _bodyMeasurementRepository.GetBodyMeasurements(id);
-            var trainings = await _trainingRepository.GetTrainerTrainings(trainer.Id);
+            if(trainer != null)
+            {
+                var trainings = await _trainingRepository.GetTrainerTrainings(trainer.Id);
+                foreach(var training in trainings)
+                {
+                    await _trainingRepository.DeleteTraining(training);
+                }
+            }
+            
 
             if (clubs.Count() != 0)
             {
                 foreach (var club in clubs)
                 {
+                    var trainings = await _trainingRepository.GetClubTrainings(club.Id);
+                    foreach (var training in trainings)
+                    {
+                        await _trainingRepository.DeleteTraining(training);
+                    }
                     await _clubRepository.DeleteClub(club);
                 }
             }
@@ -135,14 +148,6 @@ namespace TrainingPlanner.Core.Services
                 foreach(var measurement in bodyMeasurements)
                 {
                     await _bodyMeasurementRepository.DeleteBodyMeasurement(measurement);
-                }
-            }
-
-            if(trainings.Count() != 0)
-            {
-                foreach(var training in trainings)
-                {
-                    await _trainingRepository.DeleteTraining(training);
                 }
             }
 

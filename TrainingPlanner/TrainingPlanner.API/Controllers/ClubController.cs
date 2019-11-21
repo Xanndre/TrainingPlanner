@@ -183,6 +183,25 @@ namespace TrainingPlanner.API.Controllers
             }
 
         }
+
+        [HttpGet("{id}/trainers")]
+        public async Task<ActionResult<IEnumerable<string>>> GetClubTrainerNames(int id)
+        {
+            try
+            {
+                var names = await _clubService.GetClubTrainerNames(id);
+                return Ok(names);
+            }
+            catch (ArgumentNullException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
     }
 
 

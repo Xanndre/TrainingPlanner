@@ -16,5 +16,6 @@ namespace TrainingPlanner.Core.Interfaces
         Task<PagedClubsDTO> GetAllClubs(int pageNumber, int pageSize, string userId);
         Task<PagedClubsDTO> GetUserClubs(int pageNumber, int pageSize, string userId);
         Task<PagedClubsDTO> GetFavouriteClubs(int pageNumber, int pageSize, string userId);
+        Task<IEnumerable<string>> GetClubTrainerNames(int clubId);
     }
 }

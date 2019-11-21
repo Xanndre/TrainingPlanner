@@ -27,5 +27,6 @@ namespace TrainingPlanner.Repositories.Interfaces
         Task RemoveClubPictures(IEnumerable<Picture> pictures, bool isSavingChanges = true);
         Task RemoveClubPrices(IEnumerable<ClubPrice> priceList, bool isSavingChanges = true);
         Task RemoveClubWorkingHours(IEnumerable<ClubWorkingHours> workingHours, bool isSavingChanges = true);
+        Task<IEnumerable<string>> GetClubTrainerNames(int clubId);
     }
 }

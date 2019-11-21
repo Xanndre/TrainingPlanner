@@ -174,6 +174,14 @@ namespace TrainingPlanner.Repositories.Repositories
             }
         }
 
+        public async Task<IEnumerable<string>> GetClubTrainerNames(int clubId)
+        {
+            return await _trainingPlannerDbContext.ClubTrainers
+                .Where(c => c.ClubId == clubId)
+                .Select(c => c.Name)
+                .ToListAsync();
+        }
+
         private IQueryable<Club> GetClubQuery()
         {
             return _trainingPlannerDbContext.Clubs

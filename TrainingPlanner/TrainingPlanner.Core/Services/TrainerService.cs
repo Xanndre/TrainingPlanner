@@ -17,15 +17,17 @@ namespace TrainingPlanner.Core.Services
         private readonly ITrainerRepository _trainerRepository;
         private readonly IRateRepository _rateRepository;
         private readonly IFavouriteRepository _favouriteRepository;
+        private readonly ITrainingRepository _trainingRepository;
         private readonly IMapper _mapper;
 
         public TrainerService(ITrainerRepository trainerRepository, IMapper mapper, IRateRepository rateRepository,
-                                IFavouriteRepository favouriteRepository)
+                                IFavouriteRepository favouriteRepository, ITrainingRepository trainingRepository)
         {
             _trainerRepository = trainerRepository;
             _mapper = mapper;
             _rateRepository = rateRepository;
             _favouriteRepository = favouriteRepository;
+            _trainingRepository = trainingRepository;
         }
 
         public async Task<TrainerDTO> GetTrainer(int id, bool isIncrementingViewCounter)
@@ -69,6 +71,7 @@ namespace TrainingPlanner.Core.Services
         {
             var rates = await _rateRepository.GetTrainerRates(id);
             var favs = await _favouriteRepository.GetFavouriteTrainers(id);
+            var trainings = await _trainingRepository.GetTrainerTrainings(id);
 
             if (favs.Count() != 0)
             {
@@ -83,6 +86,14 @@ namespace TrainingPlanner.Core.Services
                 foreach (var rate in rates)
                 {
                     await _rateRepository.DeleteTrainerRate(rate);
+                }
+            }
+
+            if (trainings.Count() != 0)
+            {
+                foreach (var training in trainings)
+                {
+                    await _trainingRepository.DeleteTraining(training);
                 }
             }
 

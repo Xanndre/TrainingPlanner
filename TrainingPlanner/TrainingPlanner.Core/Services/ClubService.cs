@@ -17,14 +17,16 @@ namespace TrainingPlanner.Core.Services
         private readonly IClubRepository _clubRepository;
         private readonly IRateRepository _rateRepository;
         private readonly IFavouriteRepository _favouriteRepository;
+        private readonly ITrainingRepository _trainingRepository;
         private readonly IMapper _mapper;
 
         public ClubService(IClubRepository clubRepository, IMapper mapper, IRateRepository rateRepository,
-                            IFavouriteRepository favouriteRepository)
+                            IFavouriteRepository favouriteRepository, ITrainingRepository trainingRepository)
         {
             _clubRepository = clubRepository;
             _rateRepository = rateRepository;
             _favouriteRepository = favouriteRepository;
+            _trainingRepository = trainingRepository;
             _mapper = mapper;
         }
 
@@ -76,6 +78,7 @@ namespace TrainingPlanner.Core.Services
         {
             var rates = await _rateRepository.GetClubRates(id);
             var favs = await _favouriteRepository.GetFavouriteClubs(id);
+            var trainings = await _trainingRepository.GetClubTrainings(id);
 
             if (favs.Count() != 0)
             {
@@ -90,6 +93,14 @@ namespace TrainingPlanner.Core.Services
                 foreach (var rate in rates)
                 {
                     await _rateRepository.DeleteClubRate(rate);
+                }
+            }
+
+            if(trainings.Count() != 0)
+            {
+                foreach (var training in trainings)
+                {
+                    await _trainingRepository.DeleteTraining(training);
                 }
             }
 
@@ -134,6 +145,12 @@ namespace TrainingPlanner.Core.Services
             }
 
             var result = GetClubs(pageNumber, pageSize, clubs);
+            return result;
+        }
+
+        public async Task<IEnumerable<string>> GetClubTrainerNames(int clubId)
+        {
+            var result = await _clubRepository.GetClubTrainerNames(clubId);
             return result;
         }
 
