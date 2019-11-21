@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.Training;
 using TrainingPlanner.Core.Interfaces;
+using TrainingPlanner.Core.Utils;
 using TrainingPlanner.Data.Entities;
 using TrainingPlanner.Repositories.Interfaces;
 
@@ -28,6 +30,10 @@ namespace TrainingPlanner.Core.Services
 
         public async Task<TrainingDTO> UpdateTraining(TrainingDTO training)
         {
+            if (training.StartDate > training.EndDate)
+            {
+                throw new Exception(DictionaryResources.InvalidDates);
+            }
             var mappedTraining = _mapper.Map<Training>(training);
 
             var returnedTraining = await _trainingRepository.UpdateTraining(mappedTraining);
@@ -36,6 +42,10 @@ namespace TrainingPlanner.Core.Services
 
         public async Task<TrainingCreateDTO> CreateTraining(TrainingCreateDTO training)
         {
+            if(training.StartDate > training.EndDate)
+            {
+                throw new Exception(DictionaryResources.InvalidDates);
+            }
             var mappedTraining = _mapper.Map<Training>(training);
             var returnedTraining = await _trainingRepository.CreateTraining(mappedTraining);
             return _mapper.Map<TrainingCreateDTO>(returnedTraining);

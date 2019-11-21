@@ -22,10 +22,12 @@ namespace TrainingPlanner.Core.Services
         private readonly IFavouriteRepository _favouriteRepository;
         private readonly IRateRepository _rateRepository;
         private readonly IBodyMeasurementRepository _bodyMeasurementRepository;
+        private readonly ITrainingRepository _trainingRepository;
 
         public UserService(IUserRepository repository, IMapper mapper, ITrainerRepository trainerRepository,
                             IClubRepository clubRepository, IFavouriteRepository favouriteRepository,
-                            IRateRepository rateRepository, IBodyMeasurementRepository bodyMeasurementRepository)
+                            IRateRepository rateRepository, IBodyMeasurementRepository bodyMeasurementRepository,
+                            ITrainingRepository trainingRepository)
         {
             _userRepository = repository;
             _mapper = mapper;
@@ -34,6 +36,7 @@ namespace TrainingPlanner.Core.Services
             _rateRepository = rateRepository;
             _favouriteRepository = favouriteRepository;
             _bodyMeasurementRepository = bodyMeasurementRepository;
+            _trainingRepository = trainingRepository;
         }
 
         public PagedUsersDTO GetAllUsers(
@@ -80,6 +83,7 @@ namespace TrainingPlanner.Core.Services
             var clubRates = await _rateRepository.GetUserClubRates(id);
             var trainerRates = await _rateRepository.GetUserTrainerRates(id);
             var bodyMeasurements = await _bodyMeasurementRepository.GetBodyMeasurements(id);
+            var trainings = await _trainingRepository.GetTrainerTrainings(trainer.Id);
 
             if (clubs.Count() != 0)
             {
@@ -131,6 +135,14 @@ namespace TrainingPlanner.Core.Services
                 foreach(var measurement in bodyMeasurements)
                 {
                     await _bodyMeasurementRepository.DeleteBodyMeasurement(measurement);
+                }
+            }
+
+            if(trainings.Count() != 0)
+            {
+                foreach(var training in trainings)
+                {
+                    await _trainingRepository.DeleteTraining(training);
                 }
             }
 

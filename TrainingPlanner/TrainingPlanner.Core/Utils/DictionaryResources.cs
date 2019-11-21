@@ -17,6 +17,7 @@
         public const string WrongEmail = "Provided email address doesn't match yours";
         public const string InvalidChangePasswordAttempt = "Invalid password change attempt";
         public const string InvalidResetPasswordAttempt = "Invalid password reset attempt";
+        public const string InvalidDates = "Invalid dates";
 
         public const string Facebook = "FACEBOOK";
 
