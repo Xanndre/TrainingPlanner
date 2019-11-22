@@ -37,6 +37,23 @@ namespace TrainingPlanner.API.Controllers
 
         }
 
+        [HttpGet("signed")]
+        public async Task<ActionResult<PagedTrainersDTO>> GetSignedUpUsers(
+            [FromQuery] int trainingId,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 3)
+        {
+            try
+            {
+                return Ok(await _userService.GetSignedUpUsers(pageNumber, pageSize, trainingId));
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> GetUser(string id)
         {

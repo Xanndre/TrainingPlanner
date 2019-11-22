@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace TrainingPlanner.Data.Entities
@@ -21,5 +22,6 @@ namespace TrainingPlanner.Data.Entities
         public int EntriesLeft { get; set; }
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
     }
 }

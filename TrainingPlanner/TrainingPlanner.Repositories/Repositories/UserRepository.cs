@@ -21,6 +21,15 @@ namespace TrainingPlanner.Repositories.Repositories
             return GetUserQuery();
         }
 
+        public async Task<IEnumerable<ApplicationUser>> GetSignedUpUsers(int trainingId)
+        {
+            var users = GetUserWithReservationQuery(trainingId)
+                .Where(t => _trainingPlannerDbContext.Reservations
+                    .Any(res => t.Id == res.UserId && res.Training.Id == trainingId));
+
+            return await users.ToList();
+        }
+
         public async Task<ApplicationUser> GetUser(string id)
         {
             return await GetUserQuery()
@@ -99,6 +108,18 @@ namespace TrainingPlanner.Repositories.Repositories
                 .Include(t => t.Sports)
                 .Include(t => t.Locations)
                 .AsNoTracking();
+        }
+
+        private IAsyncEnumerable<ApplicationUser> GetUserWithReservationQuery(int trainingId)
+        {
+            return GetUserQuery()
+                  .Include(x => x.Reservations)
+                  .ToAsyncEnumerable()
+                  .Select(x =>
+                  {
+                      x.Reservations = x.Reservations.Any() ? x.Reservations.Where(f => f.TrainingId == trainingId).ToList() : null;
+                      return x;
+                  });
         }
 
     }

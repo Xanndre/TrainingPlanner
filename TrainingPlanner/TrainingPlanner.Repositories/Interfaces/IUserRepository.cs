@@ -18,5 +18,6 @@ namespace TrainingPlanner.Repositories.Interfaces
         Task<IEnumerable<UserLocation>> GetUserLocationsToDelete(ApplicationUser user);
         Task RemoveUserSports(IEnumerable<UserSport> sports, bool isSavingChanges = true);
         Task RemoveUserLocations(IEnumerable<UserLocation> locations, bool isSavingChanges = true);
+        Task<IEnumerable<ApplicationUser>> GetSignedUpUsers(int trainingId);
     }
 }

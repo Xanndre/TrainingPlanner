@@ -68,5 +68,11 @@ namespace TrainingPlanner.Core.Services
             var trainings = await _trainingRepository.GetClubTrainings(clubId);
             return _mapper.Map<IEnumerable<TrainingDTO>>(trainings);
         }
+
+        public async Task<IEnumerable<TrainingDTO>> GetReservedTrainings(string userId)
+        {
+            var trainings = await _trainingRepository.GetReservedTrainings(userId);
+            return _mapper.Map<IEnumerable<TrainingDTO>>(trainings);
+        }
     }
 }

@@ -12,5 +12,6 @@ namespace TrainingPlanner.Core.Interfaces
         Task DeleteTraining(int id);
         Task<IEnumerable<TrainingDTO>> GetTrainerTrainings(int trainerId);
         Task<IEnumerable<TrainingDTO>> GetClubTrainings(int clubId);
+        Task<IEnumerable<TrainingDTO>> GetReservedTrainings(string userId);
     }
 }

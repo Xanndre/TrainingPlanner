@@ -118,5 +118,19 @@ namespace TrainingPlanner.API.Controllers
             }
 
         }
+
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<TrainingDTO>>> GetReservedTrainings(string userId)
+        {
+            try
+            {
+                return Ok(await _trainingService.GetReservedTrainings(userId));
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
     }
 }

@@ -48,6 +48,16 @@ namespace TrainingPlanner.Core.Services
             return result;
         }
 
+        public async Task<PagedUsersDTO> GetSignedUpUsers(
+            int pageNumber,
+            int pageSize,
+            int trainingId)
+        {
+            var users = await _userRepository.GetSignedUpUsers(trainingId);
+            var result = GetUsers(pageNumber, pageSize, users);
+            return result;
+        }
+
         public async Task<UserDTO> GetUser(string id)
         {
             var user = await _userRepository.GetUser(id);

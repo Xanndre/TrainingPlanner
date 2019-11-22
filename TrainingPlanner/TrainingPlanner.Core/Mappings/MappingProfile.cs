@@ -7,6 +7,7 @@ using TrainingPlanner.Core.DTOs.ClubStuff;
 using TrainingPlanner.Core.DTOs.ClubStuff.ClubCard;
 using TrainingPlanner.Core.DTOs.ClubStuff.ClubRate;
 using TrainingPlanner.Core.DTOs.Favourite;
+using TrainingPlanner.Core.DTOs.Reservation;
 using TrainingPlanner.Core.DTOs.Stuff;
 using TrainingPlanner.Core.DTOs.Trainer;
 using TrainingPlanner.Core.DTOs.TrainerStuff;
@@ -81,6 +82,7 @@ namespace TrainingPlanner.Core.Mappings
 
             CreateMap<FavouriteClub, FavouriteClubDTO>().ReverseMap();
             CreateMap<FavouriteTrainer, FavouriteTrainerDTO>().ReverseMap();
+            CreateMap<Reservation, ReservationDTO>().ReverseMap();
 
             CreateMap<TrainingCreateDTO, Training>()
                 .ForMember(c => c.StartDate, d => d.MapFrom(e => e.StartDate.ToLocalTime()))

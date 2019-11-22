@@ -71,6 +71,7 @@ namespace TrainingPlanner.API.Extensions
             services.AddScoped<ICardService, CardService>();
             services.AddScoped<IBodyMeasurementService, BodyMeasurementService>();
             services.AddScoped<ITrainingService, TrainingService>();
+            services.AddScoped<IReservationService, ReservationService>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
@@ -84,6 +85,7 @@ namespace TrainingPlanner.API.Extensions
             services.AddScoped<ICardRepository, CardRepository>();
             services.AddScoped<IBodyMeasurementRepository, BodyMeasurementRepository>();
             services.AddScoped<ITrainingRepository, TrainingRepository>();
+            services.AddScoped<IReservationRepository, ReservationRepository>();
         }
 
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
