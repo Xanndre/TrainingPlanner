@@ -47,6 +47,13 @@ namespace TrainingPlanner.Repositories.Repositories
                 .FirstAsync(res => res.TrainingId == trainingId && res.UserId == userId);
         }
 
+        public async Task<IEnumerable<Reservation>> GetReservations(string userId)
+        {
+            return await GetReservations()
+                .Where(t => t.UserId == userId)
+                .ToListAsync();
+        }
+
         private IQueryable<Reservation> GetReservations()
         {
             return _trainingPlannerDbContext.Reservations;
