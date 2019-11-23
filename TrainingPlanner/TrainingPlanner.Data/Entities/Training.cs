@@ -19,7 +19,6 @@ namespace TrainingPlanner.Data.Entities
         public string Room { get; set; }
         public string Level { get; set; }
         public int Entries { get; set; }
-        public int EntriesLeft { get; set; }
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
         public ICollection<Reservation> Reservations { get; set; }

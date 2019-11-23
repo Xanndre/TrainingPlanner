@@ -13,7 +13,6 @@ namespace TrainingPlanner.Core.DTOs.Training
         public string Room { get; set; }
         public string Level { get; set; }
         public int Entries { get; set; }
-        public int EntriesLeft { get; set; }
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
     }

@@ -38,10 +38,9 @@ namespace TrainingPlanner.API.Controllers
             }
         }
 
-        [HttpDelete("{trainingId}")]
-        public async Task<ActionResult> DeleteReservation(int trainingId)
+        [HttpDelete]
+        public async Task<ActionResult> DeleteReservation([FromQuery] int trainingId, [FromQuery] string userId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             try
             {
                 await _reservationService.DeleteReservation(trainingId, userId);
@@ -50,6 +49,20 @@ namespace TrainingPlanner.API.Controllers
             catch (ArgumentNullException exception)
             {
                 return BadRequest(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ReservationInfoDTO>> GetReservationInfo([FromQuery] string userId, [FromQuery] int trainingId)
+        {
+            try
+            {
+                return Ok(await _reservationService.GetReservationInfo(userId, trainingId));
             }
             catch (Exception exception)
             {

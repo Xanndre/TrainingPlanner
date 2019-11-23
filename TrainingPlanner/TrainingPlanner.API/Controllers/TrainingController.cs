@@ -68,7 +68,7 @@ namespace TrainingPlanner.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<TrainingDTO>> UpdateTraining([FromBody] TrainingDTO training)
+        public async Task<ActionResult<TrainingUpdateDTO>> UpdateTraining([FromBody] TrainingUpdateDTO training)
         {
             try
             {

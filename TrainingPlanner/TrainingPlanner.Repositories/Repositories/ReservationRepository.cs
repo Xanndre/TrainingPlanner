@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Data;
@@ -19,6 +20,20 @@ namespace TrainingPlanner.Repositories.Repositories
             await _trainingPlannerDbContext.Reservations.AddAsync(reservation);
             await _trainingPlannerDbContext.SaveChangesAsync();
             return reservation;
+        }
+
+        public async Task<Reservation> UpdateReservation(Reservation reservation)
+        {
+            _trainingPlannerDbContext.Update(reservation);
+            await _trainingPlannerDbContext.SaveChangesAsync();
+            return reservation;
+        }
+
+        public async Task<IEnumerable<Reservation>> UpdateRange(IEnumerable<Reservation> reservations)
+        {
+            _trainingPlannerDbContext.UpdateRange(reservations);
+            await _trainingPlannerDbContext.SaveChangesAsync();
+            return reservations;
         }
 
         public async Task DeleteReservation(Reservation reservation)

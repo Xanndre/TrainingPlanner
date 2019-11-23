@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.Training;
 using TrainingPlanner.Core.Interfaces;
@@ -13,11 +14,13 @@ namespace TrainingPlanner.Core.Services
     public class TrainingService : ITrainingService
     {
         private readonly ITrainingRepository _trainingRepository;
+        private readonly IReservationRepository _reservationRepository;
         private readonly IMapper _mapper;
 
-        public TrainingService(ITrainingRepository trainingRepository, IMapper mapper)
+        public TrainingService(ITrainingRepository trainingRepository, IMapper mapper, IReservationRepository reservationRepository)
         {
             _trainingRepository = trainingRepository;
+            _reservationRepository = reservationRepository;
             _mapper = mapper;
         }
 
@@ -25,19 +28,29 @@ namespace TrainingPlanner.Core.Services
         {
             var training = await _trainingRepository.GetTraining(id);     
             var mappedTraining = _mapper.Map<TrainingDTO>(training);
+
+            var sortedReservations = training.Reservations.OrderBy(c => c.Date);
+            var peopleOnTraining = sortedReservations.Take(training.Entries);
+            mappedTraining.EntriesLeft = mappedTraining.Entries - peopleOnTraining.Count();
+
             return mappedTraining;
         }
 
-        public async Task<TrainingDTO> UpdateTraining(TrainingDTO training)
+        public async Task<TrainingUpdateDTO> UpdateTraining(TrainingUpdateDTO training)
         {
             if (training.StartDate > training.EndDate)
             {
                 throw new Exception(DictionaryResources.InvalidDates);
             }
             var mappedTraining = _mapper.Map<Training>(training);
-
             var returnedTraining = await _trainingRepository.UpdateTraining(mappedTraining);
-            return _mapper.Map<TrainingDTO>(returnedTraining);
+            var trng = await _trainingRepository.GetTraining(training.Id);
+            if(trng.Reservations.Count() != 0)
+            {
+                await UpdateSignedUpList(trng);
+            }
+            
+            return _mapper.Map<TrainingUpdateDTO>(returnedTraining);
         }
 
         public async Task<TrainingCreateDTO> CreateTraining(TrainingCreateDTO training)
@@ -73,6 +86,26 @@ namespace TrainingPlanner.Core.Services
         {
             var trainings = await _trainingRepository.GetReservedTrainings(userId);
             return _mapper.Map<IEnumerable<TrainingDTO>>(trainings);
+        }
+
+        public async Task UpdateSignedUpList(Training training)
+        {
+            var sortedReservations = training.Reservations.OrderBy(c => c.Date);
+            var peopleOnBench = sortedReservations.Skip(training.Entries);
+            var peopleOnTraining = sortedReservations.Take(training.Entries);
+
+            foreach (var person in peopleOnBench)
+            {
+                person.IsReserveList = true;
+            }
+
+            foreach (var person in peopleOnTraining)
+            {
+                person.IsReserveList = false;
+            }
+
+            await _reservationRepository.UpdateRange(peopleOnBench);
+            await _reservationRepository.UpdateRange(peopleOnTraining);
         }
     }
 }
