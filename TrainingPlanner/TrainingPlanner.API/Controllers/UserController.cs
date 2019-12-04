@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,11 +42,29 @@ namespace TrainingPlanner.API.Controllers
         public async Task<ActionResult<PagedTrainersDTO>> GetSignedUpUsers(
             [FromQuery] int trainingId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 3)
+            [FromQuery] int pageSize = 5)
         {
             try
             {
                 return Ok(await _userService.GetSignedUpUsers(pageNumber, pageSize, trainingId));
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
+
+        [HttpGet("notsigned")]
+        public async Task<ActionResult<PagedTrainersDTO>> GetNotSignedUpUsers(
+            [FromQuery] int trainingId,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 5)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                return Ok(await _userService.GetNotSignedUpUsers(pageNumber, pageSize, trainingId, userId));
             }
             catch (Exception exception)
             {

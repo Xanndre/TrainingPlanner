@@ -25,6 +25,17 @@ namespace TrainingPlanner.Repositories.Repositories
         {
             var users = GetUserWithReservationQuery(trainingId)
                 .Where(t => _trainingPlannerDbContext.Reservations
+                    .Any(res => t.Id == res.UserId && res.Training.Id == trainingId))
+                .OrderBy(t => _trainingPlannerDbContext.Reservations
+                    .SingleAsync(x => x.TrainingId == trainingId && x.UserId == t.Id).Result.Date);
+
+            return await users.ToList();
+        }
+
+        public async Task<IEnumerable<ApplicationUser>> GetNotSignedUpUsers(int trainingId, string userId)
+        {
+            var users = GetUserWithReservationQuery(trainingId)
+                .Where(t => t.Id != userId && !_trainingPlannerDbContext.Reservations
                     .Any(res => t.Id == res.UserId && res.Training.Id == trainingId));
 
             return await users.ToList();

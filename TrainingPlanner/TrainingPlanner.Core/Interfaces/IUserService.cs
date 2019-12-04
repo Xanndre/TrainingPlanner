@@ -15,5 +15,6 @@ namespace TrainingPlanner.Core.Interfaces
         Task<IEnumerable<string>> GetLocations();
         Task<PagedPartnersDTO> GetAllPartners(int pageNumber, int pageSize, string userId);
         Task<PagedUsersDTO> GetSignedUpUsers(int pageNumber, int pageSize, int trainingId);
+        Task<PagedUsersDTO> GetNotSignedUpUsers(int pageNumber, int pageSize, int trainingId, string userId);
     }
 }
