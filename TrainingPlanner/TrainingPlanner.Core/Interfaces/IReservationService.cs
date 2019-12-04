@@ -7,6 +7,5 @@ namespace TrainingPlanner.Core.Interfaces
     {
         Task<ReservationDTO> CreateReservation(ReservationDTO reservation);
         Task DeleteReservation(int trainingId, string userId);
-        Task<ReservationInfoDTO> GetReservationInfo(string userId, int trainingId);
     }
 }

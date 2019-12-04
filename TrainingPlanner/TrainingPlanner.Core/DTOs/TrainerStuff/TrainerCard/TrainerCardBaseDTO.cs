@@ -1,6 +1,4 @@
 ﻿using System;
-using TrainingPlanner.Core.DTOs.Trainer;
-using TrainingPlanner.Core.DTOs.User;
 
 namespace TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard
 {

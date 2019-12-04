@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,20 +48,6 @@ namespace TrainingPlanner.API.Controllers
             catch (ArgumentNullException exception)
             {
                 return BadRequest(exception.Message);
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.Message);
-            }
-
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<ReservationInfoDTO>> GetReservationInfo([FromQuery] string userId, [FromQuery] int trainingId)
-        {
-            try
-            {
-                return Ok(await _reservationService.GetReservationInfo(userId, trainingId));
             }
             catch (Exception exception)
             {

@@ -1,5 +1,4 @@
 ﻿using System;
-using TrainingPlanner.Core.DTOs.User;
 
 namespace TrainingPlanner.Core.DTOs.ClubStuff.ClubCard
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard
+﻿namespace TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard
 {
     public class TrainerCardDTO : TrainerCardBaseDTO
     {

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.Favourite;
 using TrainingPlanner.Core.Interfaces;

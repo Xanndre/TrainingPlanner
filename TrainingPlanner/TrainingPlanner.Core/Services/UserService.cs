@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.Paged;
+using TrainingPlanner.Core.DTOs.Reservation;
+using TrainingPlanner.Core.DTOs.Training;
 using TrainingPlanner.Core.DTOs.User;
 using TrainingPlanner.Core.DTOs.UserStuff;
 using TrainingPlanner.Core.Interfaces;
@@ -50,25 +52,85 @@ namespace TrainingPlanner.Core.Services
             return result;
         }
 
-        public async Task<PagedUsersDTO> GetSignedUpUsers(
+        public async Task<PagedReservationUsersDTO> GetSignedUpUsers(
             int pageNumber,
             int pageSize,
             int trainingId)
         {
             var users = await _userRepository.GetSignedUpUsers(trainingId);
-            var result = GetUsers(pageNumber, pageSize, users);
-            return result;
+            var pagedUsers = GetUsers(pageNumber, pageSize, users);
+            var training = await _trainingRepository.GetTraining(trainingId);
+            var pagedReservationUsers = new List<ReservationUserDTO>();
+
+            foreach (var user in pagedUsers.Users)
+            {
+                var reservation = await _reservationRepository.GetReservation(trainingId, user.Id);
+                var reservationInfo = new ReservationInfoDTO();
+                if (reservation != null)
+                {
+                    reservationInfo.IsSignedUp = true;
+                    reservationInfo.IsReserveList = reservation.IsReserveList;
+                }
+                else
+                {
+                    reservationInfo.IsSignedUp = false;
+                    reservationInfo.IsReserveList = false;
+                }
+                pagedReservationUsers.Add(new ReservationUserDTO
+                {
+                    User = user,
+                    ReservationInfo = reservationInfo
+                });
+            }
+
+            return new PagedReservationUsersDTO
+            {
+                TotalCount = pagedUsers.TotalCount,
+                TotalPages = pagedUsers.TotalPages,
+                Users = pagedReservationUsers,
+                Training = _mapper.Map<TrainingDTO>(training)
+            };
         }
 
-        public async Task<PagedUsersDTO> GetNotSignedUpUsers(
+        public async Task<PagedReservationUsersDTO> GetNotSignedUpUsers(
             int pageNumber,
             int pageSize,
             int trainingId,
             string userId)
         {
             var users = await _userRepository.GetNotSignedUpUsers(trainingId, userId);
-            var result = GetUsers(pageNumber, pageSize, users);
-            return result;
+            var pagedUsers = GetUsers(pageNumber, pageSize, users);
+            var training = await _trainingRepository.GetTraining(trainingId);
+            var pagedReservationUsers = new List<ReservationUserDTO>();
+
+            foreach (var user in pagedUsers.Users)
+            {
+                var reservation = await _reservationRepository.GetReservation(trainingId, user.Id);
+                var reservationInfo = new ReservationInfoDTO();
+                if (reservation != null)
+                {
+                    reservationInfo.IsSignedUp = true;
+                    reservationInfo.IsReserveList = reservation.IsReserveList;
+                }
+                else
+                {
+                    reservationInfo.IsSignedUp = false;
+                    reservationInfo.IsReserveList = false;
+                }
+                pagedReservationUsers.Add(new ReservationUserDTO
+                {
+                    User = user,
+                    ReservationInfo = reservationInfo
+                });
+            }
+
+            return new PagedReservationUsersDTO
+            {
+                TotalCount = pagedUsers.TotalCount,
+                TotalPages = pagedUsers.TotalPages,
+                Users = pagedReservationUsers,
+                Training = _mapper.Map<TrainingDTO>(training)
+            };
         }
 
         public async Task<UserDTO> GetUser(string id)
@@ -108,15 +170,15 @@ namespace TrainingPlanner.Core.Services
             var bodyMeasurements = await _bodyMeasurementRepository.GetBodyMeasurements(id);
             var reservations = await _reservationRepository.GetReservations(id);
 
-            if(trainer != null)
+            if (trainer != null)
             {
                 var trainings = await _trainingRepository.GetTrainerTrainings(trainer.Id);
-                foreach(var training in trainings)
+                foreach (var training in trainings)
                 {
                     await _trainingRepository.DeleteTraining(training);
                 }
             }
-            
+
 
             if (clubs.Count() != 0)
             {
@@ -168,9 +230,9 @@ namespace TrainingPlanner.Core.Services
                 }
             }
 
-            if(bodyMeasurements.Count() != 0)
+            if (bodyMeasurements.Count() != 0)
             {
-                foreach(var measurement in bodyMeasurements)
+                foreach (var measurement in bodyMeasurements)
                 {
                     await _bodyMeasurementRepository.DeleteBodyMeasurement(measurement);
                 }

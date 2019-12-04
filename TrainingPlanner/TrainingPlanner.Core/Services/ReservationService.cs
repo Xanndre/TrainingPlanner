@@ -16,7 +16,7 @@ namespace TrainingPlanner.Core.Services
         private readonly ITrainingService _trainingService;
         private readonly IMapper _mapper;
 
-        public ReservationService(IReservationRepository reservationRepository, IMapper mapper, 
+        public ReservationService(IReservationRepository reservationRepository, IMapper mapper,
                                     ITrainingRepository trainingRepository, ITrainingService trainingService)
         {
             _reservationRepository = reservationRepository;
@@ -31,7 +31,7 @@ namespace TrainingPlanner.Core.Services
             var training = await _trainingRepository.GetTraining(mappedReservation.TrainingId);
 
             mappedReservation.Date = DateTime.Now;
-            if(training.Reservations.Count() >= training.Entries)
+            if (training.Reservations.Count() >= training.Entries)
             {
                 mappedReservation.IsReserveList = true;
             }
@@ -48,22 +48,5 @@ namespace TrainingPlanner.Core.Services
             await _trainingService.UpdateSignedUpList(training);
         }
 
-        public async Task<ReservationInfoDTO> GetReservationInfo(string userId, int trainingId)
-        {
-            var result = new ReservationInfoDTO();
-            var trainings = await _trainingRepository.GetReservedTrainings(userId);
-            if (trainings.Any(t => t.Id == trainingId))
-            {
-                result.IsSignedUp = true;
-                var reservation = await _reservationRepository.GetReservation(trainingId, userId);
-                result.IsReserveList = reservation.IsReserveList;
-            }
-            else
-            {
-                result.IsSignedUp = false;
-                result.IsReserveList = false;
-            }
-            return result;
-        }
     }
 }
