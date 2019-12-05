@@ -48,5 +48,22 @@ namespace TrainingPlanner.Core.Services
             await _trainingService.UpdateSignedUpList(training);
         }
 
+        public async Task<ReservationInfoDTO> GetReservationInfo(string userId, int trainingId)
+        {
+            var result = new ReservationInfoDTO();
+            var trainings = await _trainingRepository.GetReservedTrainings(userId);
+            if (trainings.Any(t => t.Id == trainingId))
+            {
+                result.IsSignedUp = true;
+                var reservation = await _reservationRepository.GetReservation(trainingId, userId);
+                result.IsReserveList = reservation.IsReserveList;
+            }
+            else
+            {
+                result.IsSignedUp = false;
+                result.IsReserveList = false;
+            }
+            return result;
+        }
     }
 }
