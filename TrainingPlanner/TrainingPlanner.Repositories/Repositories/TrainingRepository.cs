@@ -41,6 +41,13 @@ namespace TrainingPlanner.Repositories.Repositories
             return training;
         }
 
+        public async Task<IEnumerable<Training>> CreateTrainingRange(IEnumerable<Training> trainings)
+        {
+            await _trainingPlannerDbContext.Trainings.AddRangeAsync(trainings);
+            await _trainingPlannerDbContext.SaveChangesAsync();
+            return trainings;
+        }
+
         public async Task DeleteTraining(Training training)
         {
             _trainingPlannerDbContext.Trainings.Remove(training);

@@ -107,5 +107,20 @@ namespace TrainingPlanner.Core.Services
             await _reservationRepository.UpdateRange(peopleOnBench);
             await _reservationRepository.UpdateRange(peopleOnTraining);
         }
+
+        public async Task<IEnumerable<TrainingCreateDTO>> CreateTrainingRange(IEnumerable<TrainingCreateDTO> trainings)
+        {
+            foreach (var training in trainings)
+            {
+                if (training.StartDate > training.EndDate)
+                {
+                    throw new Exception(DictionaryResources.InvalidDates);
+                }
+            }
+            
+            var mappedTrainings = _mapper.Map<IEnumerable<Training>>(trainings);
+            var returnedTrainings = await _trainingRepository.CreateTrainingRange(mappedTrainings);
+            return _mapper.Map<IEnumerable<TrainingCreateDTO>>(returnedTrainings);
+        }
     }
 }

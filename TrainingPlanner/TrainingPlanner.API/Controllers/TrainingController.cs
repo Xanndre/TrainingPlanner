@@ -132,5 +132,21 @@ namespace TrainingPlanner.API.Controllers
             }
 
         }
+
+        [HttpPost("range")]
+        public async Task<ActionResult<IEnumerable<TrainingCreateDTO>>> CreateTrainingRange(
+                        [FromBody] IEnumerable<TrainingCreateDTO> trainings)
+        {
+            try
+            {
+                var returnedTrainings = await _trainingService.CreateTrainingRange(trainings);
+                return Ok(returnedTrainings);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
     }
 }

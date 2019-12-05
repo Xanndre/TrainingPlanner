@@ -146,5 +146,6 @@ namespace TrainingPlanner.API.Controllers
             }
 
         }
+
     }
 }

@@ -13,5 +13,6 @@ namespace TrainingPlanner.Repositories.Interfaces
         Task<IEnumerable<Training>> GetTrainerTrainings(int trainerId);
         Task<IEnumerable<Training>> GetClubTrainings(int clubId);
         Task<IEnumerable<Training>> GetReservedTrainings(string userId);
+        Task<IEnumerable<Training>> CreateTrainingRange(IEnumerable<Training> trainings);
     }
 }
