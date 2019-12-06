@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,7 @@ namespace TrainingPlanner.API
             services.AddDefaultIdentity();
             services.ConfigureIdentityTokens();
             services.AddJwtAuth(Configuration);
+            services.AddHangfire(Configuration);
             services.ConfigureOptions(Configuration);
             services.AddHttpClient();
         }
@@ -51,6 +53,8 @@ namespace TrainingPlanner.API
             app.UseHttpsRedirection();
             app.UseCors(DictionaryResources.AllowAllHeaders);
             app.UseAuthentication();
+            app.UseHangfireServer();
+            app.UseHangfireDashboard("/hangfire");
             app.UseMvc();
         }
     }

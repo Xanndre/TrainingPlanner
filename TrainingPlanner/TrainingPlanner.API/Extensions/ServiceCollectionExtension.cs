@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +11,7 @@ using TrainingPlanner.Core.Interfaces;
 using TrainingPlanner.Core.Mappings;
 using TrainingPlanner.Core.Options;
 using TrainingPlanner.Core.Services;
+using TrainingPlanner.Core.Utils;
 using TrainingPlanner.Data;
 using TrainingPlanner.Data.Entities;
 using TrainingPlanner.Repositories.Interfaces;
@@ -107,6 +109,13 @@ namespace TrainingPlanner.API.Extensions
                             .AllowAnyMethod();
                     });
             });
+        }
+
+        public static void AddHangfire(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddHangfire(x =>
+                x.UseSqlServerStorage(
+                    configuration.GetConnectionString(DictionaryResources.DbConnection)));
         }
     }
 }
