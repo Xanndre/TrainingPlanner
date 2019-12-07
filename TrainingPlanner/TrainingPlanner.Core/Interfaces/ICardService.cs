@@ -2,6 +2,7 @@
 using TrainingPlanner.Core.DTOs.ClubStuff.ClubCard;
 using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard;
+using TrainingPlanner.Data.Entities;
 
 namespace TrainingPlanner.Core.Interfaces
 {
@@ -21,5 +22,6 @@ namespace TrainingPlanner.Core.Interfaces
         Task<PagedClubCardsDTO> GetUserClubCards(int pageNumber, int pageSize, string userId);
         Task<PagedClubCardsDTO> GetClubClubCards(int pageNumber, int pageSize, int clubId);
         Task<PagedClubCardsDTO> GetClubCards(int pageNumber, int pageSize, string userId, int clubId);
+        Task DeleteCardEntries(int trainingId, int? trainerId, int? clubId);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hangfire;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +16,15 @@ namespace TrainingPlanner.Core.Services
     {
         private readonly ITrainingRepository _trainingRepository;
         private readonly IReservationRepository _reservationRepository;
+        private readonly ICardService _cardService;
         private readonly IMapper _mapper;
 
-        public TrainingService(ITrainingRepository trainingRepository, IMapper mapper, IReservationRepository reservationRepository)
+        public TrainingService(ITrainingRepository trainingRepository, IMapper mapper, IReservationRepository reservationRepository, ICardService cardService)
         {
             _trainingRepository = trainingRepository;
             _reservationRepository = reservationRepository;
             _mapper = mapper;
+            _cardService = cardService;
         }
 
         public async Task<TrainingDTO> GetTraining(int id)
@@ -61,6 +64,7 @@ namespace TrainingPlanner.Core.Services
             }
             var mappedTraining = _mapper.Map<Training>(training);
             var returnedTraining = await _trainingRepository.CreateTraining(mappedTraining);
+            BackgroundJob.Schedule(() => _cardService.DeleteCardEntries(returnedTraining.Id, returnedTraining.TrainerId, returnedTraining.ClubId), returnedTraining.EndDate);
             return _mapper.Map<TrainingCreateDTO>(returnedTraining);
         }
 
@@ -120,7 +124,12 @@ namespace TrainingPlanner.Core.Services
             
             var mappedTrainings = _mapper.Map<IEnumerable<Training>>(trainings);
             var returnedTrainings = await _trainingRepository.CreateTrainingRange(mappedTrainings);
+            foreach (var trng in returnedTrainings)
+            {
+                BackgroundJob.Schedule(() => _cardService.DeleteCardEntries(trng.Id, trng.TrainerId, trng.ClubId), trng.EndDate);
+            }
             return _mapper.Map<IEnumerable<TrainingCreateDTO>>(returnedTrainings);
         }
+
     }
 }

@@ -16,12 +16,54 @@ namespace TrainingPlanner.Core.Services
     {
         private const int MaxPageSize = 20;
         private readonly ICardRepository _cardRepository;
+        private readonly IReservationRepository _reservationRepository;
         private readonly IMapper _mapper;
 
-        public CardService(ICardRepository cardRepository, IMapper mapper)
+        public CardService(ICardRepository cardRepository, IMapper mapper, IReservationRepository reservationRepository)
         {
             _cardRepository = cardRepository;
+            _reservationRepository = reservationRepository;
             _mapper = mapper;
+        }
+
+        public async Task DeleteCardEntries(int trainingId, int? trainerId, int? clubId)
+        {
+            var reservations = await _reservationRepository.GetReservationsOnTraining(trainingId);
+            
+            if(reservations != null)
+            {
+                foreach (var reservation in reservations)
+                {
+                    if (reservation.User.TrainerCards.Count() != 0 && trainerId != null)
+                    {
+                        var trainerCard = reservation.User.TrainerCards
+                            .Where(t => t.TrainerId == trainerId)
+                            .OrderBy(t => t.ExpirationDate)
+                            .First();
+
+                        if (trainerCard.EntriesLeft > 0)
+                        {
+                            trainerCard.EntriesLeft--;
+                            await _cardRepository.UpdateTrainerCard(trainerCard);
+                        }
+                    }
+                    if (reservation.User.ClubCards.Count() != 0 && clubId != null)
+                    {
+                        var clubCard = reservation.User.ClubCards
+                            .Where(t => t.ClubId == clubId)
+                            .OrderBy(t => t.ExpirationDate)
+                            .First();
+
+                        if (clubCard.EntriesLeft > 0)
+                        {
+                            clubCard.EntriesLeft--;
+                            await _cardRepository.UpdateClubCard(clubCard);
+                        }
+                    }
+
+                }
+            }
+            
         }
 
         public async Task<TrainerCardUpdateDTO> UpdateTrainerCard(TrainerCardUpdateDTO card, bool isDeactivating)

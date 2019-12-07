@@ -76,6 +76,16 @@ namespace TrainingPlanner.Data
                         .HasOne(t => t.User)
                         .WithMany(t => t.Sports)
                         .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TrainerCard>()
+                        .HasOne(t => t.User)
+                        .WithMany(t => t.TrainerCards)
+                        .HasForeignKey(t => t.UserId);
+
+            modelBuilder.Entity<ClubCard>()
+                        .HasOne(t => t.User)
+                        .WithMany(t => t.ClubCards)
+                        .HasForeignKey(t => t.UserId);
         }
     }
 }

@@ -54,6 +54,17 @@ namespace TrainingPlanner.Repositories.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Reservation>> GetReservationsOnTraining(int trainingId)
+        {
+            return await GetReservations()
+                .Include(t => t.User)
+                    .ThenInclude(u => u.TrainerCards)
+                .Include(t => t.User)
+                    .ThenInclude(u => u.ClubCards)
+                .Where(t => t.TrainingId == trainingId)
+                .ToListAsync();
+        }
+
         private IQueryable<Reservation> GetReservations()
         {
             return _trainingPlannerDbContext.Reservations;

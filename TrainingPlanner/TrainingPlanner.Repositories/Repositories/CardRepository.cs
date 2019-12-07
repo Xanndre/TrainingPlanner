@@ -90,9 +90,10 @@ namespace TrainingPlanner.Repositories.Repositories
 
         public async Task<IEnumerable<ClubCard>> GetUserClubCards(string userId)
         {
-            return await GetClubCardQuery()
+            var xd = await GetClubCardQuery()
                 .Where(c => c.UserId == userId)
                 .ToListAsync();
+            return xd;
         }
 
         public async Task<IEnumerable<ClubCard>> GetClubClubCards(int clubId)

@@ -16,5 +16,7 @@ namespace TrainingPlanner.Data.Entities
         public ICollection<UserLocation> Locations { get; set; }
         public ICollection<BodyMeasurement> BodyMeasurements { get; set; }
         public ICollection<Reservation> Reservations { get; set; }
+        public ICollection<ClubCard> ClubCards { get; set; }
+        public ICollection<TrainerCard> TrainerCards { get; set; }
     }
 }
