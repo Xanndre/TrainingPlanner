@@ -18,5 +18,6 @@ namespace TrainingPlanner.Data.Entities
         public ICollection<Reservation> Reservations { get; set; }
         public ICollection<ClubCard> ClubCards { get; set; }
         public ICollection<TrainerCard> TrainerCards { get; set; }
+        public ICollection<UserTraining> UserTrainings { get; set; }
     }
 }

@@ -41,7 +41,6 @@ namespace TrainingPlanner.Core.Services
 
         public async Task DeleteBodyMeasurement(int id)
         {
-
             var measurement = await _bodyMeasurementRepository.GetBodyMeasurement(id);
             await _bodyMeasurementRepository.DeleteBodyMeasurement(measurement);
         }

@@ -74,6 +74,7 @@ namespace TrainingPlanner.API.Extensions
             services.AddScoped<IBodyMeasurementService, BodyMeasurementService>();
             services.AddScoped<ITrainingService, TrainingService>();
             services.AddScoped<IReservationService, ReservationService>();
+            services.AddScoped<IUserTrainingService, UserTrainingService>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
@@ -88,6 +89,7 @@ namespace TrainingPlanner.API.Extensions
             services.AddScoped<IBodyMeasurementRepository, BodyMeasurementRepository>();
             services.AddScoped<ITrainingRepository, TrainingRepository>();
             services.AddScoped<IReservationRepository, ReservationRepository>();
+            services.AddScoped<IUserTrainingRepository, UserTrainingRepository>();
         }
 
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)

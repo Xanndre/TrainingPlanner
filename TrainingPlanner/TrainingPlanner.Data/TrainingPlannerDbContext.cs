@@ -28,6 +28,8 @@ namespace TrainingPlanner.Data
         public DbSet<BodyInjury> BodyInjuries { get; set; }
         public DbSet<Training> Trainings { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<UserTraining> UserTrainings { get; set; }
+        public DbSet<Exercise> Exercises { get; set; }
         public TrainingPlannerDbContext(DbContextOptions<TrainingPlannerDbContext> options) : base(options)
         {
 
@@ -85,6 +87,11 @@ namespace TrainingPlanner.Data
             modelBuilder.Entity<ClubCard>()
                         .HasOne(t => t.User)
                         .WithMany(t => t.ClubCards)
+                        .HasForeignKey(t => t.UserId);
+
+            modelBuilder.Entity<UserTraining>()
+                        .HasOne(t => t.User)
+                        .WithMany(t => t.UserTrainings)
                         .HasForeignKey(t => t.UserId);
         }
     }
