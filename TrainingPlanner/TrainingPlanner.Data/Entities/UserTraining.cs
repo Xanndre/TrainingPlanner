@@ -13,5 +13,6 @@ namespace TrainingPlanner.Data.Entities
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         public ICollection<Exercise> Exercises { get; set; }
+        public ICollection<UserCalendarTraining> UserCalendarTrainings { get; set; }
     }
 }

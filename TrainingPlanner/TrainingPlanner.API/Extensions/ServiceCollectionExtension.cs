@@ -75,6 +75,7 @@ namespace TrainingPlanner.API.Extensions
             services.AddScoped<ITrainingService, TrainingService>();
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IUserTrainingService, UserTrainingService>();
+            services.AddScoped<IUserCalendarTrainingService, UserCalendarTrainingService>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
@@ -90,6 +91,7 @@ namespace TrainingPlanner.API.Extensions
             services.AddScoped<ITrainingRepository, TrainingRepository>();
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IUserTrainingRepository, UserTrainingRepository>();
+            services.AddScoped<IUserCalendarTrainingRepository, UserCalendarTrainingRepository>();
         }
 
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)

@@ -30,6 +30,7 @@ namespace TrainingPlanner.Data
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<UserTraining> UserTrainings { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<UserCalendarTraining> UserCalendarTrainings { get; set; }
         public TrainingPlannerDbContext(DbContextOptions<TrainingPlannerDbContext> options) : base(options)
         {
 

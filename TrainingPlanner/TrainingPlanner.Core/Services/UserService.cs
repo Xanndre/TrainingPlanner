@@ -26,11 +26,13 @@ namespace TrainingPlanner.Core.Services
         private readonly IBodyMeasurementRepository _bodyMeasurementRepository;
         private readonly ITrainingRepository _trainingRepository;
         private readonly IReservationRepository _reservationRepository;
+        private readonly IUserTrainingRepository _userTrainingRepository;
 
         public UserService(IUserRepository repository, IMapper mapper, ITrainerRepository trainerRepository,
                             IClubRepository clubRepository, IFavouriteRepository favouriteRepository,
                             IRateRepository rateRepository, IBodyMeasurementRepository bodyMeasurementRepository,
-                            ITrainingRepository trainingRepository, IReservationRepository reservationRepository)
+                            ITrainingRepository trainingRepository, IReservationRepository reservationRepository,
+                            IUserTrainingRepository userTrainingRepository)
         {
             _userRepository = repository;
             _mapper = mapper;
@@ -41,6 +43,7 @@ namespace TrainingPlanner.Core.Services
             _bodyMeasurementRepository = bodyMeasurementRepository;
             _trainingRepository = trainingRepository;
             _reservationRepository = reservationRepository;
+            _userTrainingRepository = userTrainingRepository;
         }
 
         public PagedUsersDTO GetAllUsers(
@@ -169,6 +172,7 @@ namespace TrainingPlanner.Core.Services
             var trainerRates = await _rateRepository.GetUserTrainerRates(id);
             var bodyMeasurements = await _bodyMeasurementRepository.GetBodyMeasurements(id);
             var reservations = await _reservationRepository.GetReservations(id);
+            var userTrainings = await _userTrainingRepository.GetUserTrainings(id);
 
             if (trainer != null)
             {
@@ -243,6 +247,14 @@ namespace TrainingPlanner.Core.Services
                 foreach (var reservation in reservations)
                 {
                     await _reservationRepository.DeleteReservation(reservation);
+                }
+            }
+
+            if (userTrainings.Count() != 0)
+            {
+                foreach (var userTraining in userTrainings)
+                {
+                    await _userTrainingRepository.DeleteUserTraining(userTraining);
                 }
             }
 
