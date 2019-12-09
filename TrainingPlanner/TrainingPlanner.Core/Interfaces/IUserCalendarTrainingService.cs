@@ -7,7 +7,7 @@ namespace TrainingPlanner.Core.Interfaces
     public interface IUserCalendarTrainingService
     {
         Task<UserCalendarTrainingDTO> GetUserCalendarTraining(int id);
-        Task<UserCalendarTrainingDTO> UpdateUserCalendarTraining(UserCalendarTrainingDTO training);
+        Task<UserCalendarTrainingUpdateDTO> UpdateUserCalendarTraining(UserCalendarTrainingUpdateDTO training);
         Task<UserCalendarTrainingCreateDTO> CreateUserCalendarTraining(UserCalendarTrainingCreateDTO training);
         Task DeleteUserCalendarTraining(int id);
         Task<IEnumerable<UserCalendarTrainingDTO>> GetUserCalendarTrainings(string userId);

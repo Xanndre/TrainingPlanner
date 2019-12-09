@@ -58,7 +58,8 @@ namespace TrainingPlanner.Repositories.Repositories
         private IQueryable<UserCalendarTraining> GetUserCalendarTrainingQuery()
         {
             return _trainingPlannerDbContext.UserCalendarTrainings
-                .Include(t => t.UserTraining);
+                .Include(t => t.UserTraining)
+                    .ThenInclude(t => t.Exercises);
         }
     }
 }

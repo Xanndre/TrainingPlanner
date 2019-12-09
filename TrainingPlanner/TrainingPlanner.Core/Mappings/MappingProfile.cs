@@ -124,6 +124,11 @@ namespace TrainingPlanner.Core.Mappings
                 .ForMember(c => c.EndDate, d => d.MapFrom(e => e.EndDate.ToLocalTime()))
                 .ReverseMap();
 
+            CreateMap<UserCalendarTrainingUpdateDTO, UserCalendarTraining>()
+                .ForMember(c => c.StartDate, d => d.MapFrom(e => e.StartDate.ToLocalTime()))
+                .ForMember(c => c.EndDate, d => d.MapFrom(e => e.EndDate.ToLocalTime()))
+                .ReverseMap();
+
             CreateMap<ClubCard, ClubCardBaseDTO>()
                 .ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))
                 .ForMember(c => c.UnlimitedValidityPeriod, d => d.MapFrom(e => e.ValidityPeriod != 0 ? false : true));

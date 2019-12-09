@@ -27,7 +27,7 @@ namespace TrainingPlanner.Core.Services
             return _mapper.Map<UserCalendarTrainingDTO>(training);
         }
 
-        public async Task<UserCalendarTrainingDTO> UpdateUserCalendarTraining(UserCalendarTrainingDTO training)
+        public async Task<UserCalendarTrainingUpdateDTO> UpdateUserCalendarTraining(UserCalendarTrainingUpdateDTO training)
         {
             if (training.StartDate > training.EndDate)
             {
@@ -35,7 +35,7 @@ namespace TrainingPlanner.Core.Services
             }
             var mappedTraining = _mapper.Map<UserCalendarTraining>(training);
             var returnedTraining = await _trainingRepository.UpdateUserCalendarTraining(mappedTraining);
-            return _mapper.Map<UserCalendarTrainingDTO>(returnedTraining);
+            return _mapper.Map<UserCalendarTrainingUpdateDTO>(returnedTraining);
         }
 
         public async Task<UserCalendarTrainingCreateDTO> CreateUserCalendarTraining(UserCalendarTrainingCreateDTO training)

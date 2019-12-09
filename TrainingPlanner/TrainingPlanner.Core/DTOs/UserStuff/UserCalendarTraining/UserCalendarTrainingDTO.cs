@@ -1,7 +1,9 @@
-﻿namespace TrainingPlanner.Core.DTOs.UserStuff.UserCalendarTraining
+﻿using TrainingPlanner.Core.DTOs.UserStuff.UserTraining;
+
+namespace TrainingPlanner.Core.DTOs.UserStuff.UserCalendarTraining
 {
-    public class UserCalendarTrainingDTO : UserCalendarTrainingCreateDTO
+    public class UserCalendarTrainingDTO : UserCalendarTrainingUpdateDTO
     {
-        public int Id { get; set; }
+        public UserTrainingDTO UserTraining { get; set; }
     }
 }
