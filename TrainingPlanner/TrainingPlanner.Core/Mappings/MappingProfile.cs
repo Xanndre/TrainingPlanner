@@ -108,12 +108,21 @@ namespace TrainingPlanner.Core.Mappings
             CreateMap<TrainerRate, TrainerRateDTO>().ReverseMap();
             CreateMap<BodyMeasurement, BodyMeasurementDTO>().ReverseMap();
             CreateMap<UserTraining, UserTrainingDTO>().ReverseMap();
-            CreateMap<UserCalendarTraining, UserCalendarTrainingDTO>().ReverseMap();
+
+            CreateMap<UserCalendarTrainingDTO, UserCalendarTraining>()
+                .ForMember(c => c.StartDate, d => d.MapFrom(e => e.StartDate.ToLocalTime()))
+                .ForMember(c => c.EndDate, d => d.MapFrom(e => e.EndDate.ToLocalTime()))
+                .ReverseMap();
+
             CreateMap<ClubRate, ClubRateCreateDTO>().ReverseMap();
             CreateMap<TrainerRate, TrainerRateCreateDTO>().ReverseMap();
             CreateMap<BodyMeasurement, BodyMeasurementCreateDTO>().ReverseMap();
             CreateMap<UserTraining, UserTrainingCreateDTO>().ReverseMap();
-            CreateMap<UserCalendarTraining, UserCalendarTrainingCreateDTO>().ReverseMap();
+
+            CreateMap<UserCalendarTrainingCreateDTO, UserCalendarTraining>()
+                .ForMember(c => c.StartDate, d => d.MapFrom(e => e.StartDate.ToLocalTime()))
+                .ForMember(c => c.EndDate, d => d.MapFrom(e => e.EndDate.ToLocalTime()))
+                .ReverseMap();
 
             CreateMap<ClubCard, ClubCardBaseDTO>()
                 .ForMember(c => c.UnlimitedEntries, d => d.MapFrom(e => e.Entries != 0 ? false : true))
