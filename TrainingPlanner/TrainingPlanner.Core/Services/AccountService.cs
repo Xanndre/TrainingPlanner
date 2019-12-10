@@ -37,6 +37,7 @@ namespace TrainingPlanner.Core.Services
         private readonly IHttpClientFactory _clientFactory;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
+        private readonly INotificationRepository _notificationRepository;
 
         public AccountService(
             IOptions<JwtOptions> jwtOptions,
@@ -47,7 +48,8 @@ namespace TrainingPlanner.Core.Services
             IUserRepository userRepository,
             IHttpClientFactory clientFactory,
             IMapper mapper,
-            IEmailService emailService
+            IEmailService emailService,
+            INotificationRepository notificationRepository
             )
         {
             _jwtOptions = jwtOptions.Value;
@@ -59,6 +61,7 @@ namespace TrainingPlanner.Core.Services
             _clientFactory = clientFactory;
             _mapper = mapper;
             _emailService = emailService;
+            _notificationRepository = notificationRepository;
         }
 
         public async Task<LoginResultDTO> Login(LoginDTO loginDTO)
@@ -148,6 +151,9 @@ namespace TrainingPlanner.Core.Services
             {
                 return errorUrl;
             }
+
+            await CreateNotification(id);
+
             return successUrl;
         }
 
@@ -272,6 +278,7 @@ namespace TrainingPlanner.Core.Services
             }
 
             await AddLogin(loginDTO, user);
+            await CreateNotification(user.Id);
             return user;
         }
 
@@ -325,6 +332,26 @@ namespace TrainingPlanner.Core.Services
         private async Task ValidateGoogleToken(string token)
         {
             await GoogleJsonWebSignature.ValidateAsync(token);
+        }
+
+        private async Task CreateNotification(string id)
+        {
+            var notification = new Notification()
+            {
+                UserId = id,
+                CardAlmostExpired = true,
+                CardExpired = true,
+                IncomingTraining = true,
+                SignUpConfirmed = true,
+                SignOutConfirmed = true,
+                TrainingDeleted = true,
+                ReserveListToList = true,
+                ListToReserveList = true,
+                ReserveListSignUpConfirmed = true,
+                ReserveListSignOutConfirmed = true
+            };
+
+            await _notificationRepository.CreateNotification(notification);
         }
     }
 }
