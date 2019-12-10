@@ -19,5 +19,7 @@ namespace TrainingPlanner.Data.Entities
         public ICollection<ClubCard> ClubCards { get; set; }
         public ICollection<TrainerCard> TrainerCards { get; set; }
         public ICollection<UserTraining> UserTrainings { get; set; }
+        public int NotificationId { get; set; }
+        public Notification Notification { get; set; }
     }
 }

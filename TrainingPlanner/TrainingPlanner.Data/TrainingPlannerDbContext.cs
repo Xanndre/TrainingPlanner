@@ -31,6 +31,7 @@ namespace TrainingPlanner.Data
         public DbSet<UserTraining> UserTrainings { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<UserCalendarTraining> UserCalendarTrainings { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         public TrainingPlannerDbContext(DbContextOptions<TrainingPlannerDbContext> options) : base(options)
         {
 
@@ -94,6 +95,11 @@ namespace TrainingPlanner.Data
                         .HasOne(t => t.User)
                         .WithMany(t => t.UserTrainings)
                         .HasForeignKey(t => t.UserId);
+
+            modelBuilder.Entity<ApplicationUser>()
+                        .HasOne(t => t.Notification)
+                        .WithOne(t => t.User)
+                        .HasForeignKey<Notification>(t => t.UserId);
         }
     }
 }
