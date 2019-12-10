@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hangfire;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using TrainingPlanner.Core.DTOs.ClubStuff.ClubCard;
 using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard;
 using TrainingPlanner.Core.Interfaces;
+using TrainingPlanner.Core.Utils;
 using TrainingPlanner.Data.Entities;
 using TrainingPlanner.Repositories.Interfaces;
 
@@ -18,12 +20,16 @@ namespace TrainingPlanner.Core.Services
         private readonly ICardRepository _cardRepository;
         private readonly IReservationRepository _reservationRepository;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
+        private readonly IUserService _userService;
 
-        public CardService(ICardRepository cardRepository, IMapper mapper, IReservationRepository reservationRepository)
+        public CardService(ICardRepository cardRepository, IMapper mapper, IReservationRepository reservationRepository, IEmailService emailService, IUserService userService)
         {
             _cardRepository = cardRepository;
             _reservationRepository = reservationRepository;
             _mapper = mapper;
+            _emailService = emailService;
+            _userService = userService;
         }
 
         public async Task DeleteCardEntries(int trainingId, int? trainerId, int? clubId)
@@ -94,6 +100,17 @@ namespace TrainingPlanner.Core.Services
                 mappedCard.ExpirationDate = DateTime.Now.AddDays(days);
             }
             var returnedCard = await _cardRepository.CreateTrainerCard(mappedCard);
+
+            var user = await _userService.GetUser(card.UserId);
+
+            if (!card.UnlimitedValidityPeriod)
+            {
+                var expDate = (DateTime)mappedCard.ExpirationDate;
+                var sendDate = expDate.AddDays(-3);
+                BackgroundJob.Schedule(() => SendNotificationCardAlmostExpired(user.Email, mappedCard.TrainerName, user.FirstName, user.Notification.CardAlmostExpired), sendDate);
+                BackgroundJob.Schedule(() => SendNotificationCardExpired(user.Email, mappedCard.TrainerName, user.FirstName, user.Notification.CardExpired), expDate);
+            }
+
             return _mapper.Map<TrainerCardCreateDTO>(returnedCard);
         }
 
@@ -168,6 +185,17 @@ namespace TrainingPlanner.Core.Services
                 mappedCard.ExpirationDate = DateTime.Now.AddDays(days);
             }
             var returnedCard = await _cardRepository.CreateClubCard(mappedCard);
+
+            var user = await _userService.GetUser(card.UserId);
+            
+            if (!card.UnlimitedValidityPeriod)
+            {
+                var expDate = (DateTime)mappedCard.ExpirationDate;
+                var sendDate = expDate.AddDays(-3);
+                BackgroundJob.Schedule(() => SendNotificationCardAlmostExpired(user.Email, mappedCard.ClubName, user.FirstName, user.Notification.CardAlmostExpired), sendDate);
+                BackgroundJob.Schedule(() => SendNotificationCardExpired(user.Email, mappedCard.ClubName, user.FirstName, user.Notification.CardExpired), expDate);
+            }
+
             return _mapper.Map<ClubCardCreateDTO>(returnedCard);
         }
 
@@ -262,6 +290,42 @@ namespace TrainingPlanner.Core.Services
             result.Cards = _mapper.Map<IEnumerable<ClubCardBaseDTO>>(pagedCards);
 
             return result;
+        }
+
+        public async Task SendNotificationCardAlmostExpired(string email, string trainerName, string userFirstName, bool isChecked)
+        {
+            if (isChecked)
+            {
+                var subject = "Your card will expire in 3 days";
+                var message = "Hello " + userFirstName + "!<br/>Remember that your card at " + trainerName +
+                    " will expire in 3 days." + DictionaryResources.Regards;
+
+                var emailResult = await _emailService.SendEmail(email, subject, message);
+
+                if (emailResult == null)
+                {
+                    throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
+                }
+            }
+            
+        }
+
+        public async Task SendNotificationCardExpired(string email, string trainerName, string userFirstName, bool isChecked)
+        {
+            if (isChecked)
+            {
+                var subject = "Your card has expired";
+                var message = "Hello " + userFirstName + "!<br/>Please be informed that your card at " + trainerName +
+                    " has expired. " + DictionaryResources.Regards;
+
+                var emailResult = await _emailService.SendEmail(email, subject, message);
+
+                if (emailResult == null)
+                {
+                    throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
+                }
+            }
+            
         }
     }
 }

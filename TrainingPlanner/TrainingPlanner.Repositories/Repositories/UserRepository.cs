@@ -44,6 +44,7 @@ namespace TrainingPlanner.Repositories.Repositories
         public async Task<ApplicationUser> GetUser(string id)
         {
             return await GetUserQuery()
+                .Include(u => u.Notification)
                 .FirstAsync(u => u.Id == id);
         }
 

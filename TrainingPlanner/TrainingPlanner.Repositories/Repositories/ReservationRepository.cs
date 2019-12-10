@@ -61,6 +61,8 @@ namespace TrainingPlanner.Repositories.Repositories
                     .ThenInclude(u => u.TrainerCards)
                 .Include(t => t.User)
                     .ThenInclude(u => u.ClubCards)
+                .Include(t => t.User)
+                    .ThenInclude(u => u.Notification)
                 .Where(t => t.TrainingId == trainingId)
                 .ToListAsync();
         }

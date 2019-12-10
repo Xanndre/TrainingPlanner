@@ -16,5 +16,6 @@ namespace TrainingPlanner.Core.Interfaces
         Task<IEnumerable<TrainingDTO>> GetReservedTrainings(string userId);
         Task UpdateSignedUpList(Training training);
         Task<IEnumerable<TrainingCreateDTO>> CreateTrainingRange(IEnumerable<TrainingCreateDTO> trainings);
+        Task SendNotificationIncomingTraining(Training training);
     }
 }

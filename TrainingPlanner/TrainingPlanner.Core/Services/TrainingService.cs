@@ -18,13 +18,15 @@ namespace TrainingPlanner.Core.Services
         private readonly IReservationRepository _reservationRepository;
         private readonly ICardService _cardService;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
 
-        public TrainingService(ITrainingRepository trainingRepository, IMapper mapper, IReservationRepository reservationRepository, ICardService cardService)
+        public TrainingService(ITrainingRepository trainingRepository, IMapper mapper, IReservationRepository reservationRepository, ICardService cardService, IEmailService emailService)
         {
             _trainingRepository = trainingRepository;
             _reservationRepository = reservationRepository;
             _mapper = mapper;
             _cardService = cardService;
+            _emailService = emailService;
         }
 
         public async Task<TrainingDTO> GetTraining(int id)
@@ -64,7 +66,12 @@ namespace TrainingPlanner.Core.Services
             }
             var mappedTraining = _mapper.Map<Training>(training);
             var returnedTraining = await _trainingRepository.CreateTraining(mappedTraining);
+
             BackgroundJob.Schedule(() => _cardService.DeleteCardEntries(returnedTraining.Id, returnedTraining.TrainerId, returnedTraining.ClubId), returnedTraining.EndDate);
+
+            BackgroundJob.Schedule(() => SendNotificationIncomingTraining(returnedTraining), returnedTraining.StartDate
+                .AddHours(-3));
+            
             return _mapper.Map<TrainingCreateDTO>(returnedTraining);
         }
 
@@ -129,6 +136,32 @@ namespace TrainingPlanner.Core.Services
                 BackgroundJob.Schedule(() => _cardService.DeleteCardEntries(trng.Id, trng.TrainerId, trng.ClubId), trng.EndDate);
             }
             return _mapper.Map<IEnumerable<TrainingCreateDTO>>(returnedTrainings);
+        }
+
+        public async Task SendNotificationIncomingTraining(Training training)
+        {
+            var reservations = await _reservationRepository.GetReservationsOnTraining(training.Id);
+
+            if (reservations != null)
+            {
+                foreach (var reservation in reservations)
+                {
+                    if (reservation.User.Notification.IncomingTraining)
+                    {
+                        var subject = "Incoming training";
+                        var name = training.ClubId != null ? training.Club.Name : training.TrainerName;
+                        var message = "Hello " + reservation.User.FirstName + "!<br/>Training " + training.Title + " at " + name + " is coming up. It will take place on " + training.StartDate.ToString() + " in the room " + training.Room + "." + DictionaryResources.Regards;
+
+                        var emailResult = await _emailService.SendEmail(reservation.User.Email, subject, message);
+
+                        if (emailResult == null)
+                        {
+                            throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
+                        }
+                    }
+                }
+            }
+
         }
 
     }

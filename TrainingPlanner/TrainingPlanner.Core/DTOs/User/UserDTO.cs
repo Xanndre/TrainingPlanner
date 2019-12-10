@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TrainingPlanner.Core.DTOs.BodyMeasurement;
 using TrainingPlanner.Core.DTOs.ClubStuff.ClubCard;
+using TrainingPlanner.Core.DTOs.Notification;
 using TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard;
 using TrainingPlanner.Core.DTOs.UserStuff;
 
@@ -22,5 +23,6 @@ namespace TrainingPlanner.Core.DTOs.User
         public ICollection<BodyMeasurementDTO> BodyMeasurements { get; set; }
         public ICollection<ClubCardDTO> ClubCards { get; set; }
         public ICollection<TrainerCardDTO> TrainerCards { get; set; }
+        public NotificationDTO Notification { get; set; }
     }
 }

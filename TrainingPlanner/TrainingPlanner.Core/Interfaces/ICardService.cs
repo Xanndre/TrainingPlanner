@@ -23,5 +23,7 @@ namespace TrainingPlanner.Core.Interfaces
         Task<PagedClubCardsDTO> GetClubClubCards(int pageNumber, int pageSize, int clubId);
         Task<PagedClubCardsDTO> GetClubCards(int pageNumber, int pageSize, string userId, int clubId);
         Task DeleteCardEntries(int trainingId, int? trainerId, int? clubId);
+        Task SendNotificationCardAlmostExpired(string email, string trainerName, string userFirstName, bool isChecked);
+        Task SendNotificationCardExpired(string email, string trainerName, string userFirstName, bool isChecked);
     }
 }
