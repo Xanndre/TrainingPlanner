@@ -242,6 +242,42 @@ namespace TrainingPlanner.Core.Services
             return result;
         }
 
+        public async Task SendNotificationCardAlmostExpired(string email, string trainerName, string userFirstName, bool isChecked)
+        {
+            if (isChecked)
+            {
+                var subject = "Your card will expire in 3 days";
+                var message = "Hello " + userFirstName + "!<br/>Remember that your card at " + trainerName +
+                    " will expire in 3 days." + DictionaryResources.Regards;
+
+                var emailResult = await _emailService.SendEmail(email, subject, message);
+
+                if (emailResult == null)
+                {
+                    throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
+                }
+            }
+            
+        }
+
+        public async Task SendNotificationCardExpired(string email, string trainerName, string userFirstName, bool isChecked)
+        {
+            if (isChecked)
+            {
+                var subject = "Your card has expired";
+                var message = "Hello " + userFirstName + "!<br/>Please be informed that your card at " + trainerName +
+                    " has expired. " + DictionaryResources.Regards;
+
+                var emailResult = await _emailService.SendEmail(email, subject, message);
+
+                if (emailResult == null)
+                {
+                    throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
+                }
+            }
+            
+        }
+
         private PagedTrainerCardsDTO GetTrainerCards(
             int pageNumber, int pageSize, IEnumerable<TrainerCard> cards)
         {
@@ -290,42 +326,6 @@ namespace TrainingPlanner.Core.Services
             result.Cards = _mapper.Map<IEnumerable<ClubCardBaseDTO>>(pagedCards);
 
             return result;
-        }
-
-        public async Task SendNotificationCardAlmostExpired(string email, string trainerName, string userFirstName, bool isChecked)
-        {
-            if (isChecked)
-            {
-                var subject = "Your card will expire in 3 days";
-                var message = "Hello " + userFirstName + "!<br/>Remember that your card at " + trainerName +
-                    " will expire in 3 days." + DictionaryResources.Regards;
-
-                var emailResult = await _emailService.SendEmail(email, subject, message);
-
-                if (emailResult == null)
-                {
-                    throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
-                }
-            }
-            
-        }
-
-        public async Task SendNotificationCardExpired(string email, string trainerName, string userFirstName, bool isChecked)
-        {
-            if (isChecked)
-            {
-                var subject = "Your card has expired";
-                var message = "Hello " + userFirstName + "!<br/>Please be informed that your card at " + trainerName +
-                    " has expired. " + DictionaryResources.Regards;
-
-                var emailResult = await _emailService.SendEmail(email, subject, message);
-
-                if (emailResult == null)
-                {
-                    throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
-                }
-            }
-            
         }
     }
 }

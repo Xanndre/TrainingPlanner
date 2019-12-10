@@ -13,5 +13,6 @@ namespace TrainingPlanner.Repositories.Interfaces
         Task<IEnumerable<Reservation>> UpdateRange(IEnumerable<Reservation> reservations);
         Task<IEnumerable<Reservation>> GetReservations(string userId);
         Task<IEnumerable<Reservation>> GetReservationsOnTraining(int trainingId);
+        Task<Reservation> GetReservationById(int id);
     }
 }

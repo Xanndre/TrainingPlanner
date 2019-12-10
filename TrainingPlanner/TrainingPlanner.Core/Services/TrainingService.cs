@@ -134,6 +134,8 @@ namespace TrainingPlanner.Core.Services
             foreach (var trng in returnedTrainings)
             {
                 BackgroundJob.Schedule(() => _cardService.DeleteCardEntries(trng.Id, trng.TrainerId, trng.ClubId), trng.EndDate);
+                BackgroundJob.Schedule(() => SendNotificationIncomingTraining(trng), trng.StartDate
+                .AddHours(-3));
             }
             return _mapper.Map<IEnumerable<TrainingCreateDTO>>(returnedTrainings);
         }

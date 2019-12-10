@@ -41,11 +41,6 @@ namespace TrainingPlanner.Repositories.Repositories
             _trainingPlannerDbContext.Reservations.Remove(reservation);
             await _trainingPlannerDbContext.SaveChangesAsync();
         }
-        public async Task<Reservation> GetReservation(int trainingId, string userId)
-        {
-            return await GetReservations()
-                .FirstOrDefaultAsync(res => res.TrainingId == trainingId && res.UserId == userId);
-        }
 
         public async Task<IEnumerable<Reservation>> GetReservations(string userId)
         {
@@ -65,6 +60,28 @@ namespace TrainingPlanner.Repositories.Repositories
                     .ThenInclude(u => u.Notification)
                 .Where(t => t.TrainingId == trainingId)
                 .ToListAsync();
+        }
+
+        public async Task<Reservation> GetReservationById(int id)
+        {
+            return await GetReservations()
+                .Include(res => res.User)
+                .Include(res => res.Training)
+                    .ThenInclude(t => t.Club)
+                .Include(res => res.Training)
+                    .ThenInclude(t => t.Trainer)
+                .FirstOrDefaultAsync(res => res.Id == id);
+        }
+
+        public async Task<Reservation> GetReservation(int trainingId, string userId)
+        {
+            return await GetReservations()
+                .Include(res => res.User)
+                .Include(res => res.Training)
+                    .ThenInclude(t => t.Club)
+                .Include(res => res.Training)
+                    .ThenInclude(t => t.Trainer)
+                .FirstOrDefaultAsync(res => res.TrainingId == trainingId && res.UserId == userId);
         }
 
         private IQueryable<Reservation> GetReservations()
