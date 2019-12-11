@@ -59,6 +59,7 @@ namespace TrainingPlanner.Repositories.Repositories
                 .Include(t => t.User)
                     .ThenInclude(u => u.Notification)
                 .Where(t => t.TrainingId == trainingId)
+                .AsNoTracking()
                 .ToListAsync();
         }
 

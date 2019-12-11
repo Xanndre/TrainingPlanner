@@ -78,7 +78,21 @@ namespace TrainingPlanner.Core.Services
         public async Task DeleteTraining(int id)
         {
             var training = await _trainingRepository.GetTraining(id);
+            var reservations = await _reservationRepository.GetReservationsOnTraining(id);
+
             await _trainingRepository.DeleteTraining(training);
+
+            if(reservations != null)
+            {
+                foreach (var reservation in reservations)
+                {
+                    if (reservation.User.Notification.TrainingDeleted)
+                    {
+                        await SendNotificationTrainingDeleted(reservation, training);
+                    }
+                }
+            }
+            
         }
 
         public async Task<IEnumerable<TrainingDTO>> GetTrainerTrainings(int trainerId)
@@ -102,6 +116,10 @@ namespace TrainingPlanner.Core.Services
         public async Task UpdateSignedUpList(Training training)
         {
             var sortedReservations = training.Reservations.OrderBy(c => c.Date);
+            var reservationsBeforeUpdate = _reservationRepository.GetReservationsOnTraining(training.Id).Result
+                .OrderBy(c => c.Date)
+                .ToList();
+
             var peopleOnBench = sortedReservations.Skip(training.Entries);
             var peopleOnTraining = sortedReservations.Take(training.Entries);
 
@@ -117,6 +135,25 @@ namespace TrainingPlanner.Core.Services
 
             await _reservationRepository.UpdateRange(peopleOnBench);
             await _reservationRepository.UpdateRange(peopleOnTraining);
+
+            
+            var reservationsAfterUpdate = training.Reservations.OrderBy(c => c.Date).ToList();
+            for(int i = 0; i < reservationsBeforeUpdate.Count(); i++)
+            {
+                if(reservationsBeforeUpdate[i].IsReserveList != reservationsAfterUpdate[i].IsReserveList)
+                {
+                    if(reservationsBeforeUpdate[i].User.Notification.ListToReserveList && 
+                        reservationsBeforeUpdate[i].IsReserveList == false)
+                    {
+                        await SendNotificationListToReserveList(reservationsBeforeUpdate[i], training);
+                    }
+                    else if(reservationsBeforeUpdate[i].User.Notification.ReserveListToList &&
+                        reservationsBeforeUpdate[i].IsReserveList == true)
+                    {
+                        await SendNotificationListToReserveList(reservationsBeforeUpdate[i], training);
+                    }
+                }
+            }
         }
 
         public async Task<IEnumerable<TrainingCreateDTO>> CreateTrainingRange(IEnumerable<TrainingCreateDTO> trainings)
@@ -162,6 +199,45 @@ namespace TrainingPlanner.Core.Services
                         }
                     }
                 }
+            }
+
+        }
+
+        public async Task SendNotificationTrainingDeleted(Reservation reservation, Training training)
+        {
+            var subject = "Deleted training";
+            var name = training.ClubId != null ? training.Club.Name : training.TrainerName;
+            var message = "Hello " + reservation.User.FirstName + "!<br/>Please be informed that training " + training.Title + " at " + name + " has been deleted. It was supposed to take place on " + training.StartDate.ToString() + " in the room " + training.Room + "." + DictionaryResources.Regards;
+
+            var emailResult = await _emailService.SendEmail(reservation.User.Email, subject, message);
+
+            if (emailResult == null)
+            {
+                throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
+            }
+
+        }
+
+        public async Task SendNotificationListToReserveList(Reservation reservation, Training training)
+        {
+            var subject = reservation.IsReserveList ? "Transfer from reserve list to training list" : "Transfer from training list to reserve list";
+            var name = training.ClubId != null ? training.Club.Name : training.TrainerName;
+            string message;
+
+            if (reservation.IsReserveList)
+            {
+                message = "Hello " + reservation.User.FirstName + "!<br/>Please be informed that you've been transfered from reserve list to training list on training " + training.Title + " at " + name + ". It has probably happened due to increased number of training's entries or another user's sign-out. Training will take place on " + training.StartDate.ToString() + " in the room " + training.Room + "." + DictionaryResources.Regards;
+            }
+            else
+            {
+                message = "Hello " + reservation.User.FirstName + "!<br/>Please be informed that you've been transfered from training list to reserve list on training " + training.Title + " at " + name + ". It has probably happened due to decreased number of training's entries. Training will take place on " + training.StartDate.ToString() + " in the room " + training.Room + "." + DictionaryResources.Regards;
+            }
+
+            var emailResult = await _emailService.SendEmail(reservation.User.Email, subject, message);
+
+            if (emailResult == null)
+            {
+                throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
             }
 
         }

@@ -19,9 +19,9 @@ namespace TrainingPlanner.Repositories.Repositories
         {
             return await _trainingPlannerDbContext.Trainings
                 .Include(t => t.Club)
-                .ThenInclude(t => t.User)
+                    .ThenInclude(t => t.User)
                 .Include(t => t.Trainer)
-                .ThenInclude(t => t.User)
+                    .ThenInclude(t => t.User)
                 .Include(t => t.Reservations)
                 .AsNoTracking()
                 .FirstAsync(t => t.Id == id);
