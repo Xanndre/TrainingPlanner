@@ -100,6 +100,11 @@ namespace TrainingPlanner.Data
                         .HasOne(t => t.Notification)
                         .WithOne(t => t.User)
                         .HasForeignKey<Notification>(t => t.UserId);
+
+            modelBuilder.Entity<Notification>()
+                        .HasOne(t => t.User)
+                        .WithOne(t => t.Notification)
+                        .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
