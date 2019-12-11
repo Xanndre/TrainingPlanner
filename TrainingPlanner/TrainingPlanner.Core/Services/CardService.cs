@@ -21,15 +21,15 @@ namespace TrainingPlanner.Core.Services
         private readonly IReservationRepository _reservationRepository;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
-        private readonly IUserService _userService;
+        private readonly IUserRepository _userRepository;
 
-        public CardService(ICardRepository cardRepository, IMapper mapper, IReservationRepository reservationRepository, IEmailService emailService, IUserService userService)
+        public CardService(ICardRepository cardRepository, IMapper mapper, IReservationRepository reservationRepository, IEmailService emailService, IUserRepository userRepository)
         {
             _cardRepository = cardRepository;
             _reservationRepository = reservationRepository;
             _mapper = mapper;
             _emailService = emailService;
-            _userService = userService;
+            _userRepository = userRepository;
         }
 
         public async Task DeleteCardEntries(int trainingId, int? trainerId, int? clubId)
@@ -101,7 +101,7 @@ namespace TrainingPlanner.Core.Services
             }
             var returnedCard = await _cardRepository.CreateTrainerCard(mappedCard);
 
-            var user = await _userService.GetUser(card.UserId);
+            var user = await _userRepository.GetUser(card.UserId);
 
             if (!card.UnlimitedValidityPeriod)
             {
@@ -186,7 +186,7 @@ namespace TrainingPlanner.Core.Services
             }
             var returnedCard = await _cardRepository.CreateClubCard(mappedCard);
 
-            var user = await _userService.GetUser(card.UserId);
+            var user = await _userRepository.GetUser(card.UserId);
             
             if (!card.UnlimitedValidityPeriod)
             {

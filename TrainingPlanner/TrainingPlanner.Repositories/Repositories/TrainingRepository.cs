@@ -68,9 +68,11 @@ namespace TrainingPlanner.Repositories.Repositories
             return await trainings.ToListAsync();
         }
 
-        public async Task<IEnumerable<Training>> GetReservedTrainings(string userId)
+        public async Task<IEnumerable<Training>> GetReservedTrainings(
+            string userId,
+            bool fetchAllReservations = false)
         {
-            var trainings = GetTrainingWithReservationQuery(userId)
+            var trainings = GetTrainingWithReservationQuery(userId, fetchAllReservations)
                 .Where(t => _trainingPlannerDbContext.Reservations
                     .Any(res => t.Id == res.TrainingId && res.User.Id == userId));
 
@@ -82,14 +84,21 @@ namespace TrainingPlanner.Repositories.Repositories
             return _trainingPlannerDbContext.Trainings;
         }
 
-        private IAsyncEnumerable<Training> GetTrainingWithReservationQuery(string userId)
+        private IAsyncEnumerable<Training> GetTrainingWithReservationQuery(
+            string userId,
+            bool fetchAllReservations)
         {
             return GetTrainingQuery()
                   .Include(x => x.Reservations)
                   .ToAsyncEnumerable()
                   .Select(x =>
                   {
-                      x.Reservations = x.Reservations.Any() ? x.Reservations.Where(f => f.UserId == userId).ToList() : null;
+                      if(!fetchAllReservations)
+                      {
+                          x.Reservations = x.Reservations.Any() 
+                          ? x.Reservations.Where(f => f.UserId == userId).ToList() 
+                          : null;
+                      }
                       return x;
                   });
         }

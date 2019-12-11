@@ -19,8 +19,14 @@ namespace TrainingPlanner.Core.Services
         private readonly ICardService _cardService;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
+   
 
-        public TrainingService(ITrainingRepository trainingRepository, IMapper mapper, IReservationRepository reservationRepository, ICardService cardService, IEmailService emailService)
+        public TrainingService(
+            ITrainingRepository trainingRepository,
+            IMapper mapper,
+            IReservationRepository reservationRepository,
+            ICardService cardService,
+            IEmailService emailService)
         {
             _trainingRepository = trainingRepository;
             _reservationRepository = reservationRepository;

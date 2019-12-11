@@ -27,12 +27,13 @@ namespace TrainingPlanner.Core.Services
         private readonly ITrainingRepository _trainingRepository;
         private readonly IReservationRepository _reservationRepository;
         private readonly IUserTrainingRepository _userTrainingRepository;
+        private readonly ITrainingService _trainingService;
 
         public UserService(IUserRepository repository, IMapper mapper, ITrainerRepository trainerRepository,
                             IClubRepository clubRepository, IFavouriteRepository favouriteRepository,
                             IRateRepository rateRepository, IBodyMeasurementRepository bodyMeasurementRepository,
                             ITrainingRepository trainingRepository, IReservationRepository reservationRepository,
-                            IUserTrainingRepository userTrainingRepository)
+                            IUserTrainingRepository userTrainingRepository, ITrainingService trainingService)
         {
             _userRepository = repository;
             _mapper = mapper;
@@ -44,6 +45,7 @@ namespace TrainingPlanner.Core.Services
             _trainingRepository = trainingRepository;
             _reservationRepository = reservationRepository;
             _userTrainingRepository = userTrainingRepository;
+            _trainingService = trainingService;
         }
 
         public PagedUsersDTO GetAllUsers(
@@ -163,17 +165,7 @@ namespace TrainingPlanner.Core.Services
 
         public async Task DeleteUser(string id)
         {
-            var user = await _userRepository.GetUser(id);
             var trainer = await _trainerRepository.GetTrainerByUser(id);
-            var clubs = await _clubRepository.GetUserClubs(id);
-            var favTrainers = await _favouriteRepository.GetUserFavouriteTrainers(id);
-            var favClubs = await _favouriteRepository.GetUserFavouriteClubs(id);
-            var clubRates = await _rateRepository.GetUserClubRates(id);
-            var trainerRates = await _rateRepository.GetUserTrainerRates(id);
-            var bodyMeasurements = await _bodyMeasurementRepository.GetBodyMeasurements(id);
-            var reservations = await _reservationRepository.GetReservations(id);
-            var userTrainings = await _userTrainingRepository.GetUserTrainings(id);
-
             if (trainer != null)
             {
                 var trainings = await _trainingRepository.GetTrainerTrainings(trainer.Id);
@@ -181,9 +173,11 @@ namespace TrainingPlanner.Core.Services
                 {
                     await _trainingRepository.DeleteTraining(training);
                 }
+
+                await _trainerRepository.DeleteTrainer(trainer);
             }
 
-
+            var clubs = await _clubRepository.GetUserClubs(id);
             if (clubs.Count() != 0)
             {
                 foreach (var club in clubs)
@@ -193,15 +187,12 @@ namespace TrainingPlanner.Core.Services
                     {
                         await _trainingRepository.DeleteTraining(training);
                     }
+
                     await _clubRepository.DeleteClub(club);
                 }
             }
 
-            if (trainer != null)
-            {
-                await _trainerRepository.DeleteTrainer(trainer);
-            }
-
+            var favClubs = await _favouriteRepository.GetUserFavouriteClubs(id);
             if (favClubs.Count() != 0)
             {
                 foreach (var club in favClubs)
@@ -210,6 +201,7 @@ namespace TrainingPlanner.Core.Services
                 }
             }
 
+            var favTrainers = await _favouriteRepository.GetUserFavouriteTrainers(id);
             if (favTrainers.Count() != 0)
             {
                 foreach (var favTrainer in favTrainers)
@@ -218,6 +210,7 @@ namespace TrainingPlanner.Core.Services
                 }
             }
 
+            var clubRates = await _rateRepository.GetUserClubRates(id);
             if (clubRates.Count() != 0)
             {
                 foreach (var rate in clubRates)
@@ -226,6 +219,7 @@ namespace TrainingPlanner.Core.Services
                 }
             }
 
+            var trainerRates = await _rateRepository.GetUserTrainerRates(id);
             if (trainerRates.Count() != 0)
             {
                 foreach (var rate in trainerRates)
@@ -234,6 +228,7 @@ namespace TrainingPlanner.Core.Services
                 }
             }
 
+            var bodyMeasurements = await _bodyMeasurementRepository.GetBodyMeasurements(id);
             if (bodyMeasurements.Count() != 0)
             {
                 foreach (var measurement in bodyMeasurements)
@@ -242,6 +237,8 @@ namespace TrainingPlanner.Core.Services
                 }
             }
 
+            var reservedTrainings = await _trainingRepository.GetReservedTrainings(id, true);
+            var reservations = await _reservationRepository.GetReservations(id);
             if (reservations.Count() != 0)
             {
                 foreach (var reservation in reservations)
@@ -250,6 +247,12 @@ namespace TrainingPlanner.Core.Services
                 }
             }
 
+            foreach (var trng in reservedTrainings)
+            {
+                await _trainingService.UpdateSignedUpList(trng);
+            }
+
+            var userTrainings = await _userTrainingRepository.GetUserTrainings(id);
             if (userTrainings.Count() != 0)
             {
                 foreach (var userTraining in userTrainings)
@@ -258,8 +261,11 @@ namespace TrainingPlanner.Core.Services
                 }
             }
 
-            await _userRepository.DeleteUser(user);
 
+           
+
+            var user = await _userRepository.GetUser(id);
+            await _userRepository.DeleteUser(user);
         }
 
         public async Task<IEnumerable<string>> GetLocations()
