@@ -68,7 +68,7 @@ namespace TrainingPlanner.Core.Services
         {
             var user = _userManager.Users.SingleOrDefault(u => u.Email == loginDTO.Email);
 
-            if (! await _userManager.IsEmailConfirmedAsync(user))
+            if (! await _userManager.IsEmailConfirmedAsync(user) && !_userManager.GetLoginsAsync(user).Result.Any())
             {
                 throw new ApplicationException(DictionaryResources.EmailNotConfirmed);
             }
