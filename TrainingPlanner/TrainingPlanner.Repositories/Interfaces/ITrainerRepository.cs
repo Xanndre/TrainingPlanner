@@ -7,7 +7,6 @@ namespace TrainingPlanner.Repositories.Interfaces
 {
     public interface ITrainerRepository
     {
-        IQueryable<Trainer> GetAllTrainers();
         Task<IEnumerable<Trainer>> GetFavouriteTrainers(string userId);
         Task<IEnumerable<Trainer>> GetAllTrainers(string userId);
         Task<Trainer> GetTrainer(int id);

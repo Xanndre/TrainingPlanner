@@ -13,7 +13,6 @@ namespace TrainingPlanner.Repositories.Interfaces
         Task<Club> UpdateClub(Club club);
         Task<Club> CreateClub(Club club);
         Task DeleteClub(Club club);
-        IQueryable<Club> GetAllClubs();
         Task<IEnumerable<Club>> GetFavouriteClubs(string userId);
         Task<IEnumerable<Club>> GetAllClubs(string userId);
         Task<IEnumerable<Club>> GetUserClubs(string userId);

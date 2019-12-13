@@ -15,12 +15,6 @@ namespace TrainingPlanner.Repositories.Repositories
 
         }
 
-        public IQueryable<Club> GetAllClubs()
-        {
-            return GetClubQuery();
-        }
-
-
         public async Task<IEnumerable<Club>> GetAllClubs(string userId)
         {
             var clubs = GetClubWithFavouriteQuery(userId);

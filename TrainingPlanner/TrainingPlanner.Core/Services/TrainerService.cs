@@ -123,15 +123,8 @@ namespace TrainingPlanner.Core.Services
             TrainerFilterData filterData)
         {
             IEnumerable<Trainer> trainers;
-
-            if (!string.IsNullOrEmpty(userId))
-            {
-                trainers = await _trainerRepository.GetAllTrainers(userId);
-            }
-            else
-            {
-                trainers = _trainerRepository.GetAllTrainers();
-            }
+        
+            trainers = await _trainerRepository.GetAllTrainers(userId);
 
             var result = GetTrainers(pageNumber, pageSize, trainers, filterData);
             return result;

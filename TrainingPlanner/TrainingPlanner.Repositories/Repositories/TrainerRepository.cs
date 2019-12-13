@@ -90,12 +90,6 @@ namespace TrainingPlanner.Repositories.Repositories
             }
         }
 
-        public IQueryable<Trainer> GetAllTrainers()
-        {
-            return GetTrainerQuery();
-        }
-
-
         public async Task<IEnumerable<Trainer>> GetAllTrainers(string userId)
         {
             var trainers = GetTrainerWithFavouriteQuery(userId);

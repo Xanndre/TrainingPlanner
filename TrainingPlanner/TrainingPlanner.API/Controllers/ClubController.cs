@@ -98,9 +98,9 @@ namespace TrainingPlanner.API.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedClubsDTO>> GetAllClubs(
             [FromQuery] ClubFilterData filterData,
+            [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 3,
-            [FromQuery] string userId = null)
+            [FromQuery] int pageSize = 3)
         {
             try
             {

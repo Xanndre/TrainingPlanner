@@ -141,16 +141,9 @@ namespace TrainingPlanner.Core.Services
             ClubFilterData filterData)
         {
             IEnumerable<Club> clubs;
-
-            if (!string.IsNullOrEmpty(userId))
-            {
-                clubs = await _clubRepository.GetAllClubs(userId);
-            }
-            else
-            {
-                clubs = _clubRepository.GetAllClubs();
-            }
-
+            
+            clubs = await _clubRepository.GetAllClubs(userId);
+            
             var result = GetClubs(pageNumber, pageSize, clubs, filterData);
             return result;
         }
