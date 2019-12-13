@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using TrainingPlanner.Core.DTOs.ClubStuff.ClubCard;
 using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard;
+using TrainingPlanner.Core.Helpers;
 using TrainingPlanner.Core.Interfaces;
 
 namespace TrainingPlanner.API.Controllers
@@ -94,13 +95,14 @@ namespace TrainingPlanner.API.Controllers
 
         [HttpGet("club/user")]
         public async Task<ActionResult<PagedClubCardsDTO>> GetUserClubCards(
+            [FromQuery] CardFilterData filterData,
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 5)
         {
             try
             {
-                return Ok(await _cardService.GetUserClubCards(pageNumber, pageSize, userId));
+                return Ok(await _cardService.GetUserClubCards(pageNumber, pageSize, userId, filterData));
             }
             catch (Exception exception)
             {
@@ -111,13 +113,14 @@ namespace TrainingPlanner.API.Controllers
 
         [HttpGet("club/club")]
         public async Task<ActionResult<PagedClubCardsDTO>> GetClubClubCards(
+            [FromQuery] CardFilterData filterData,
             [FromQuery] int clubId,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 5)
         {
             try
             {
-                return Ok(await _cardService.GetClubClubCards(pageNumber, pageSize, clubId));
+                return Ok(await _cardService.GetClubClubCards(pageNumber, pageSize, clubId, filterData));
             }
             catch (Exception exception)
             {
@@ -128,6 +131,7 @@ namespace TrainingPlanner.API.Controllers
 
         [HttpGet("club")]
         public async Task<ActionResult<PagedClubCardsDTO>> GetClubCards(
+            [FromQuery] CardFilterData filterData,
             [FromQuery] int clubId,
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
@@ -135,7 +139,7 @@ namespace TrainingPlanner.API.Controllers
         {
             try
             {
-                return Ok(await _cardService.GetClubCards(pageNumber, pageSize, userId, clubId));
+                return Ok(await _cardService.GetClubCards(pageNumber, pageSize, userId, clubId, filterData));
             }
             catch (Exception exception)
             {
@@ -217,13 +221,14 @@ namespace TrainingPlanner.API.Controllers
 
         [HttpGet("trainer/user")]
         public async Task<ActionResult<PagedTrainerCardsDTO>> GetUserTrainerCards(
+            [FromQuery] CardFilterData filterData,
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 5)
         {
             try
             {
-                return Ok(await _cardService.GetUserTrainerCards(pageNumber, pageSize, userId));
+                return Ok(await _cardService.GetUserTrainerCards(pageNumber, pageSize, userId, filterData));
             }
             catch (Exception exception)
             {
@@ -234,13 +239,14 @@ namespace TrainingPlanner.API.Controllers
 
         [HttpGet("trainer/trainer")]
         public async Task<ActionResult<PagedTrainerCardsDTO>> GetTrainerTrainerCards(
+            [FromQuery] CardFilterData filterData,
             [FromQuery] int trainerId,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 5)
         {
             try
             {
-                return Ok(await _cardService.GetTrainerTrainerCards(pageNumber, pageSize, trainerId));
+                return Ok(await _cardService.GetTrainerTrainerCards(pageNumber, pageSize, trainerId, filterData));
             }
             catch (Exception exception)
             {
@@ -251,6 +257,7 @@ namespace TrainingPlanner.API.Controllers
 
         [HttpGet("trainer")]
         public async Task<ActionResult<PagedTrainerCardsDTO>> GetTrainerCards(
+            [FromQuery] CardFilterData filterData,
             [FromQuery] int trainerId,
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
@@ -258,7 +265,7 @@ namespace TrainingPlanner.API.Controllers
         {
             try
             {
-                return Ok(await _cardService.GetTrainerCards(pageNumber, pageSize, userId, trainerId));
+                return Ok(await _cardService.GetTrainerCards(pageNumber, pageSize, userId, trainerId, filterData));
             }
             catch (Exception exception)
             {

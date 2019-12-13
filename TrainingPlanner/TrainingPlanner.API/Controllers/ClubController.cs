@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrainingPlanner.Core.DTOs.Club;
 using TrainingPlanner.Core.DTOs.Paged;
+using TrainingPlanner.Core.Helpers;
 using TrainingPlanner.Core.Interfaces;
 
 namespace TrainingPlanner.API.Controllers
@@ -96,13 +97,14 @@ namespace TrainingPlanner.API.Controllers
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<PagedClubsDTO>> GetAllClubs(
+            [FromQuery] ClubFilterData filterData,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 3,
             [FromQuery] string userId = null)
         {
             try
             {
-                var result = await _clubService.GetAllClubs(pageNumber, pageSize, userId);
+                var result = await _clubService.GetAllClubs(pageNumber, pageSize, userId, filterData);
                 return Ok(result);
             }
             catch (Exception exception)
@@ -114,13 +116,14 @@ namespace TrainingPlanner.API.Controllers
 
         [HttpGet("favourites")]
         public async Task<ActionResult<PagedClubsDTO>> GetFavouriteClubs(
+            [FromQuery] ClubFilterData filterData,
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 3)
         {
             try
             {
-                return Ok(await _clubService.GetFavouriteClubs(pageNumber, pageSize, userId));
+                return Ok(await _clubService.GetFavouriteClubs(pageNumber, pageSize, userId, filterData));
             }
             catch (Exception exception)
             {
@@ -131,13 +134,14 @@ namespace TrainingPlanner.API.Controllers
 
         [HttpGet("user")]
         public async Task<ActionResult<PagedClubsDTO>> GetUserClubs(
+            [FromQuery] ClubFilterData filterData,
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 3)
         {
             try
             {
-                return Ok(await _clubService.GetUserClubs(pageNumber, pageSize, userId));
+                return Ok(await _clubService.GetUserClubs(pageNumber, pageSize, userId, filterData));
             }
             catch (Exception exception)
             {

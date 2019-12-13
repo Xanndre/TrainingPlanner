@@ -5,7 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.DTOs.Trainer;
+using TrainingPlanner.Core.Helpers;
 using TrainingPlanner.Core.Interfaces;
+using TrainingPlanner.Core.Specifications.Extensions;
+using TrainingPlanner.Core.Specifications.Filters.TrainerFilters;
+using TrainingPlanner.Core.Specifications.Interfaces;
 using TrainingPlanner.Data.Entities;
 using TrainingPlanner.Repositories.Interfaces;
 
@@ -104,17 +108,19 @@ namespace TrainingPlanner.Core.Services
         public async Task<PagedTrainersDTO> GetFavouriteTrainers(
             int pageNumber,
             int pageSize,
-            string userId)
+            string userId,
+            TrainerFilterData filterData)
         {
             var trainers = await _trainerRepository.GetFavouriteTrainers(userId);
-            var result = GetTrainers(pageNumber, pageSize, trainers);
+            var result = GetTrainers(pageNumber, pageSize, trainers, filterData);
             return result;
         }
 
         public async Task<PagedTrainersDTO> GetAllTrainers(
             int pageNumber,
             int pageSize,
-            string userId)
+            string userId,
+            TrainerFilterData filterData)
         {
             IEnumerable<Trainer> trainers;
 
@@ -127,7 +133,7 @@ namespace TrainingPlanner.Core.Services
                 trainers = _trainerRepository.GetAllTrainers();
             }
 
-            var result = GetTrainers(pageNumber, pageSize, trainers);
+            var result = GetTrainers(pageNumber, pageSize, trainers, filterData);
             return result;
         }
 
@@ -144,8 +150,9 @@ namespace TrainingPlanner.Core.Services
         }
 
         private PagedTrainersDTO GetTrainers(
-            int pageNumber, int pageSize, IEnumerable<Trainer> trainers)
+            int pageNumber, int pageSize, IEnumerable<Trainer> trainers, TrainerFilterData filterData)
         {
+            trainers = Filter(filterData, trainers);
             var result = GetPagedTrainers(trainers, pageNumber, pageSize);
             return result;
         }
@@ -165,6 +172,21 @@ namespace TrainingPlanner.Core.Services
             result.Trainers = _mapper.Map<IEnumerable<TrainerBaseDTO>>(pagedTrainers);
 
             return result;
+        }
+
+        private IEnumerable<Trainer> Filter(TrainerFilterData filterData, IEnumerable<Trainer> trainers)
+        {
+            trainers = trainers.Where(trainer => ApplyFilters(filterData)
+                .IsSatisfiedBy(trainer))
+                .ToList();
+            return trainers;
+        }
+
+        private ISpecification<Trainer> ApplyFilters(TrainerFilterData filterData)
+        {
+            return new TrainerMatchesLocation(filterData.Location)
+                .And(new TrainerMatchesKeywords(filterData.Keywords))
+                .And(new TrainerMatchesSports(filterData.SportIds));
         }
 
         private async Task<double> CalculateAverageTrainerRate(int trainerId)

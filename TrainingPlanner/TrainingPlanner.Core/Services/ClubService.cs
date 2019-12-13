@@ -5,7 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.Club;
 using TrainingPlanner.Core.DTOs.Paged;
+using TrainingPlanner.Core.Helpers;
 using TrainingPlanner.Core.Interfaces;
+using TrainingPlanner.Core.Specifications.Extensions;
+using TrainingPlanner.Core.Specifications.Filters.ClubFilters;
+using TrainingPlanner.Core.Specifications.Interfaces;
 using TrainingPlanner.Data.Entities;
 using TrainingPlanner.Repositories.Interfaces;
 
@@ -111,27 +115,30 @@ namespace TrainingPlanner.Core.Services
         public async Task<PagedClubsDTO> GetFavouriteClubs(
             int pageNumber,
             int pageSize,
-            string userId)
+            string userId,
+            ClubFilterData filterData)
         {
             var clubs = await _clubRepository.GetFavouriteClubs(userId);
-            var result = GetClubs(pageNumber, pageSize, clubs);
+            var result = GetClubs(pageNumber, pageSize, clubs, filterData);
             return result;
         }
 
         public async Task<PagedClubsDTO> GetUserClubs(
             int pageNumber,
             int pageSize,
-            string userId)
+            string userId,
+            ClubFilterData filterData)
         {
             var clubs = await _clubRepository.GetUserClubs(userId);
-            var result = GetClubs(pageNumber, pageSize, clubs);
+            var result = GetClubs(pageNumber, pageSize, clubs, filterData);
             return result;
         }
 
         public async Task<PagedClubsDTO> GetAllClubs(
             int pageNumber,
             int pageSize,
-            string userId)
+            string userId,
+            ClubFilterData filterData)
         {
             IEnumerable<Club> clubs;
 
@@ -144,7 +151,7 @@ namespace TrainingPlanner.Core.Services
                 clubs = _clubRepository.GetAllClubs();
             }
 
-            var result = GetClubs(pageNumber, pageSize, clubs);
+            var result = GetClubs(pageNumber, pageSize, clubs, filterData);
             return result;
         }
 
@@ -155,8 +162,9 @@ namespace TrainingPlanner.Core.Services
         }
 
         private PagedClubsDTO GetClubs(
-            int pageNumber, int pageSize, IEnumerable<Club> clubs)
+            int pageNumber, int pageSize, IEnumerable<Club> clubs, ClubFilterData filterData)
         {
+            clubs = Filter(filterData, clubs);
             var result = GetPagedClubs(clubs, pageNumber, pageSize);
             return result;
         }
@@ -176,6 +184,20 @@ namespace TrainingPlanner.Core.Services
             result.Clubs = _mapper.Map<IEnumerable<ClubBaseDTO>>(pagedClubs);
 
             return result;
+        }
+
+        private IEnumerable<Club> Filter(ClubFilterData filterData, IEnumerable<Club> clubs)
+        {
+            clubs = clubs.Where(club => ApplyFilters(filterData)
+                .IsSatisfiedBy(club))
+                .ToList();
+            return clubs;
+        }
+
+        private ISpecification<Club> ApplyFilters(ClubFilterData filterData)
+        {
+            return new ClubMatchesLocation(filterData.Location)
+                .And(new ClubMatchesKeywords(filterData.Keywords));
         }
 
         private async Task RemoveClubActivities(Club mappedClub)

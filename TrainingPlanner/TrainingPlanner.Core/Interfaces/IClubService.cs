@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.Club;
 using TrainingPlanner.Core.DTOs.Paged;
+using TrainingPlanner.Core.Helpers;
 
 namespace TrainingPlanner.Core.Interfaces
 {
@@ -13,9 +14,9 @@ namespace TrainingPlanner.Core.Interfaces
         Task<ClubUpdateDTO> UpdateClub(ClubUpdateDTO club);
         Task<ClubCreateDTO> CreateClub(ClubCreateDTO club);
         Task DeleteClub(int id);
-        Task<PagedClubsDTO> GetAllClubs(int pageNumber, int pageSize, string userId);
-        Task<PagedClubsDTO> GetUserClubs(int pageNumber, int pageSize, string userId);
-        Task<PagedClubsDTO> GetFavouriteClubs(int pageNumber, int pageSize, string userId);
+        Task<PagedClubsDTO> GetAllClubs(int pageNumber, int pageSize, string userId, ClubFilterData filterData);
+        Task<PagedClubsDTO> GetUserClubs(int pageNumber, int pageSize, string userId, ClubFilterData filterData);
+        Task<PagedClubsDTO> GetFavouriteClubs(int pageNumber, int pageSize, string userId, ClubFilterData filterData);
         Task<IEnumerable<string>> GetClubTrainerNames(int clubId);
     }
 }

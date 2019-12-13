@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrainingPlanner.Core.DTOs.Training;
+using TrainingPlanner.Core.Helpers;
 using TrainingPlanner.Core.Interfaces;
 
 namespace TrainingPlanner.API.Controllers
@@ -21,11 +22,13 @@ namespace TrainingPlanner.API.Controllers
         }
 
         [HttpGet("club/{id}")]
-        public async Task<ActionResult<IEnumerable<TrainingDTO>>> GetClubTrainings(int id)
+        public async Task<ActionResult<IEnumerable<TrainingDTO>>> GetClubTrainings(
+            [FromQuery] TrainingFilterData filterData, 
+            int id)
         {
             try
             {
-                return Ok(await _trainingService.GetClubTrainings(id));
+                return Ok(await _trainingService.GetClubTrainings(id, filterData));
             }
             catch (Exception exception)
             {
@@ -35,11 +38,13 @@ namespace TrainingPlanner.API.Controllers
         }
 
         [HttpGet("trainer/{id}")]
-        public async Task<ActionResult<IEnumerable<TrainingDTO>>> GetTrainerTrainings(int id)
+        public async Task<ActionResult<IEnumerable<TrainingDTO>>> GetTrainerTrainings(
+            [FromQuery] TrainingFilterData filterData, 
+            int id)
         {
             try
             {
-                return Ok(await _trainingService.GetTrainerTrainings(id));
+                return Ok(await _trainingService.GetTrainerTrainings(id, filterData));
             }
             catch (Exception exception)
             {
@@ -120,11 +125,13 @@ namespace TrainingPlanner.API.Controllers
         }
 
         [HttpGet("user/{userId}")]
-        public async Task<ActionResult<IEnumerable<TrainingDTO>>> GetReservedTrainings(string userId)
+        public async Task<ActionResult<IEnumerable<TrainingDTO>>> GetReservedTrainings(
+            [FromQuery] TrainingFilterData filterData, 
+            string userId)
         {
             try
             {
-                return Ok(await _trainingService.GetReservedTrainings(userId));
+                return Ok(await _trainingService.GetReservedTrainings(userId, filterData));
             }
             catch (Exception exception)
             {

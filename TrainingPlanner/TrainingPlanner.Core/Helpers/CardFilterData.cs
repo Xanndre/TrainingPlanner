@@ -1,6 +1,6 @@
 ﻿namespace TrainingPlanner.Core.Helpers
 {
-    public class TrainerCardFilterData
+    public class CardFilterData
     {
         public string Name { get; set; }
         public string Keywords { get; set; }

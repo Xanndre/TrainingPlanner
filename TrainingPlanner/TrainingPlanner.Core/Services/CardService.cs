@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.ClubStuff.ClubCard;
 using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard;
+using TrainingPlanner.Core.Helpers;
 using TrainingPlanner.Core.Interfaces;
+using TrainingPlanner.Core.Specifications.Extensions;
+using TrainingPlanner.Core.Specifications.Filters.ClubCardFilters;
+using TrainingPlanner.Core.Specifications.Filters.TrainerCardFilters;
+using TrainingPlanner.Core.Specifications.Interfaces;
 using TrainingPlanner.Core.Utils;
 using TrainingPlanner.Data.Entities;
 using TrainingPlanner.Repositories.Interfaces;
@@ -129,20 +134,22 @@ namespace TrainingPlanner.Core.Services
         public async Task<PagedTrainerCardsDTO> GetUserTrainerCards(
             int pageNumber,
             int pageSize,
-            string userId)
+            string userId,
+            CardFilterData filterData)
         {
             var cards = await _cardRepository.GetUserTrainerCards(userId);
-            var result = GetTrainerCards(pageNumber, pageSize, cards);
+            var result = GetTrainerCards(pageNumber, pageSize, cards, filterData);
             return result;
         }
 
         public async Task<PagedTrainerCardsDTO> GetTrainerTrainerCards(
             int pageNumber,
             int pageSize,
-            int trainerId)
+            int trainerId,
+            CardFilterData filterData)
         {
             var cards = await _cardRepository.GetTrainerTrainerCards(trainerId);
-            var result = GetTrainerCards(pageNumber, pageSize, cards);
+            var result = GetTrainerCards(pageNumber, pageSize, cards, filterData);
             return result;
         }
 
@@ -150,10 +157,11 @@ namespace TrainingPlanner.Core.Services
             int pageNumber,
             int pageSize,
             string userId,
-            int trainerId)
+            int trainerId,
+            CardFilterData filterData)
         {
             var cards = await _cardRepository.GetTrainerCards(userId, trainerId);
-            var result = GetTrainerCards(pageNumber, pageSize, cards);
+            var result = GetTrainerCards(pageNumber, pageSize, cards, filterData);
             return result;
         }
 
@@ -214,20 +222,22 @@ namespace TrainingPlanner.Core.Services
         public async Task<PagedClubCardsDTO> GetUserClubCards(
             int pageNumber,
             int pageSize,
-            string userId)
+            string userId,
+            CardFilterData filterData)
         {
             var cards = await _cardRepository.GetUserClubCards(userId);
-            var result = GetClubCards(pageNumber, pageSize, cards);
+            var result = GetClubCards(pageNumber, pageSize, cards, filterData);
             return result;
         }
 
         public async Task<PagedClubCardsDTO> GetClubClubCards(
             int pageNumber,
             int pageSize,
-            int clubId)
+            int clubId,
+            CardFilterData filterData)
         {
             var cards = await _cardRepository.GetClubClubCards(clubId);
-            var result = GetClubCards(pageNumber, pageSize, cards);
+            var result = GetClubCards(pageNumber, pageSize, cards, filterData);
             return result;
         }
 
@@ -235,10 +245,11 @@ namespace TrainingPlanner.Core.Services
             int pageNumber,
             int pageSize,
             string userId,
-            int clubId)
+            int clubId,
+            CardFilterData filterData)
         {
             var cards = await _cardRepository.GetClubCards(userId, clubId);
-            var result = GetClubCards(pageNumber, pageSize, cards);
+            var result = GetClubCards(pageNumber, pageSize, cards, filterData);
             return result;
         }
 
@@ -279,9 +290,10 @@ namespace TrainingPlanner.Core.Services
         }
 
         private PagedTrainerCardsDTO GetTrainerCards(
-            int pageNumber, int pageSize, IEnumerable<TrainerCard> cards)
+            int pageNumber, int pageSize, IEnumerable<TrainerCard> cards, CardFilterData filterData)
         {
-            var trainerCards = cards.OrderByDescending(u => u.PurchaseDate);
+            IEnumerable<TrainerCard> trainerCards = cards.OrderByDescending(u => u.PurchaseDate);
+            trainerCards = Filter(filterData, trainerCards);
             var result = GetPagedTrainerCards(trainerCards, pageNumber, pageSize);
             return result;
         }
@@ -304,9 +316,10 @@ namespace TrainingPlanner.Core.Services
         }
 
         private PagedClubCardsDTO GetClubCards(
-            int pageNumber, int pageSize, IEnumerable<ClubCard> cards)
+            int pageNumber, int pageSize, IEnumerable<ClubCard> cards, CardFilterData filterData)
         {
-            var clubCards = cards.OrderByDescending(u => u.PurchaseDate);
+            IEnumerable<ClubCard> clubCards = cards.OrderByDescending(u => u.PurchaseDate);
+            clubCards = Filter(filterData, clubCards);
             var result = GetPagedClubCards(clubCards, pageNumber, pageSize);
             return result;
         }
@@ -327,5 +340,37 @@ namespace TrainingPlanner.Core.Services
 
             return result;
         }
+
+        private IEnumerable<ClubCard> Filter(CardFilterData filterData, IEnumerable<ClubCard> cards)
+        {
+            cards = cards.Where(card => ApplyClubCardFilters(filterData)
+                .IsSatisfiedBy(card))
+                .ToList();
+            return cards;
+        }
+
+        private ISpecification<ClubCard> ApplyClubCardFilters(CardFilterData filterData)
+        {
+            return new ClubCardMatchesName(filterData.Name)
+                .And(new ClubCardMatchesKeywords(filterData.Keywords))
+                .And(new ClubCardIsActive(filterData.IsActive));
+        }
+
+        private IEnumerable<TrainerCard> Filter(CardFilterData filterData, IEnumerable<TrainerCard> cards)
+        {
+            cards = cards.Where(card => ApplyTrainerCardFilters(filterData)
+                .IsSatisfiedBy(card))
+                .ToList();
+            return cards;
+        }
+
+        private ISpecification<TrainerCard> ApplyTrainerCardFilters(CardFilterData filterData)
+        {
+            return new TrainerCardMatchesName(filterData.Name)
+                .And(new TrainerCardMatchesKeywords(filterData.Keywords))
+                .And(new TrainerCardIsActive(filterData.IsActive));
+        }
+
+
     }
 }

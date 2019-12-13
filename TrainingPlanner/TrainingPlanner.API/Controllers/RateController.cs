@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using TrainingPlanner.Core.DTOs.ClubStuff.ClubRate;
 using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.DTOs.TrainerStuff.TrainerRate;
+using TrainingPlanner.Core.Helpers;
 using TrainingPlanner.Core.Interfaces;
+using TrainingPlanner.Core.Utils;
 
 namespace TrainingPlanner.API.Controllers
 {
@@ -95,13 +97,15 @@ namespace TrainingPlanner.API.Controllers
         [AllowAnonymous]
         [HttpGet("club/all")]
         public async Task<ActionResult<PagedClubRatesDTO>> GetClubRates(
+            [FromQuery] RateFilterData filterData,
             [FromQuery] int clubId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 3)
+            [FromQuery] int pageSize = 3,
+            [FromQuery] string sortData = DictionaryResources.RateDesc)
         {
             try
             {
-                return Ok(await _rateService.GetAllClubRates(pageNumber, pageSize, clubId));
+                return Ok(await _rateService.GetAllClubRates(pageNumber, pageSize, clubId, sortData, filterData));
             }
             catch (Exception exception)
             {
@@ -184,13 +188,15 @@ namespace TrainingPlanner.API.Controllers
         [AllowAnonymous]
         [HttpGet("trainer/all")]
         public async Task<ActionResult<PagedTrainerRatesDTO>> GetTrainerRates(
+            [FromQuery] RateFilterData filterData,
             [FromQuery] int trainerId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 3)
+            [FromQuery] int pageSize = 3,
+            [FromQuery] string sortData = DictionaryResources.RateDesc)
         {
             try
             {
-                return Ok(await _rateService.GetAllTrainerRates(pageNumber, pageSize, trainerId));
+                return Ok(await _rateService.GetAllTrainerRates(pageNumber, pageSize, trainerId, sortData, filterData));
             }
             catch (Exception exception)
             {

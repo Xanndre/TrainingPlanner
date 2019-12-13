@@ -5,7 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.Training;
+using TrainingPlanner.Core.Helpers;
 using TrainingPlanner.Core.Interfaces;
+using TrainingPlanner.Core.Specifications.Extensions;
+using TrainingPlanner.Core.Specifications.Filters.TrainingFilters;
+using TrainingPlanner.Core.Specifications.Interfaces;
 using TrainingPlanner.Core.Utils;
 using TrainingPlanner.Data.Entities;
 using TrainingPlanner.Repositories.Interfaces;
@@ -101,21 +105,24 @@ namespace TrainingPlanner.Core.Services
             
         }
 
-        public async Task<IEnumerable<TrainingDTO>> GetTrainerTrainings(int trainerId)
+        public async Task<IEnumerable<TrainingDTO>> GetTrainerTrainings(int trainerId, TrainingFilterData filterData)
         {
             var trainings = await _trainingRepository.GetTrainerTrainings(trainerId);
+            trainings = Filter(filterData, trainings);
             return _mapper.Map<IEnumerable<TrainingDTO>>(trainings);
         }
 
-        public async Task<IEnumerable<TrainingDTO>> GetClubTrainings(int clubId)
+        public async Task<IEnumerable<TrainingDTO>> GetClubTrainings(int clubId, TrainingFilterData filterData)
         {
             var trainings = await _trainingRepository.GetClubTrainings(clubId);
+            trainings = Filter(filterData, trainings);
             return _mapper.Map<IEnumerable<TrainingDTO>>(trainings);
         }
 
-        public async Task<IEnumerable<TrainingDTO>> GetReservedTrainings(string userId)
+        public async Task<IEnumerable<TrainingDTO>> GetReservedTrainings(string userId, TrainingFilterData filterData)
         {
             var trainings = await _trainingRepository.GetReservedTrainings(userId);
+            trainings = Filter(filterData, trainings);
             return _mapper.Map<IEnumerable<TrainingDTO>>(trainings);
         }
 
@@ -246,6 +253,21 @@ namespace TrainingPlanner.Core.Services
                 throw new ApplicationException(DictionaryResources.InvalidSendAttempt);
             }
 
+        }
+
+        private IEnumerable<Training> Filter(TrainingFilterData filterData, IEnumerable<Training> trainings)
+        {
+            trainings = trainings.Where(training => ApplyFilters(filterData)
+                .IsSatisfiedBy(training))
+                .ToList();
+            return trainings;
+        }
+
+        private ISpecification<Training> ApplyFilters(TrainingFilterData filterData)
+        {
+            return new TrainingMatchesLevel(filterData.Level)
+                .And(new TrainingMatchesTitle(filterData.Title))
+                .And(new TrainingHoursInRange(filterData.DateLowerBound, filterData.DateUpperBound));
         }
 
     }

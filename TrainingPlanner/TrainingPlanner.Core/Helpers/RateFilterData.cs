@@ -1,6 +1,6 @@
 ﻿namespace TrainingPlanner.Core.Helpers
 {
-    public class TrainerRateFilterData
+    public class RateFilterData
     {
         public int? Rate { get; set; }
     }

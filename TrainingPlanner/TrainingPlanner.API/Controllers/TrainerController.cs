@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.DTOs.Trainer;
+using TrainingPlanner.Core.Helpers;
 using TrainingPlanner.Core.Interfaces;
 
 namespace TrainingPlanner.API.Controllers
@@ -114,13 +115,14 @@ namespace TrainingPlanner.API.Controllers
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<PagedTrainersDTO>> GetAllTrainers(
+            [FromQuery] TrainerFilterData filterData,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 3,
             [FromQuery] string userId = null)
         {
             try
             {
-                var result = await _trainerService.GetAllTrainers(pageNumber, pageSize, userId);
+                var result = await _trainerService.GetAllTrainers(pageNumber, pageSize, userId, filterData);
                 return Ok(result);
             }
             catch (Exception exception)
@@ -132,13 +134,14 @@ namespace TrainingPlanner.API.Controllers
 
         [HttpGet("favourites")]
         public async Task<ActionResult<PagedTrainersDTO>> GetFavouriteTrainers(
+            [FromQuery] TrainerFilterData filterData,
             [FromQuery] string userId,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 3)
         {
             try
             {
-                return Ok(await _trainerService.GetFavouriteTrainers(pageNumber, pageSize, userId));
+                return Ok(await _trainerService.GetFavouriteTrainers(pageNumber, pageSize, userId, filterData));
             }
             catch (Exception exception)
             {
