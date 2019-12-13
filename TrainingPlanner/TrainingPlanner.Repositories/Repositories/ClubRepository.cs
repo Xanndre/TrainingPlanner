@@ -176,6 +176,16 @@ namespace TrainingPlanner.Repositories.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<string>> GetLocations()
+        {
+            var locations = await _trainingPlannerDbContext.Clubs
+                .Where(u => u.City != null)
+                .Select(u => u.City)
+                .Distinct()
+                .ToListAsync();
+            return locations;
+        }
+
         private IQueryable<Club> GetClubQuery()
         {
             return _trainingPlannerDbContext.Clubs

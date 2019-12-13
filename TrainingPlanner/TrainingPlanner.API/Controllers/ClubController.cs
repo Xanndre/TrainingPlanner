@@ -206,6 +206,25 @@ namespace TrainingPlanner.API.Controllers
             }
 
         }
+
+        [HttpGet("locations")]
+        public async Task<ActionResult<string>> GetLocations()
+        {
+            try
+            {
+                var locations = await _clubService.GetLocations();
+                return Ok(locations);
+            }
+            catch (ArgumentNullException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
     }
 
 

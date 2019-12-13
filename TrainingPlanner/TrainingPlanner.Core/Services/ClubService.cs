@@ -154,6 +154,11 @@ namespace TrainingPlanner.Core.Services
             return result;
         }
 
+        public async Task<IEnumerable<string>> GetLocations()
+        {
+            return await _clubRepository.GetLocations();
+        }
+
         private PagedClubsDTO GetClubs(
             int pageNumber, int pageSize, IEnumerable<Club> clubs, ClubFilterData filterData)
         {
