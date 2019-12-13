@@ -69,7 +69,7 @@ namespace TrainingPlanner.Core.Services
         {
             var users = await _userRepository.GetSignedUpUsers(trainingId);
             var pagedUsers = GetUsers(pageNumber, pageSize, users, filterData);
-            var training = await _trainingRepository.GetTraining(trainingId);
+            var training = await _trainingService.GetTraining(trainingId);
             var pagedReservationUsers = new List<ReservationUserDTO>();
 
             foreach (var user in pagedUsers.Users)
@@ -98,7 +98,7 @@ namespace TrainingPlanner.Core.Services
                 TotalCount = pagedUsers.TotalCount,
                 TotalPages = pagedUsers.TotalPages,
                 Users = pagedReservationUsers,
-                Training = _mapper.Map<TrainingDTO>(training)
+                Training = training
             };
         }
 
@@ -111,7 +111,7 @@ namespace TrainingPlanner.Core.Services
         {
             var users = await _userRepository.GetNotSignedUpUsers(trainingId, userId);
             var pagedUsers = GetUsers(pageNumber, pageSize, users, filterData);
-            var training = await _trainingRepository.GetTraining(trainingId);
+            var training = await _trainingService.GetTraining(trainingId);
             var pagedReservationUsers = new List<ReservationUserDTO>();
 
             foreach (var user in pagedUsers.Users)
@@ -140,7 +140,7 @@ namespace TrainingPlanner.Core.Services
                 TotalCount = pagedUsers.TotalCount,
                 TotalPages = pagedUsers.TotalPages,
                 Users = pagedReservationUsers,
-                Training = _mapper.Map<TrainingDTO>(training)
+                Training = training
             };
         }
 

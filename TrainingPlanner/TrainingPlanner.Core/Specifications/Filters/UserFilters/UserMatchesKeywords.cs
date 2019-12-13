@@ -14,8 +14,8 @@ namespace TrainingPlanner.Core.Specifications.Filters.UserFilters
         public bool IsSatisfiedBy(ApplicationUser user)
         {
             return Keywords == null ||
-                user.FirstName.ToLower().Contains(Keywords.ToLower()) ||
-                user.LastName.ToLower().Contains(Keywords.ToLower());
+                (user.FirstName.ToLower() + ' ' + user.LastName.ToLower())
+                    .Contains(Keywords.ToLower());
         }
     }
 }
