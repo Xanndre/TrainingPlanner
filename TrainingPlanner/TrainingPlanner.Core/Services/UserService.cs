@@ -8,7 +8,10 @@ using TrainingPlanner.Core.DTOs.Reservation;
 using TrainingPlanner.Core.DTOs.Training;
 using TrainingPlanner.Core.DTOs.User;
 using TrainingPlanner.Core.DTOs.UserStuff;
+using TrainingPlanner.Core.Helpers;
 using TrainingPlanner.Core.Interfaces;
+using TrainingPlanner.Core.Specifications.Filters.UserFilters;
+using TrainingPlanner.Core.Specifications.Interfaces;
 using TrainingPlanner.Data.Entities;
 using TrainingPlanner.Repositories.Interfaces;
 
@@ -50,20 +53,22 @@ namespace TrainingPlanner.Core.Services
 
         public PagedUsersDTO GetAllUsers(
             int pageNumber,
-            int pageSize)
+            int pageSize,
+            UserFilterData filterData)
         {
             var users = _userRepository.GetAllUsers();
-            var result = GetUsers(pageNumber, pageSize, users);
+            var result = GetUsers(pageNumber, pageSize, users, filterData);
             return result;
         }
 
         public async Task<PagedReservationUsersDTO> GetSignedUpUsers(
             int pageNumber,
             int pageSize,
-            int trainingId)
+            int trainingId,
+            UserFilterData filterData)
         {
             var users = await _userRepository.GetSignedUpUsers(trainingId);
-            var pagedUsers = GetUsers(pageNumber, pageSize, users);
+            var pagedUsers = GetUsers(pageNumber, pageSize, users, filterData);
             var training = await _trainingRepository.GetTraining(trainingId);
             var pagedReservationUsers = new List<ReservationUserDTO>();
 
@@ -101,10 +106,11 @@ namespace TrainingPlanner.Core.Services
             int pageNumber,
             int pageSize,
             int trainingId,
-            string userId)
+            string userId,
+            UserFilterData filterData)
         {
             var users = await _userRepository.GetNotSignedUpUsers(trainingId, userId);
-            var pagedUsers = GetUsers(pageNumber, pageSize, users);
+            var pagedUsers = GetUsers(pageNumber, pageSize, users, filterData);
             var training = await _trainingRepository.GetTraining(trainingId);
             var pagedReservationUsers = new List<ReservationUserDTO>();
 
@@ -261,9 +267,6 @@ namespace TrainingPlanner.Core.Services
                 }
             }
 
-
-           
-
             var user = await _userRepository.GetUser(id);
             await _userRepository.DeleteUser(user);
         }
@@ -318,8 +321,9 @@ namespace TrainingPlanner.Core.Services
         }
 
         private PagedUsersDTO GetUsers(
-            int pageNumber, int pageSize, IEnumerable<ApplicationUser> users)
+            int pageNumber, int pageSize, IEnumerable<ApplicationUser> users, UserFilterData filterData)
         {
+            users = Filter(filterData, users);
             var result = GetPagedUsers(users, pageNumber, pageSize);
             return result;
         }
@@ -339,6 +343,19 @@ namespace TrainingPlanner.Core.Services
             result.Users = _mapper.Map<IEnumerable<UserDTO>>(pagedUsers);
 
             return result;
+        }
+
+        private IEnumerable<ApplicationUser> Filter(UserFilterData filterData, IEnumerable<ApplicationUser> users)
+        {
+            users = users.Where(user => ApplyFilters(filterData)
+                .IsSatisfiedBy(user))
+                .ToList();
+            return users;
+        }
+
+        private ISpecification<ApplicationUser> ApplyFilters(UserFilterData filterData)
+        {
+            return new UserMatchesKeywords(filterData.Keywords);
         }
 
         private async Task RemoveUserSports(ApplicationUser mappedUser)

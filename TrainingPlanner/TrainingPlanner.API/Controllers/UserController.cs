@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.DTOs.User;
+using TrainingPlanner.Core.Helpers;
 using TrainingPlanner.Core.Interfaces;
 
 namespace TrainingPlanner.API.Controllers
@@ -23,12 +24,13 @@ namespace TrainingPlanner.API.Controllers
 
         [HttpGet]
         public ActionResult<PagedUsersDTO> GetAllUsers(
+            [FromQuery] UserFilterData filterData,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 5)
         {
             try
             {
-                var result = _userService.GetAllUsers(pageNumber, pageSize);
+                var result = _userService.GetAllUsers(pageNumber, pageSize, filterData);
                 return Ok(result);
             }
             catch (Exception exception)
@@ -40,13 +42,14 @@ namespace TrainingPlanner.API.Controllers
 
         [HttpGet("signed")]
         public async Task<ActionResult<PagedTrainersDTO>> GetSignedUpUsers(
+            [FromQuery] UserFilterData filterData,
             [FromQuery] int trainingId,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 5)
         {
             try
             {
-                return Ok(await _userService.GetSignedUpUsers(pageNumber, pageSize, trainingId));
+                return Ok(await _userService.GetSignedUpUsers(pageNumber, pageSize, trainingId, filterData));
             }
             catch (Exception exception)
             {
@@ -57,6 +60,7 @@ namespace TrainingPlanner.API.Controllers
 
         [HttpGet("notsigned")]
         public async Task<ActionResult<PagedTrainersDTO>> GetNotSignedUpUsers(
+            [FromQuery] UserFilterData filterData,
             [FromQuery] int trainingId,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 5)
@@ -64,7 +68,7 @@ namespace TrainingPlanner.API.Controllers
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                return Ok(await _userService.GetNotSignedUpUsers(pageNumber, pageSize, trainingId, userId));
+                return Ok(await _userService.GetNotSignedUpUsers(pageNumber, pageSize, trainingId, userId, filterData));
             }
             catch (Exception exception)
             {
