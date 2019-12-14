@@ -257,6 +257,27 @@ namespace TrainingPlanner.Core.Services
 
         private IEnumerable<Training> Filter(TrainingFilterData filterData, IEnumerable<Training> trainings)
         {
+            if(filterData.DateLowerBound != null && filterData.DateLowerBound.Value.TimeOfDay.TotalHours == 0)
+            {
+                filterData.DateLowerBound = ((DateTime)filterData.DateLowerBound).AddHours(12);
+            }
+
+            if (filterData.DateLowerBound != null && filterData.DateLowerBound.Value.TimeOfDay.TotalHours == 12)
+            {
+                filterData.DateLowerBound = ((DateTime)filterData.DateLowerBound).AddHours(-12);
+            }
+
+            if (filterData.DateUpperBound != null && filterData.DateUpperBound.Value.TimeOfDay.TotalHours == 0)
+            {
+                filterData.DateUpperBound = ((DateTime)filterData.DateUpperBound).AddHours(12);
+            }
+
+            if (filterData.DateUpperBound != null && filterData.DateUpperBound.Value.TimeOfDay.TotalHours == 12)
+            {
+                filterData.DateUpperBound = ((DateTime)filterData.DateUpperBound).AddHours(-12);
+            }
+
+
             trainings = trainings.Where(training => ApplyFilters(filterData)
                 .IsSatisfiedBy(training))
                 .ToList();
