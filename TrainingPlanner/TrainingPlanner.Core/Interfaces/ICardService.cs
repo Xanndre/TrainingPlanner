@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TrainingPlanner.Core.DTOs.ClubStuff.ClubCard;
 using TrainingPlanner.Core.DTOs.Paged;
 using TrainingPlanner.Core.DTOs.TrainerStuff.TrainerCard;
@@ -31,5 +32,7 @@ namespace TrainingPlanner.Core.Interfaces
         Task DeleteCardEntries(int trainingId, int? trainerId, int? clubId);
         Task SendNotificationCardAlmostExpired(string email, string trainerName, string userFirstName, bool isChecked);
         Task SendNotificationCardExpired(string email, string trainerName, string userFirstName, bool isChecked);
+        Task<IEnumerable<string>> GetClubCardNames(int clubId);
+        Task<IEnumerable<string>> GetTrainerCardNames(int trainerId);
     }
 }

@@ -253,6 +253,16 @@ namespace TrainingPlanner.Core.Services
             return result;
         }
 
+        public async Task<IEnumerable<string>> GetClubCardNames(int clubId)
+        {
+            return await _cardRepository.GetClubCardNames(clubId);
+        }
+
+        public async Task<IEnumerable<string>> GetTrainerCardNames(int trainerId)
+        {
+            return await _cardRepository.GetTrainerCardNames(trainerId);
+        }
+
         public async Task SendNotificationCardAlmostExpired(string email, string trainerName, string userFirstName, bool isChecked)
         {
             if (isChecked)

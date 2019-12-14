@@ -20,5 +20,7 @@ namespace TrainingPlanner.Repositories.Interfaces
         Task<IEnumerable<ClubCard>> GetUserClubCards(string userId);
         Task<IEnumerable<ClubCard>> GetClubClubCards(int clubId);
         Task<IEnumerable<ClubCard>> GetClubCards(string userId, int clubId);
+        Task<IEnumerable<string>> GetClubCardNames(int clubId);
+        Task<IEnumerable<string>> GetTrainerCardNames(int trainerId);
     }
 }

@@ -273,5 +273,43 @@ namespace TrainingPlanner.API.Controllers
             }
 
         }
+
+        [HttpGet("club/{id}/names")]
+        public async Task<ActionResult<string>> GetClubCardNames(int id)
+        {
+            try
+            {
+                var names = await _cardService.GetClubCardNames(id);
+                return Ok(names);
+            }
+            catch (ArgumentNullException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
+
+        [HttpGet("trainer/{id}/names")]
+        public async Task<ActionResult<string>> GetTrainerCardNames(int id)
+        {
+            try
+            {
+                var names = await _cardService.GetTrainerCardNames(id);
+                return Ok(names);
+            }
+            catch (ArgumentNullException exception)
+            {
+                return NotFound(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
+        }
     }
 }

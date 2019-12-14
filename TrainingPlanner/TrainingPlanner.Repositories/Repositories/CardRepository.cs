@@ -110,6 +110,26 @@ namespace TrainingPlanner.Repositories.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<string>> GetClubCardNames(int clubId)
+        {
+            var names = await _trainingPlannerDbContext.ClubCards
+                .Where(u => u.Name != null && u.ClubId == clubId)
+                .Select(u => u.Name)
+                .Distinct()
+                .ToListAsync();
+            return names;
+        }
+
+        public async Task<IEnumerable<string>> GetTrainerCardNames(int trainerId)
+        {
+            var names = await _trainingPlannerDbContext.TrainerCards
+                .Where(u => u.Name != null && u.TrainerId == trainerId)
+                .Select(u => u.Name)
+                .Distinct()
+                .ToListAsync();
+            return names;
+        }
+
         private IQueryable<ClubCard> GetClubCardQuery()
         {
             return _trainingPlannerDbContext.ClubCards;
