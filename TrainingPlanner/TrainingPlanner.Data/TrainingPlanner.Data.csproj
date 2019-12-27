@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20191112154631_TrainingPartner.Designer.cs" />
     <Compile Remove="Migrations\20191112154718_TrainingPartner.cs" />
     <Compile Remove="Migrations\20191112154718_TrainingPartner.Designer.cs" />
+    <Compile Remove="Migrations\20191220163348_Chat.cs" />
+    <Compile Remove="Migrations\20191220163348_Chat.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +25,7 @@
     <PackageReference Include="MailKit" Version="2.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
   </ItemGroup>
 
 </Project>

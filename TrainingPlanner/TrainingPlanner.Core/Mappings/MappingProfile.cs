@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using System;
 using System.Linq;
 using TrainingPlanner.Core.DTOs.Account;
 using TrainingPlanner.Core.DTOs.BodyMeasurement;
+using TrainingPlanner.Core.DTOs.Chat;
 using TrainingPlanner.Core.DTOs.Club;
 using TrainingPlanner.Core.DTOs.ClubStuff;
 using TrainingPlanner.Core.DTOs.ClubStuff.ClubCard;
@@ -110,6 +112,21 @@ namespace TrainingPlanner.Core.Mappings
             CreateMap<BodyMeasurement, BodyMeasurementDTO>().ReverseMap();
             CreateMap<UserTraining, UserTrainingDTO>().ReverseMap();
             CreateMap<Notification, NotificationDTO>().ReverseMap();
+
+            CreateMap<Chat, ChatDTO>()
+                .ForMember(c => c.LastMessage, d =>
+                    d.MapFrom(e =>
+                        e.Messages != null && e.Messages.Count > 0 ? e.Messages.Max(f => f.SentAt) : DateTime.Now))
+                .ForMember(c => c.ReceiverName, d => d.MapFrom(e => e.Receiver.FirstName + ' ' + e.Receiver.LastName))
+                .ForMember(c => c.SenderName, d => d.MapFrom(e => e.Sender.FirstName + ' ' + e.Sender.LastName))
+                .ForMember(c => c.ReceiverProfilePic, d => d.MapFrom(e => e.Receiver.ProfilePicture))
+                .ForMember(c => c.SenderProfilePic, d => d.MapFrom(e => e.Sender.ProfilePicture))
+                .ReverseMap();
+            CreateMap<Chat, ChatCreateDTO>().ReverseMap();
+            CreateMap<MessageDTO, Message>().ReverseMap();
+            CreateMap<MessageBaseDTO, Message>()
+                .ForMember(c => c.SentAt, d => d.MapFrom(e => DateTime.Now))
+                .ReverseMap();
 
             CreateMap<UserCalendarTrainingDTO, UserCalendarTraining>()
                 .ForMember(c => c.StartDate, d => d.MapFrom(e => e.StartDate.ToLocalTime()))

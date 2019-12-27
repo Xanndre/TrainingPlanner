@@ -86,12 +86,35 @@ namespace TrainingPlanner.Repositories.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Notification>> GetUserNotificationsToDelete(ApplicationUser user)
+        {
+            var list = new List<Notification>
+            {
+                user.Notification
+            };
+
+            return await _trainingPlannerDbContext.Notifications
+                .Where(u => u.UserId == user.Id)
+                .Except(list)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<UserLocation>> GetUserLocationsToDelete(ApplicationUser user)
         {
             return await _trainingPlannerDbContext.UserLocations
                 .Where(u => u.UserId == user.Id)
                 .Except(user.Locations)
                 .ToListAsync();
+        }
+
+        public async Task RemoveUserNotification(Notification notification, bool isSavingChanges = true)
+        {
+            _trainingPlannerDbContext.Notifications.Remove(notification);
+
+            if (isSavingChanges)
+            {
+                await _trainingPlannerDbContext.SaveChangesAsync();
+            }
         }
 
         public async Task RemoveUserSports(IEnumerable<UserSport> sports, bool isSavingChanges = true)

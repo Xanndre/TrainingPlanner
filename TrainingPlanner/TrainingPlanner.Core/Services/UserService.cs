@@ -165,6 +165,8 @@ namespace TrainingPlanner.Core.Services
                 await RemoveUserSports(identityUser);
                 await RemoveUserLocations(identityUser);
             }
+
+            await RemoveUserNotifications(identityUser);
             var appUser = await _userRepository.UpdateUser(identityUser);
             return _mapper.Map<UserDTO>(appUser);
         }
@@ -356,6 +358,16 @@ namespace TrainingPlanner.Core.Services
         private ISpecification<ApplicationUser> ApplyFilters(UserFilterData filterData)
         {
             return new UserMatchesKeywords(filterData.Keywords);
+        }
+
+        private async Task RemoveUserNotifications(ApplicationUser mappedUser)
+        {
+            var userNotificationsToDelete = await _userRepository.GetUserNotificationsToDelete(mappedUser);
+            if(userNotificationsToDelete.Any())
+            {
+                await _userRepository.RemoveUserNotification(userNotificationsToDelete.First(), false);
+            }
+            
         }
 
         private async Task RemoveUserSports(ApplicationUser mappedUser)

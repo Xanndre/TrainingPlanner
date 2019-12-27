@@ -35,6 +35,7 @@ namespace TrainingPlanner.API
             services.ConfigureIdentityTokens();
             services.AddJwtAuth(Configuration);
             services.AddHangfire(Configuration);
+            services.AddSignalR();
             services.ConfigureOptions(Configuration);
             services.AddHttpClient();
         }
@@ -51,8 +52,13 @@ namespace TrainingPlanner.API
             }
 
             app.UseHttpsRedirection();
-            app.UseCors(DictionaryResources.AllowAllHeaders);
+            app.UseCors(x => x
+                    .WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowCredentials()
+                    .AllowAnyHeader());
             app.UseAuthentication();
+            app.ConfigureSignalR();
             app.UseHangfireServer();
             app.UseHangfireDashboard("/hangfire");
             app.UseMvc();
