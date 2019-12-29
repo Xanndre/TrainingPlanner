@@ -12,5 +12,6 @@ namespace TrainingPlanner.Repositories.Interfaces
         Task<IEnumerable<Message>> GetAllMessages(int chatId);
         Task<Chat> GetChat(string senderId, string receiverId);
         Task<Chat> GetChatById(int id);
+        Task DeleteChat(Chat chat);
     }
 }

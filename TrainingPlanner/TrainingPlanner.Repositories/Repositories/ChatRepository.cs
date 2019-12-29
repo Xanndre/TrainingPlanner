@@ -33,6 +33,7 @@ namespace TrainingPlanner.Repositories.Repositories
         {
             return await GetChatQuery()
                 .Include(c => c.Messages)
+                .AsNoTracking()
                 .Where(c => c.SenderId == userId || c.ReceiverId == userId)
                 .ToListAsync();
         }
@@ -57,6 +58,12 @@ namespace TrainingPlanner.Repositories.Repositories
             return await GetChatQuery()
                 .Include(c => c.Messages)
                 .FirstAsync(c => c.Id == id);
+        }
+
+        public async Task DeleteChat(Chat chat)
+        {
+            _trainingPlannerDbContext.Chats.Remove(chat);
+            await _trainingPlannerDbContext.SaveChangesAsync();
         }
 
         private IQueryable<Chat> GetChatQuery()

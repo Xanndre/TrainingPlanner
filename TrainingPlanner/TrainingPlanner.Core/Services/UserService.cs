@@ -31,12 +31,14 @@ namespace TrainingPlanner.Core.Services
         private readonly IReservationRepository _reservationRepository;
         private readonly IUserTrainingRepository _userTrainingRepository;
         private readonly ITrainingService _trainingService;
+        private readonly IChatRepository _chatRepository;
 
         public UserService(IUserRepository repository, IMapper mapper, ITrainerRepository trainerRepository,
                             IClubRepository clubRepository, IFavouriteRepository favouriteRepository,
                             IRateRepository rateRepository, IBodyMeasurementRepository bodyMeasurementRepository,
                             ITrainingRepository trainingRepository, IReservationRepository reservationRepository,
-                            IUserTrainingRepository userTrainingRepository, ITrainingService trainingService)
+                            IUserTrainingRepository userTrainingRepository, ITrainingService trainingService,
+                            IChatRepository chatRepository)
         {
             _userRepository = repository;
             _mapper = mapper;
@@ -49,6 +51,7 @@ namespace TrainingPlanner.Core.Services
             _reservationRepository = reservationRepository;
             _userTrainingRepository = userTrainingRepository;
             _trainingService = trainingService;
+            _chatRepository = chatRepository;
         }
 
         public PagedUsersDTO GetAllUsers(
@@ -266,6 +269,15 @@ namespace TrainingPlanner.Core.Services
                 foreach (var userTraining in userTrainings)
                 {
                     await _userTrainingRepository.DeleteUserTraining(userTraining);
+                }
+            }
+
+            var chats = await _chatRepository.GetAllChats(id);
+            if(chats.Count() != 0)
+            {
+                foreach(var chat in chats)
+                {
+                    await _chatRepository.DeleteChat(chat);
                 }
             }
 
