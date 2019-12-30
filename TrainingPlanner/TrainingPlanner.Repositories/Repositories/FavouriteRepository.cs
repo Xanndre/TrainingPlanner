@@ -71,6 +71,7 @@ namespace TrainingPlanner.Repositories.Repositories
         {
             return await GetFavouriteClubs()
                 .Where(c => c.ClubId == clubId)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -78,6 +79,7 @@ namespace TrainingPlanner.Repositories.Repositories
         {
             return await GetFavouriteTrainers()
                 .Where(c => c.TrainerId == trainerId)
+                .AsNoTracking()
                 .ToListAsync();
         }
 

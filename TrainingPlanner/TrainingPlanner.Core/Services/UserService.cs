@@ -185,6 +185,12 @@ namespace TrainingPlanner.Core.Services
                     await _trainingRepository.DeleteTraining(training);
                 }
 
+                var favs = await _favouriteRepository.GetFavouriteTrainers(trainer.Id);
+                foreach (var fav in favs)
+                {
+                    await _favouriteRepository.DeleteFavouriteTrainer(fav);
+                }
+
                 await _trainerRepository.DeleteTrainer(trainer);
             }
 
@@ -197,6 +203,12 @@ namespace TrainingPlanner.Core.Services
                     foreach (var training in trainings)
                     {
                         await _trainingRepository.DeleteTraining(training);
+                    }
+
+                    var favs = await _favouriteRepository.GetFavouriteClubs(club.Id);
+                    foreach (var fav in favs)
+                    {
+                        await _favouriteRepository.DeleteFavouriteClub(fav);
                     }
 
                     await _clubRepository.DeleteClub(club);
